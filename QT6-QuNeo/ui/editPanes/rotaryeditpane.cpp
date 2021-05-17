@@ -609,6 +609,7 @@ void RotaryEditPane::slotValueChanged(double num) {
 
 
 void RotaryEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject){
+    qDebug() << "RotaryEditPane called";
     if(nowObject) {
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("rotary")) {

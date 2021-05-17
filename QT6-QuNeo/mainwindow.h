@@ -101,6 +101,8 @@ public slots:
     void slotGoToNextSensor();
     void slotGoToPrevSensor();
     void slotRogueWarning();
+    void slotShowUpdateAllDialog();
+    void slotShowFWUpdateDialog();
 
 private:
     Ui::MainWindow *ui;

@@ -353,6 +353,7 @@ void LeftrightEditPane::slotToLabels(QString parameter) {
 }
 
 void LeftrightEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject) {
+    qDebug() << "LeftrightEditPane called";
     if(nowObject) {
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("leftright")) {

@@ -363,6 +363,7 @@ void LSliderEditPane::slotValueChanged(int num){
 }
 
 void LSliderEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject){
+    qDebug() << "LSliderEditPane called";
     if(nowObject){
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("lSlider")){

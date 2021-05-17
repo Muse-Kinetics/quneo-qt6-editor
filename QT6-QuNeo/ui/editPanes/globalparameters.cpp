@@ -6,6 +6,7 @@ GlobalParameters::GlobalParameters(QVariantMap *variantMap, QVariantMap *variant
 {
     this->setStyleSheet("QLabel { font: 10px } QLineEdit { font: 12px } QCheckBox {font:9px} QSpinBox {font: 10px} QDoubleSpinBox {font: 10px}");
 
+
     mainWindow = widget;
     presetMap = variantMap;
     presetMapCopy = variantMapCopy;

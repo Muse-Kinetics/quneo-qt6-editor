@@ -277,6 +277,7 @@ void TransportEditPane::slotToLabels(QString parameter) {
 }
 
 void TransportEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject) {
+    qDebug() << "TransportEditPane called";
     if(nowObject) {
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("transport")) {

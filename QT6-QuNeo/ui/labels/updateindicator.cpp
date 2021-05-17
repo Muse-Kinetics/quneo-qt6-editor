@@ -422,11 +422,11 @@ void UpdateIndicator::slotPresetModified(bool state){
 
 void UpdateIndicator::slotFlasher(){
     if (redBlack){
-        indicatorButton->setStyleSheet("color: transparent");
+        indicatorButton->setStyleSheet("color: transparent; background-color: rgb(191, 191, 191);");
         redBlack = false;
     }
     else {
-        indicatorButton->setStyleSheet("color: red");
+        indicatorButton->setStyleSheet("color: red; background-color: rgb(191, 191, 191);");
         redBlack = true;
     }
 

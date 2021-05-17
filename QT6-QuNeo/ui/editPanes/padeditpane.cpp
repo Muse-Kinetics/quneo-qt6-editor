@@ -648,7 +648,9 @@ void PadEditPane::slotValueChanged(int num)
 }
 
 void PadEditPane::slotFocusParam(QWidget* oldObject, QWidget* nowObject) {
+    qDebug() << "PadEditPane called";
     if(nowObject) { // eb TODO - was nowObject > 0, see others
+        qDebug() << "slotFocusParam called";
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("pad") && clicked->objectName() != justClicked) {
             this->slotUpdateXYText();

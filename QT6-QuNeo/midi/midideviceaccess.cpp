@@ -331,8 +331,11 @@ void MidiDeviceAccess::slotSelectDevice(QString index){
 
 void MidiDeviceAccess::slotUpdateAllPresets(){ //used for updating all presets at once
 
-
+    qDebug() << "slotUpdateAllPresets called";
     if(deviceMenu->currentText() == "QuNeo 1"){
+
+        emit sigShowUpdateAllPresetsDialog();
+
         for(int i= 0; i< 16; i++){
 
             //encode current preset data
@@ -365,7 +368,7 @@ void MidiDeviceAccess::slotUpdateAllPresets(){ //used for updating all presets a
                     qDebug() << "bytes to send update all presets" << updateAllPresetSysExReq->bytesToSend;
                 }
 
-                //qDebug() << "done with preset" << i;
+                qDebug() << "done with preset" << i;
                 emit sigUpdateAllPresetsCount(i);
             }
         }
@@ -467,9 +470,12 @@ void MidiDeviceAccess::slotLoadPreset(){
 
 void MidiDeviceAccess::slotUpdateFirmware(){//this function puts the board into bootloader mode************
 
+    qDebug() << "slotUpdateFirmware() called";
 
     //if selected device...
     if(selectedDevice){
+
+        emit(sigShowFWUpdateDialog());
 
         //create new sysex event/request
         enterBootloaderSysExReq = new MIDISysexSendRequest;
@@ -486,13 +492,15 @@ void MidiDeviceAccess::slotUpdateFirmware(){//this function puts the board into 
 
         //send the syesex data
         MIDISendSysex(enterBootloaderSysExReq);
-        //qDebug() << "address of msg" << enterBootloaderSysExReq;
+        qDebug() << "address of msg" << enterBootloaderSysExReq;
     }
 
     QTimer::singleShot(5000, callbackPointer, SLOT(slotDownloadFw()));
 }
 
 void MidiDeviceAccess::slotDownloadFw(){//this function sends the actual firmware data**********
+
+    qDebug() << "slowDownloadFw() called";
 
     if(selectedDevice){
 
@@ -511,12 +519,13 @@ void MidiDeviceAccess::slotDownloadFw(){//this function sends the actual firmwar
 
         //send the syesex data
         MIDISendSysex(downloadFwSysExReq);
-        //qDebug() << "address of msg" << midiSysexSendRequest;
+        qDebug() << "address of msg" << downloadFwSysExReq;
     }
 
     while(!downloadFwSysExReq->complete){
         bytesLeft = downloadFwSysExReq->bytesToSend;
-        emit sigFwBytesLeft(bytesLeft);
+        qDebug() << "BytesLeft: " << bytesLeft;
+        //emit sigFwBytesLeft(bytesLeft);
     }
 
     //emit sigFwBytesLeft((0));

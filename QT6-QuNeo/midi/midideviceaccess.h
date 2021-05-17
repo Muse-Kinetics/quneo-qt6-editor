@@ -95,6 +95,8 @@ signals:
     void sigSetVersions(QString, QString);
     void sigQuNeoConnected(bool);
     void sigRogueWarning();
+    void sigShowUpdateAllPresetsDialog();
+    void sigShowFWUpdateDialog();
 
 public slots:
     void slotSetCurrentPreset(QString); //sets preset var internally

@@ -395,6 +395,7 @@ void UpdownEditPane::slotToLabels(QString parameter) {
 }
 
 void UpdownEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject) {
+    qDebug() << "UpdownEditPane called";
     if(nowObject) {
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("updown")) {

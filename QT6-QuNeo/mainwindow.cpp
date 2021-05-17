@@ -148,12 +148,14 @@ MainWindow::MainWindow(QWidget *parent) :
     fwUpdateDialogManual.setText(QString("Click OK to update your firmware."));
     fwUpdateDialogManual.move(this->width()/2, this->height()/2);
 
-    // EB TODO - this gets triggered automatically
+    // moved this into slowShowUpdateAllDialog()
     //updateAllPresetsProgressDialog = new QProgressDialog("Updating All Presets...","Cancel", 0,16,this);
     //updateAllPresetsProgressDialog->setWindowModality(Qt::WindowModal);
     //updateAllPresetsProgressDialog->setCancelButton(0);
+    //updateAllPresetsProgressDialog->hide();
 
-    //connect(midiDeviceAccess, SIGNAL(sigUpdateAllPresetsCount(int)), this, SLOT(slotUpdateAllPresetsProgress(int)));
+    connect(midiDeviceAccess, SIGNAL(sigUpdateAllPresetsCount(int)), this, SLOT(slotUpdateAllPresetsProgress(int)));
+    connect(midiDeviceAccess, SIGNAL(sigShowUpdateAllPresetsDialog()), this, SLOT(slotShowUpdateAllDialog()));
 
     //populate clicked sensor map with 0's for initial state of editmultiple
     for(int i=0; i < 16; i++) {
@@ -179,13 +181,15 @@ MainWindow::MainWindow(QWidget *parent) :
     presetHandler->clickedSensors.insert(QString("lSliderButton0"), 0);
     presetHandler->sensorList.append(QString("lSliderButton0"));
 
-    //mac progress bar...
-#ifdef Q_OS_MAC
     totalFwBytes = midiDeviceAccess->sysExFirmwareBytes.size();
 
-    // EB TODO - this triggers automatically
+    //mac progress bar...
+#ifdef Q_OS_MAC
+
+    connect(midiDeviceAccess, SIGNAL(sigFwBytesLeft(int)), this, SLOT(slotUpdateFwProgressDialog(int)));
+    connect(midiDeviceAccess, SIGNAL(sigShowFWUpdateDialog()), this, SLOT(slotShowFWUpdateDialog));
+    // this is moved to slotShowFWUpdateDialog()
     //progress = new QProgressDialog("Updating Firmware...", "Cancel", 0, totalFwBytes, this);
-    //connect(midiDeviceAccess, SIGNAL(sigFwBytesLeft(int)), this, SLOT(slotUpdateFwProgressDialog(int)));
     //progress->setWindowModality(Qt::WindowModal);
     //progress->setCancelButton(0);
 
@@ -194,7 +198,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 #else
     //windows progress bar...
-    totalFwBytes = midiDeviceAccess->sysExFirmwareBytes.size();
+
     progress = new QProgressDialog("Updating Firmware...", "Cancel", 0, 0, this);
     progress->setWindowModality(Qt::WindowModal);
     progress->setCancelButton(0);
@@ -212,6 +216,8 @@ MainWindow::MainWindow(QWidget *parent) :
     rogueWarning.addButton(QMessageBox::Ok);
     rogueWarning.setText("Your QuNeo is either in Expander Mode or you are using a Rogue.");
     rogueWarning.setInformativeText("Please connect your QuNeo with a USB cable, and make sure it is not in \"expander\" mode.");
+
+
 
 }
 
@@ -827,6 +833,7 @@ int MainWindow::maybeSave()
 
 int MainWindow::firmwareUpdateDialog(bool upToDate)
 {
+    //return 1; // debug
     qDebug() << "fw update DIALOG";
 
     rogueQueryDevice = false;
@@ -874,7 +881,7 @@ int MainWindow::firmwareUpdateDialog(bool upToDate)
 void MainWindow::progressDialog(){
 
     emit sigFwProgressDialogOpen(true);
-    progress->show();
+    //progress->show(); // debug
 }
 
 void MainWindow::firmwareUpdateCompleteDialog(){
@@ -988,4 +995,19 @@ void MainWindow::slotRogueWarning()
             qDebug() << "warning thrown with no devices connected";
         }
     }
+}
+
+void MainWindow::slotShowUpdateAllDialog()
+{
+    updateAllPresetsProgressDialog = new QProgressDialog("Updating All Presets...","Cancel", 0,16,this);
+    updateAllPresetsProgressDialog->setWindowModality(Qt::WindowModal);
+    updateAllPresetsProgressDialog->setCancelButton(0);
+    updateAllPresetsProgressDialog->hide();
+}
+
+void MainWindow::slotShowFWUpdateDialog()
+{
+    progress = new QProgressDialog("Updating Firmware...", "Cancel", 0, totalFwBytes, this);
+    progress->setWindowModality(Qt::WindowModal);
+    progress->setCancelButton(0);
 }

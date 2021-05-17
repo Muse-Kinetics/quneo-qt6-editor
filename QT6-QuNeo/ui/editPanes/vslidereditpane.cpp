@@ -354,6 +354,7 @@ void VSliderEditPane::slotToLabels(QString parameter){
 }
 
 void VSliderEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject){
+    qDebug() << "VSliderEditPane called";
     if(nowObject){
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("vSlider")){
