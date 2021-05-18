@@ -77,12 +77,12 @@ CopyPasteHandler::CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess
     connect(clearPreset, SIGNAL(triggered()), this, SLOT(slotImportBlankPreset()));
 
     // Key Commands
-    copySensorAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
-    pasteSensorAct->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
-    copyAct->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_C));
-    pasteAct->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_V));
-    savePreset->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
-    saveAllPresets->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_S));
+    copySensorAct->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_C));
+    pasteSensorAct->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_V));
+    copyAct->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_C));
+    pasteAct->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_V));
+    savePreset->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
+    saveAllPresets->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
 
     //qDebug() << "copied preset size" << presetCopiedMap.keys();
     pasteAct->setDisabled(true);
@@ -223,7 +223,7 @@ void CopyPasteHandler::slotImportPreset(){
 
     QString filename = NULL;
     filename = QFileDialog::getOpenFileName(mWindow, tr("Import Preset"), QString("./"),tr("QuNeo Preset Files (*.quneopreset)"));
-    if(filename != NULL){
+    if(!filename.isNull()){
        presetFile = new QFile(filename);
         presetFile->open(QIODevice::ReadOnly);
         presetByteArray = presetFile->readAll();

@@ -148,11 +148,12 @@ MainWindow::MainWindow(QWidget *parent) :
     fwUpdateDialogManual.setText(QString("Click OK to update your firmware."));
     fwUpdateDialogManual.move(this->width()/2, this->height()/2);
 
-    // moved this into slowShowUpdateAllDialog()
-    //updateAllPresetsProgressDialog = new QProgressDialog("Updating All Presets...","Cancel", 0,16,this);
+    // moved this into slotShowUpdateAllDialog()
+    updateAllPresetsProgressDialog = new QProgressDialog("Updating All Presets...","Cancel", 0,16,this);
     //updateAllPresetsProgressDialog->setWindowModality(Qt::WindowModal);
-    //updateAllPresetsProgressDialog->setCancelButton(0);
-    //updateAllPresetsProgressDialog->hide();
+    updateAllPresetsProgressDialog->setCancelButton(0);
+    updateAllPresetsProgressDialog->close();
+    //updateAllPresetsProgressDialog->setValue(4);
 
     connect(midiDeviceAccess, SIGNAL(sigUpdateAllPresetsCount(int)), this, SLOT(slotUpdateAllPresetsProgress(int)));
     connect(midiDeviceAccess, SIGNAL(sigShowUpdateAllPresetsDialog()), this, SLOT(slotShowUpdateAllDialog()));
@@ -908,20 +909,6 @@ void MainWindow::firmwareUpdateCompleteDialog(){
 }
 
 void MainWindow::slotUpdateFwProgressDialog(int val){
-    static int slowCount;
-
-    /*
-    if (slowCount < 1000)
-    {
-        slowCount++;
-
-    } else {
-        slowCount = 0;
-        qDebug() << "bytes left" << val << ", totalFwBytes: " << totalFwBytes;
-    }
-    */
-
-    //progress->setValue(1500);
 
     qDebug() << "called slotUpdateFwProgressDialog";
 
@@ -937,14 +924,16 @@ void MainWindow::slotUpdateFwProgressDialog(int val){
 
 void MainWindow::slotUpdateAllPresetsProgress(int val){
 
-    // qDebug() << "slot update all Presets Progress called" << val;
+     qDebug() << "slot update all Presets Progress called" << val;
 
 
     if(val != 16){
 #ifndef Q_OS_MAC
         updateAllPresetsProgressDialog->show();
 #endif
+        updateAllPresetsProgressDialog->show();
         updateAllPresetsProgressDialog->setValue(val);
+        qDebug() << "update val: " << val;
     } else {
         updateAllPresetsProgressDialog->setValue(16);
         updateAllPresetsCompleteMsgBox.setText("Update All Presets Complete");
@@ -1021,10 +1010,8 @@ void MainWindow::slotRogueWarning()
 
 void MainWindow::slotShowUpdateAllDialog()
 {
-    updateAllPresetsProgressDialog = new QProgressDialog("Updating All Presets...","Cancel", 0,16,this);
-    updateAllPresetsProgressDialog->setWindowModality(Qt::WindowModal);
-    updateAllPresetsProgressDialog->setCancelButton(0);
-    updateAllPresetsProgressDialog->hide();
+    updateAllPresetsProgressDialog->open();
+    updateAllPresetsProgressDialog->show();
 }
 
 void MainWindow::slotShowFWUpdateDialog()

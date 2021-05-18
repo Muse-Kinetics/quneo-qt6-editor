@@ -337,9 +337,11 @@ void MidiDeviceAccess::slotUpdateAllPresets(){ //used for updating all presets a
     qDebug() << "slotUpdateAllPresets called";
     if(deviceMenu->currentText() == "QuNeo 1"){
 
-        emit sigShowUpdateAllPresetsDialog();
+
 
         for(int i= 0; i< 16; i++){
+
+            emit sigShowUpdateAllPresetsDialog();
 
             //encode current preset data
             sysExFormat->slotEncodePreset(i);
@@ -367,8 +369,17 @@ void MidiDeviceAccess::slotUpdateAllPresets(){ //used for updating all presets a
                 //send the syesex data
                 MIDISendSysex(updateAllPresetSysExReq);
 
+
+                QElapsedTimer t;
+
+                t.start();
+
                 while(updateAllPresetSysExReq->bytesToSend > 0){
-                    qDebug() << "bytes to send update all presets" << updateAllPresetSysExReq->bytesToSend;
+                    if (t.elapsed() > 100)
+                    {
+                        qDebug() << "bytes to send update all presets" << updateAllPresetSysExReq->bytesToSend << "Time: " << t.elapsed();
+                        t.restart();
+                    }
                 }
 
                 qDebug() << "done with preset" << i;

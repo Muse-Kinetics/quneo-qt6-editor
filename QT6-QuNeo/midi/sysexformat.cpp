@@ -346,11 +346,30 @@ SysExFormat::SysExFormat(QVariantMap* variantMap, QObject *parent) :
 
     //set data and load file arrays to correct path
     for(int i = 0; i < 16; i ++){
-        presetSysEx[i] = new QFile(QString("./resources/sysex/dataPreset%1.syx").arg(i));
-        loadPresetSysEx[i] = new QFile(QString("./resources/sysex/loadPreset%1.syx").arg(i));
-        //qDebug() << presetSysEx[i];
-    }
+        QString saveSyx = QString("../../../sysex/data/dataPreset%1.syx").arg(i);
+        QString loadSyx = QString("../../../sysex/loadPresets/loadPreset%1.syx").arg(i);
 
+        presetSysEx[i] = new QFile(saveSyx);
+        loadPresetSysEx[i] = new QFile(loadSyx);
+
+        /*
+        if(presetSysEx[i]->open(QIODevice::ReadWrite)){
+            qDebug("presetFound");
+        } else {
+            qDebug() << "preset not found";
+        }
+
+        if(loadPresetSysEx[i]->open(QIODevice::ReadWrite)){
+            qDebug("presetFound");
+        } else {
+            qDebug() << "preset not found";
+        }
+
+        //presetSysEx[i]->open(QIODevice::ReadWrite);
+        qDebug() << "presetSysex[" << i << "] file: " << saveSyx << " debug: " << presetSysEx[i]->isReadable();
+        qDebug() << "loadPresetSysEx[" << i << "] file: " << loadSyx << "debug: " << loadPresetSysEx[i]->isReadable();
+        */
+    }
 
     //initialize encoding variables and sysex id
     size = 0;
@@ -373,6 +392,8 @@ SysExFormat::SysExFormat(QVariantMap* variantMap, QObject *parent) :
 }
 
 void SysExFormat::slotEncodePreset(int presetNum){
+
+    qDebug() << "slotEncodePreset called";
 
     PRESET_LENGTH = 1279; //****************** Doublecheck the fly.
     PRESET_START = 0xA1;
