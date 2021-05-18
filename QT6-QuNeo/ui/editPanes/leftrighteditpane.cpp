@@ -354,7 +354,7 @@ void LeftrightEditPane::slotToLabels(QString parameter) {
 
 void LeftrightEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject) {
     qDebug() << "LeftrightEditPane called";
-    if(nowObject) {
+    if(nowObject->isEnabled()) {
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("leftright")) {
             emit signalToLabels(clicked->objectName());

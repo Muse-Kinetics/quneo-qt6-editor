@@ -27,6 +27,9 @@ bool firmwareSent = true;
 //determines whether device has reconnected or not
 bool deviceReconnected = true;
 
+//
+int fwProgSlowDown; // slows down the fw progress update
+
 //sysex request msgs
 MIDISysexSendRequest *enterBootloaderSysExReq;
 MIDISysexSendRequest *checkFwSysEx;
@@ -109,9 +112,9 @@ MidiDeviceAccess::MidiDeviceAccess(QVariantMap* presetMapsCopy,QObject *parent) 
     //sysExFirmware = new QFile(pathSysex);
     sysExFirmware = new QFile(":Quneo/sysex/resources/sysex/Quneo.syx");
     if(sysExFirmware->open(QIODevice::ReadOnly)){
-        //qDebug("sysex open");
+        qDebug("sysex open");
     } else {
-        //qDebug("couldn't find sysex");
+        qDebug("couldn't find sysex");
     }
 
     //read all data from file, and store in a QByteArray
@@ -521,14 +524,25 @@ void MidiDeviceAccess::slotDownloadFw(){//this function sends the actual firmwar
         MIDISendSysex(downloadFwSysExReq);
         qDebug() << "address of msg" << downloadFwSysExReq;
     }
+    if (!downloadFwSysExReq->complete) qDebug() << "Counting Bytes Down";
+
+    QElapsedTimer t;
+
+    t.start();
+
 
     while(!downloadFwSysExReq->complete){
-        bytesLeft = downloadFwSysExReq->bytesToSend;
-        qDebug() << "BytesLeft: " << bytesLeft;
-        //emit sigFwBytesLeft(bytesLeft);
+
+        if (t.elapsed() > 1000)
+        {
+            qDebug() << "bytes left: " << bytesLeft << "time: " << t.elapsed();
+            bytesLeft = downloadFwSysExReq->bytesToSend;
+            emit sigFwBytesLeft(bytesLeft);
+            t.restart();
+        }
     }
 
-    //emit sigFwBytesLeft((0));
+    //emit sigFwBytesLeft((0)); // this causes the completion window to show up twice
 
 
 }
@@ -629,8 +643,8 @@ void MidiDeviceAccess::slotProcessSysExRx(int val)
                 boardVersion = QString("%1.%2.%3").arg(fwVersionMSB/16).arg(fwVersionMSB%16).arg(fwVersionLSB);
                 boardVersionBoot = QString("%1.%2").arg(bootloaderVersionMSB).arg(bootloaderVersionLSB);
 
-                //qDebug() << "fw:" << fwVersionMSB << fwVersionLSB;
-                //qDebug() << "bootloader:" << bootloaderVersionMSB << bootloaderVersionLSB;
+                qDebug() << "fw:" << fwVersionMSB << fwVersionLSB;
+                qDebug() << "bootloader:" << bootloaderVersionMSB << bootloaderVersionLSB;
 
                 //First check if board is in expander mode or is Rogue
                 if(sysExMsg.at(10))
@@ -648,11 +662,11 @@ void MidiDeviceAccess::slotProcessSysExRx(int val)
                             versionArray[4] != fwVersionMSB/16)
                     {
                         emit sigFirmwareCurrent(false);
-                        //qDebug() << "version good" << false;
+                        qDebug() << "version good" << false;
                     }
                     else
                     {
-                        //qDebug() << "version good" << true;
+                        qDebug() << "version good" << true;
                         emit sigFirmwareCurrent(true);
                     }
                 }

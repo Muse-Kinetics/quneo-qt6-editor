@@ -364,7 +364,7 @@ void LSliderEditPane::slotValueChanged(int num){
 
 void LSliderEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject){
     qDebug() << "LSliderEditPane called";
-    if(nowObject){
+    if(nowObject->isEnabled()){
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("lSlider")){
             emit signalToLabels(clicked->objectName());

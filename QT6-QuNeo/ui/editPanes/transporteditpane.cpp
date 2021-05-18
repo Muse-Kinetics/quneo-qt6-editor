@@ -278,7 +278,7 @@ void TransportEditPane::slotToLabels(QString parameter) {
 
 void TransportEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject) {
     qDebug() << "TransportEditPane called";
-    if(nowObject) {
+    if(nowObject->isEnabled()) {
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("transport")) {
             emit signalToLabels(clicked->objectName());

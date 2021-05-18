@@ -30,6 +30,7 @@ public:
     QFile *sysExFirmware; //sysex firmware file
     QByteArray sysExFirmwareBytes; //sysex firmware as byte array
     int bytesLeft;
+    int fwProgSlowDown;
     char *sysExFirmwareData; //char array address for sysex firmware
     QList<int> sysExMsg;    //used to process sysEx messages from start to finish in slotProcessSysExRx(int);
 

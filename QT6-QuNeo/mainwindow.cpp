@@ -187,11 +187,13 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef Q_OS_MAC
 
     connect(midiDeviceAccess, SIGNAL(sigFwBytesLeft(int)), this, SLOT(slotUpdateFwProgressDialog(int)));
-    connect(midiDeviceAccess, SIGNAL(sigShowFWUpdateDialog()), this, SLOT(slotShowFWUpdateDialog));
+    //connect(midiDeviceAccess, SIGNAL(sigShowFWUpdateDialog()), this, SLOT(slotShowFWUpdateDialog()));
     // this is moved to slotShowFWUpdateDialog()
-    //progress = new QProgressDialog("Updating Firmware...", "Cancel", 0, totalFwBytes, this);
+    progress = new QProgressDialog("Updating Firmware...", "Cancel", 0, totalFwBytes, this);
     //progress->setWindowModality(Qt::WindowModal);
-    //progress->setCancelButton(0);
+    progress->setCancelButton(0);
+    //progress->setValue(1000);
+    progress->close();
 
     //************ THIS SHOULD BE DONE LAST, AFTER APP IS "CONSTRUCTED" / LOADED ****************//
     midiDeviceAccess->getSourcesDests(); //populate midi devices
@@ -849,11 +851,12 @@ int MainWindow::firmwareUpdateDialog(bool upToDate)
         if(!upToDate)
         {
             int ret = fwUpdateDialogAuto.exec();
-            //qDebug() << "FW UPDATE CALLED";
+            qDebug() << "FW UPDATE CALLED";
 
             if(ret == QMessageBox::Ok)
             {
 
+                slotShowFWUpdateDialog();
                 midiDeviceAccess->slotUpdateFirmware();
                 progressDialog();
 
@@ -868,11 +871,13 @@ int MainWindow::firmwareUpdateDialog(bool upToDate)
         }
         else
         {
+             // EB TODO - commented out to avoid crash
             if(progress->isVisible())
             {
                 progress->close();
                 firmwareUpdateCompleteDialog();
             }
+
         }
     }
 
@@ -903,9 +908,25 @@ void MainWindow::firmwareUpdateCompleteDialog(){
 }
 
 void MainWindow::slotUpdateFwProgressDialog(int val){
-    //qDebug() << "bytes left" << val;
+    static int slowCount;
+
+    /*
+    if (slowCount < 1000)
+    {
+        slowCount++;
+
+    } else {
+        slowCount = 0;
+        qDebug() << "bytes left" << val << ", totalFwBytes: " << totalFwBytes;
+    }
+    */
+
+    //progress->setValue(1500);
+
+    qDebug() << "called slotUpdateFwProgressDialog";
 
     if(val != 0){
+        qDebug() << "setvalue: " << val;
         progress->setValue(totalFwBytes - val);
     } else {
         progress->setValue(totalFwBytes - val);
@@ -948,6 +969,7 @@ int MainWindow::firmwareUpdateDialogMenu(bool upToDate)
 
             if(ret == QMessageBox::Ok)
             {
+                slotShowFWUpdateDialog();
                 midiDeviceAccess->slotUpdateFirmware();
                 progressDialog();
 
@@ -1007,7 +1029,11 @@ void MainWindow::slotShowUpdateAllDialog()
 
 void MainWindow::slotShowFWUpdateDialog()
 {
+    /*
     progress = new QProgressDialog("Updating Firmware...", "Cancel", 0, totalFwBytes, this);
     progress->setWindowModality(Qt::WindowModal);
     progress->setCancelButton(0);
+    */
+    progress->open();
+    progress->show();
 }

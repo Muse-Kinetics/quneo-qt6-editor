@@ -374,7 +374,7 @@ void HSliderEditPane::slotToLabels(QString parameter) {
 
 void HSliderEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject) {
     qDebug() << "HSliderEditPane called";
-    if(nowObject) {
+    if(nowObject->isEnabled()) {
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("hSlider")) {
             emit signalToLabels(clicked->objectName());
