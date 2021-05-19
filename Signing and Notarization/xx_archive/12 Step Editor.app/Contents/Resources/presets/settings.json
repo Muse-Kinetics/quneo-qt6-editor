@@ -1,0 +1,8 @@
+{
+    "Global": {
+        "globalSensitivity": 1,
+        "midiVolume": 0,
+        "selectSensitivity": 1,
+        "velocityOverride": 0
+    }
+}
