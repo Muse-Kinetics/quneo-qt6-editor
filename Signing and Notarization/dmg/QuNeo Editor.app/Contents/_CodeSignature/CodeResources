@@ -20,9 +20,17 @@
 		<data>
 		7ZobRmdVGTKNKy/rmFOL98UtEvs=
 		</data>
+		<key>Resources/presets/QuNeo.json.zip</key>
+		<data>
+		MZo1aKfmrGLBxvxvNCaOdxZwI4o=
+		</data>
 		<key>Resources/presets/QuNeo_FactoryPresets.json</key>
 		<data>
 		7ZobRmdVGTKNKy/rmFOL98UtEvs=
+		</data>
+		<key>Resources/presets/QuNeo_FactoryPresets.json.zip</key>
+		<data>
+		OJj4994HWCIKdWBTLm44p7y9hZI=
 		</data>
 		<key>Resources/presets/QuNeo_FactoryPresets_old.json</key>
 		<data>
@@ -376,11 +384,25 @@
 			7ddtpkp/3QvqaLsXc0bHuMZlU1MKoOjkeT6Uov17SwA=
 			</data>
 		</dict>
+		<key>Resources/presets/QuNeo.json.zip</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			0xhNlvQEMyNVbfn4RIn1l9H4tEHJzkp9SEWG2577vxQ=
+			</data>
+		</dict>
 		<key>Resources/presets/QuNeo_FactoryPresets.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			7ddtpkp/3QvqaLsXc0bHuMZlU1MKoOjkeT6Uov17SwA=
+			</data>
+		</dict>
+		<key>Resources/presets/QuNeo_FactoryPresets.json.zip</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			2roujKCM+wE4DK4xO22kioTVHJld1XX8khSR6XJeFQc=
 			</data>
 		</dict>
 		<key>Resources/presets/QuNeo_FactoryPresets_old.json</key>

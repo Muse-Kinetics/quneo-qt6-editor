@@ -43,7 +43,8 @@ CopyPasteHandler::CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess
 
     connect(exportPreset, SIGNAL(triggered()), this, SLOT(slotExportPreset()));
     connect(importPreset, SIGNAL(triggered()), this, SLOT(slotImportPreset()));
-    connect(savePreset, SIGNAL(triggered()), handlerOfPresets, SLOT(slotSave()));
+    // EB commented out to avoid crash
+    //connect(savePreset, SIGNAL(triggered()), handlerOfPresets, SLOT(slotSave()));
     connect(saveAllPresets, SIGNAL(triggered()), handlerOfPresets, SLOT(slotSaveAllPresets()));
     connect(exportAllPresets, SIGNAL(triggered()), this, SLOT(slotExportAllPresets()));
 

@@ -31,7 +31,8 @@ void LSliderButton::slotEvents(QString string){
         focusConnected = false;
         if(!startMessage->isHidden()){
             startMessage->hide();
-            connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
+            // EB commented out to avoid crash
+            //connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
             copyPasteHandle->copyAct->setDisabled(false);
             copyPasteHandle->copySensorAct->setDisabled(false);
             copyPasteHandle->revertFactoryAct->setDisabled(false);

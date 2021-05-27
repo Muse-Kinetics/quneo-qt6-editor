@@ -275,7 +275,7 @@ void Serializer::serialize( const QVariant& v, QIODevice* io, bool* ok)
   Q_ASSERT( io );
   if (ok)
       *ok = false;
-
+  
   if (!io->isOpen()) {
     if (!io->open(QIODevice::WriteOnly)) {
       qCritical ("Error opening device");

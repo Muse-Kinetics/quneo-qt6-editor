@@ -110,12 +110,17 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
 }
 
 void PresetHandler::slotRecallPreset(QString selected){
+    qDebug() << "slotRecallPreset() called: " << selected;
     if(selected.contains("Preset ")){ //remove prepended preset
+        /* // EB Removing this asterisk to test if this causes the crash
         if(selected.contains(" *")){    //remove asterisk if recalling unsaved/modified preset
             selected.remove(" *");
         }
+        */
 
         currentPreset = selected.remove(0,7).toInt() - 1;
+
+        qDebug() << "currentPresest:" << currentPreset;
 
         disconnect(this, SIGNAL(signalPresetModified(bool)), updateIndicator, SLOT(slotPresetModified(bool)));
         slotConnectDisconnectDisplayAllLabels(false);
@@ -135,7 +140,7 @@ void PresetHandler::slotRecallPreset(QString selected){
         connect(this, SIGNAL(signalPresetModified(bool)), updateIndicator, SLOT(slotPresetModified(bool)));
         slotCheckPresets();
     }
-    //qDebug() << "recall called";
+    qDebug() << "recall called";
 }
 
 //to revert presets this function inserts the presetMaps values from the current preset into that preset slot of presetMapsCopy
@@ -144,6 +149,7 @@ void PresetHandler::slotRevertPreset() {
     presetMapsCopy.insert(QString("Preset %1").arg(currentPreset), presetMaps.value(QString("Preset %1").arg(currentPreset)).toMap());
     slotRecallPreset(QString("Preset %1").arg(currentPreset + 1));
     slotCheckPresets();
+    qDebug() << "slotRevertPreset() called";
 }
 
 void PresetHandler::slotSave(){

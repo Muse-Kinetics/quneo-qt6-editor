@@ -650,17 +650,23 @@ void PadEditPane::slotValueChanged(int num)
 void PadEditPane::slotFocusParam(QWidget* oldObject, QWidget* nowObject) {
     qDebug() << "PadEditPane called";
 
-    if(nowObject->isEnabled()) { // eb TODO - was nowObject > 0, see others
-        qDebug() << "slotFocusParam called";
+    if(nowObject != nullptr) { // eb TODO - was nowObject > 0, see others
+        qDebug() << "slotFocusParam called: " << nowObject->objectName() << " Parent: " << nowObject->parent()->objectName();
+
         clicked = nowObject;
+
         if(clicked->parent()->objectName().contains("pad") && clicked->objectName() != justClicked) {
+            qDebug() << "first if";
             this->slotUpdateXYText();
             justClicked = clicked->objectName();
         }
+
         if(clicked->parent()->objectName().contains("pad")){
-            emit signalToLabels(clicked->objectName()); //whenever a value is changed, this should be emitted, but it shouldn't always have an effect.
+            qDebug() << "second if";
+                emit signalToLabels(clicked->objectName()); //whenever a value is changed, this should be emitted, but it shouldn't always have an effect.
         }
     }
+    qDebug() << "Survived nowObject";
 }
 
 void PadEditPane::slotToLabels(QString parameter)
