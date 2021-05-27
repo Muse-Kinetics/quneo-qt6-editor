@@ -386,7 +386,7 @@ void RhombusEditPane::slotToLabels(QString parameter) {
 }
 
 void RhombusEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject) {
-    if (nowObject->isEnabled()) {
+    if (nowObject != nullptr) {
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("rhombus")) {
             emit signalToLabels(clicked->objectName());

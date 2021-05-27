@@ -40,7 +40,8 @@ void ButtonButton::slotEvents(QString string){
         disconnect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), transportEdit, SLOT(slotFocusParam(QWidget*,QWidget*)));
         if(!startMessage->isHidden()){
             startMessage->hide();
-            connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
+            // EB commented out to avoid crash
+            //connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
             copyPasteHandle->copyAct->setDisabled(false);
             copyPasteHandle->copySensorAct->setDisabled(false);
             copyPasteHandle->revertFactoryAct->setDisabled(false);
@@ -60,7 +61,8 @@ void ButtonButton::slotEvents(QString string){
         if(string == "buttonButton0"){//mode button
             if(!startMessage->isHidden()){
                 startMessage->hide();
-                connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
+                // EB commented out to avoid crash
+                //connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
             }
             presetHandler->slotConnectDisconnectDisplayAllLabels(false);
             editPanes->setCurrentIndex(2);
@@ -70,7 +72,8 @@ void ButtonButton::slotEvents(QString string){
             disconnect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), leftrightEdit, SLOT(slotFocusParam(QWidget*,QWidget*)));
             if(!startMessage->isHidden()){
                 startMessage->hide();
-                connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
+                // EB commented out to avoid crash
+                //connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
             }
             presetHandler->slotConnectDisconnectDisplayAllLabels(false);
             editPanes->setCurrentIndex(3);
@@ -81,7 +84,8 @@ void ButtonButton::slotEvents(QString string){
             disconnect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), rhombusEdit, SLOT(slotFocusParam(QWidget*,QWidget*)));
             if(!startMessage->isHidden()){
                 startMessage->hide();
-                connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
+                // EB commented out to avoid crash
+                //connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
             }
             presetHandler->slotConnectDisconnectDisplayAllLabels(false);
             editPanes->setCurrentIndex(4);
@@ -92,7 +96,8 @@ void ButtonButton::slotEvents(QString string){
             disconnect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), updownEdit, SLOT(slotFocusParam(QWidget*,QWidget*)));
             if(!startMessage->isHidden()){
                 startMessage->hide();
-                connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
+                // EB commented out to avoid crash
+                //connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
             }
             presetHandler->slotConnectDisconnectDisplayAllLabels(false);
             editPanes->setCurrentIndex(5);

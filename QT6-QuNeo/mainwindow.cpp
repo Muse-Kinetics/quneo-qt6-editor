@@ -127,6 +127,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(presetHandler->rhombusEditPane, SIGNAL(signalTriggerCopy()), copyPasteHandler, SLOT(slotCopySensor()));
     connect(presetHandler->rhombusEditPane, SIGNAL(signalTriggerPaste()), copyPasteHandler, SLOT(slotPasteSensor()));
 
+    //Save button
+    // EB commented out to avoid crash
+    connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
+
     //Firmware Updating Stuff ***********
     firmwareUpdate = this->findChild<QPushButton *>(QString("updateFirmwareButton"));
     firmwareUpdate->hide();
@@ -872,7 +876,6 @@ int MainWindow::firmwareUpdateDialog(bool upToDate)
         }
         else
         {
-             // EB TODO - commented out to avoid crash
             if(progress->isVisible())
             {
                 progress->close();
