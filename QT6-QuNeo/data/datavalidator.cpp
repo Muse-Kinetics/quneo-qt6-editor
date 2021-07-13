@@ -1498,11 +1498,22 @@ void DataValidator::slotLoadJSON(){
         qDebug() << "json not found";
     }
 
+    // error object
+    QJsonParseError JsonParseError;
+    // convert file to QJsonDocument. this can be read/written to
+    QJsonDocument JsonDocument = QJsonDocument::fromJson(jsonFile->readAll(), &JsonParseError);
+    // close jsonFile
+    jsonFile->close();
+    // convert QJsonDocument to QJsonObject. this can be queried and modified in a human-readable way
+    QJsonObject RootObject = JsonDocument.object();
+
     //load json file into a byte array to be processd by the parser
-    jsonByteArray = jsonFile->readAll();
+//    jsonByteArray = jsonFile->readAll();
+    jsonByteArray = JsonDocument.toJson();
 
     //parse the json data, convert it to a map and set it equal to the master jsonMap
-    jsonMasterMap = parser.parse(jsonByteArray, &ok).toMap();
+//    jsonMasterMap = parser.parse(jsonByteArray, &ok).toMap();
+    jsonMasterMap = RootObject.toVariantMap();
 
     //store a map of the 16 preset maps
     jsonQuNeoPresetsMap = jsonMasterMap["QuNeo Presets"].toMap();
@@ -3211,7 +3222,9 @@ void DataValidator::slotSaveJSON(){
 
     jsonMasterMap.insert(QString("QuNeo Presets"), jsonQuNeoPresetsMap); //insert updated map into json map
 
-    jsonByteArray = serializer.serialize(jsonMasterMap); //serialize the master json map into the byte array
+//    jsonByteArray = serializer.serialize(jsonMasterMap); //serialize the master json map into the byte array
+    QJsonDocument jsonPresets = QJsonDocument::fromVariant(jsonMasterMap);
+    jsonByteArray = jsonPresets.toJson();
 
     //qDebug() << "byte array" << jsonByteArray;
 

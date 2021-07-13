@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QVariant>
 #include <QFile>
-#include "qjson/src/parser.h"
-#include "qjson/src/serializer.h"
+//#include "qjson/src/parser.h"
+//#include "qjson/src/serializer.h"
 #include "padeditpane.h"
 #include "rotaryeditpane.h"
 #include "hslidereditpane.h"
@@ -32,8 +32,8 @@ public:
     QByteArray jsonByteArray;
     QVariantMap jsonMasterMap;
 
-    QJson::Parser parser;
-    QJson::Serializer serializer;
+//    QJson::Parser parser;
+//    QJson::Serializer serializer;
     bool ok;
 
     /*****Edit Panes*****/

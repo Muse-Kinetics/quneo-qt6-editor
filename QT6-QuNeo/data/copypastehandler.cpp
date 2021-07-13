@@ -172,9 +172,22 @@ void CopyPasteHandler::slotExportPreset(){
     QString filename = QFileDialog::getSaveFileName(mWindow, tr("Save Preset"), QString("./"),tr("QuNeo Preset Files (*.quneopreset)"));
     presetFile = new QFile(filename);
 
-    presetFile->open(QIODevice::WriteOnly);
+    presetFile->open(QIODevice::WriteOnly | QIODevice::Text);
 
-    presetByteArray = serializer.serialize(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(handlerOfPresets->currentPreset)).toMap());
+    // error object
+    QJsonParseError JsonParseError;
+    // convert file to QJsonDocument. this can be read/written to
+    QJsonDocument JsonDocument = QJsonDocument::fromJson(presetFile->readAll(), &JsonParseError);
+    // close jsonFile
+    presetFile->close();
+    // convert QJsonDocument to QJsonObject. this can be queried and modified in a human-readable way
+    QJsonObject RootObject = JsonDocument.object();
+
+//    presetByteArray = serializer.serialize(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(handlerOfPresets->currentPreset)).toMap());
+    QJsonDocument jsonPresets = QJsonDocument::fromVariant(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(handlerOfPresets->currentPreset)).toMap());
+
+    presetByteArray = jsonPresets.toJson();
+
     presetFile->resize(0);
     presetFile->write(presetByteArray);
     presetFile->close();
@@ -193,7 +206,11 @@ void CopyPasteHandler::slotExportAllPresets(){
 for(int i=0; i<16; i++){
 
     //load preset i
-    presetByteArray = serializer.serialize(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(i)).toMap());
+//    presetByteArray = serializer.serialize(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(i)).toMap());
+    QJsonDocument jsonPresets = QJsonDocument::fromVariant(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(i)).toMap());
+
+    presetByteArray = jsonPresets.toJson();
+
     //Get preset i's name.
     QString presetFileName = handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(i)).toMap().value(QString("presetName")).toString();
 
@@ -226,17 +243,29 @@ void CopyPasteHandler::slotImportPreset(){
     filename = QFileDialog::getOpenFileName(mWindow, tr("Import Preset"), QString("./"),tr("QuNeo Preset Files (*.quneopreset)"));
     if(!filename.isNull()){
        presetFile = new QFile(filename);
-        presetFile->open(QIODevice::ReadOnly);
-        presetByteArray = presetFile->readAll();
+//     presetFile->open(QIODevice::ReadOnly);
+       presetFile->open(QIODevice::ReadOnly | QIODevice::Text);
+       // error object
+       QJsonParseError JsonParseError;
+       // convert file to QJsonDocument. this can be read/written to
+       QJsonDocument JsonDocument = QJsonDocument::fromJson(presetFile->readAll(), &JsonParseError);
+       // close jsonFile
+       presetFile->close();
+       // convert QJsonDocument to QJsonObject. this can be queried and modified in a human-readable way
+       QJsonObject RootObject = JsonDocument.object();
 
-        importedPresetMap = dataValidator->slotValidatePreset(parser.parse(presetByteArray, &ok).toMap());
+       presetByteArray = JsonDocument.toJson();
 
-        handlerOfPresets->presetMapsCopy.insert(QString("Preset %1").arg(handlerOfPresets->currentPreset), importedPresetMap);
-        handlerOfPresets->slotRecallPreset(QString("Preset %1").arg(handlerOfPresets->currentPreset + 1));
-        handlerOfPresets->slotCheckPresets();
-        presetByteArray.clear();
-        presetFile->close();
-        importedPresetMap.clear();
+//       importedPresetMap = dataValidator->slotValidatePreset(parser.parse(presetByteArray, &ok).toMap());
+       importedPresetMap = RootObject.toVariantMap();
+
+       handlerOfPresets->presetMapsCopy.insert(QString("Preset %1").arg(handlerOfPresets->currentPreset), importedPresetMap);
+       handlerOfPresets->slotRecallPreset(QString("Preset %1").arg(handlerOfPresets->currentPreset + 1));
+       handlerOfPresets->slotCheckPresets();
+
+       presetByteArray.clear();
+       presetFile->close();
+       importedPresetMap.clear();
     } else {
         qDebug("nothing selected");
     }
@@ -251,21 +280,33 @@ void CopyPasteHandler::slotImportBlankPreset(){
     //pathBlankPreset.remove(pathBlankPreset.length() - 5, pathBlankPreset.length());
     //pathBlankPreset.append("Resources/blank.quneopreset");
     //presetFile = new QFile(pathBlankPreset);
+
     presetFile = new QFile(":Quneo/preset/resources/blank.quneopreset");
-    if(presetFile->open(QIODevice::ReadOnly)){
+    if(presetFile->open(QIODevice::ReadOnly | QIODevice::Text)){
         qDebug("blank preset open");
     } else {
         qDebug("blank preset NOT OPEN");
     }
 
-    presetByteArray = presetFile->readAll();
-    importedPresetMap = dataValidator->slotValidatePreset(parser.parse(presetByteArray, &ok).toMap());
+    // error object
+    QJsonParseError JsonParseError;
+    // convert file to QJsonDocument. this can be read/written to
+    QJsonDocument JsonDocument = QJsonDocument::fromJson(presetFile->readAll(), &JsonParseError);
+    // close jsonFile
+    presetFile->close();
+    // convert QJsonDocument to QJsonObject. this can be queried and modified in a human-readable way
+    QJsonObject RootObject = JsonDocument.object();
 
+//    presetByteArray = presetFile->readAll();
+    presetByteArray = JsonDocument.toJson();
+//    importedPresetMap = dataValidator->slotValidatePreset(parser.parse(presetByteArray, &ok).toMap());
+    importedPresetMap = RootObject.toVariantMap();
     //importedPresetMap = parser.parse(presetByteArray, &ok).toMap();
 
     handlerOfPresets->presetMapsCopy.insert(QString("Preset %1").arg(handlerOfPresets->currentPreset), importedPresetMap);
     handlerOfPresets->slotRecallPreset(QString("Preset %1").arg(handlerOfPresets->currentPreset + 1));
     handlerOfPresets->slotCheckPresets();
+
     presetByteArray.clear();
     presetFile->close();
     importedPresetMap.clear();
@@ -342,9 +383,23 @@ void CopyPasteHandler::slotLoadFactoryAll(){
 #endif
 
     presetFile = new QFile(factoryPath);
-    presetFile->open(QIODevice::ReadOnly);
-    presetByteArray = presetFile->readAll();
-    importedPresetMap = parser.parse(presetByteArray, &ok).toMap();
+    presetFile->open(QIODevice::ReadOnly | QIODevice::Text);
+
+    // error object
+    QJsonParseError JsonParseError;
+    // convert file to QJsonDocument. this can be read/written to
+    QJsonDocument JsonDocument = QJsonDocument::fromJson(presetFile->readAll(), &JsonParseError);
+    // close jsonFile
+    presetFile->close();
+    // convert QJsonDocument to QJsonObject. this can be queried and modified in a human-readable way
+    QJsonObject RootObject = JsonDocument.object();
+
+
+//    presetByteArray = presetFile->readAll();
+    presetByteArray = JsonDocument.toJson();
+//    importedPresetMap = parser.parse(presetByteArray, &ok).toMap();
+    importedPresetMap = RootObject.toVariantMap();
+
     handlerOfPresets->presetMapsCopy = importedPresetMap["QuNeo Presets"].toMap();
     handlerOfPresets->slotRecallPreset(QString("Preset %1").arg(handlerOfPresets->currentPreset + 1));
     for(int i = 0; i < 16; i++){
@@ -354,6 +409,7 @@ void CopyPasteHandler::slotLoadFactoryAll(){
         }
     }
     //handlerOfPresets->slotCheckPresets();
+
     presetByteArray.clear();
     presetFile->close();
     importedPresetMap.clear();
@@ -372,9 +428,23 @@ void CopyPasteHandler::slotLoadFactoryCurrent(){
 
 
     presetFile = new QFile(factoryPath);
-    presetFile->open(QIODevice::ReadOnly);
-    presetByteArray = presetFile->readAll();
-    importedPresetMap = parser.parse(presetByteArray, &ok).toMap();
+    presetFile->open(QIODevice::ReadOnly | QIODevice::Text);
+
+    // error object
+    QJsonParseError JsonParseError;
+    // convert file to QJsonDocument. this can be read/written to
+    QJsonDocument JsonDocument = QJsonDocument::fromJson(presetFile->readAll(), &JsonParseError);
+    // close jsonFile
+    presetFile->close();
+    // convert QJsonDocument to QJsonObject. this can be queried and modified in a human-readable way
+    QJsonObject RootObject = JsonDocument.object();
+
+
+//    presetByteArray = presetFile->readAll();
+    presetByteArray = JsonDocument.toJson();
+//    importedPresetMap = parser.parse(presetByteArray, &ok).toMap();
+    importedPresetMap = RootObject.toVariantMap();
+
     //handlerOfPresets->presetMapsCopy.value("QuNeo Presets").toMap().value(QString("Preset %1").arg(handlerOfPresets->currentPreset)).toMap() = importedPresetMap.value("QuNeo Presets").toMap().value(QString("Preset %1").arg(handlerOfPresets->currentPreset)).toMap();
     handlerOfPresets->presetMapsCopy.insert(QString("Preset %1").arg(handlerOfPresets->currentPreset), importedPresetMap.value("QuNeo Presets").toMap().value(QString("Preset %1").arg(handlerOfPresets->currentPreset)).toMap());
     handlerOfPresets->slotRecallPreset(QString("Preset %1").arg(handlerOfPresets->currentPreset + 1));
@@ -384,6 +454,7 @@ void CopyPasteHandler::slotLoadFactoryCurrent(){
         }
     }
     handlerOfPresets->slotCheckPresets();
+
     presetByteArray.clear();
     presetFile->close();
     importedPresetMap.clear();

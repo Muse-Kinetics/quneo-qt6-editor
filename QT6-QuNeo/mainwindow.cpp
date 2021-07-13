@@ -946,8 +946,16 @@ void MainWindow::slotUpdateAllPresetsProgress(int val){
 }
 
 void MainWindow::centerWidgetOnScreen (QWidget * widget) {
-    QRect rect = QApplication::desktop()->availableGeometry();
-    widget->move(rect.center() - widget->rect().center());
+    QScreen *screen = QGuiApplication::primaryScreen();
+    QRect  screenGeometry = screen->geometry();
+//    int height = screenGeometry.height();
+//    int width = screenGeometry.width();
+
+
+//    QRect rect = QApplication::desktop()->availableGeometry();
+//    widget->move(rect.center() - widget->rect().center());
+
+    widget->move(screenGeometry.center() - widget->rect().center());
 }
 
 int MainWindow::firmwareUpdateDialogMenu(bool upToDate)

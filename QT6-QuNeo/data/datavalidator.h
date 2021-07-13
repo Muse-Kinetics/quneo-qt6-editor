@@ -6,8 +6,8 @@
 #include <QVariant>
 #include <QFile>
 #include <QDebug>
-#include "qjson/src/parser.h"
-#include "qjson/src/serializer.h"
+//#include "qjson/src/parser.h"
+//#include "qjson/src/serializer.h"
 
 class DataValidator : public QWidget
 {
@@ -22,8 +22,8 @@ public:
     QVariantMap jsonMasterMap;
     QVariantMap jsonQuNeoPresetsMap;
 
-    QJson::Parser parser;
-    QJson::Serializer serializer;
+//    QJson::Parser parser;
+//    QJson::Serializer serializer;
     bool ok;
     /******************/
     /******************/

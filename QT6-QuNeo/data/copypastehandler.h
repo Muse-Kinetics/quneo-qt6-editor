@@ -46,8 +46,8 @@ public:
     /*****JSON I/O*****/
     QFile *presetFile;
 
-    QJson::Parser parser;
-    QJson::Serializer serializer;
+//    QJson::Parser parser;
+//    QJson::Serializer serializer;
     bool ok;
 
     DataValidator* dataValidator;
