@@ -14,7 +14,7 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
     currentPresetModified = false;
     alreadyOn = false;
     connect(mainWindow, SIGNAL(signalEvents(QString)), this, SLOT(slotEvents(QString)));
-    connect(presetMenu, SIGNAL(activated(QString)), this, SLOT(slotRecallPreset(QString)));
+    connect(presetMenu, SIGNAL(currentTextChanged(QString)), this, SLOT(slotRecallPreset(QString)));
     connect(revertButton, SIGNAL(clicked()), this, SLOT(slotRevertPreset()));
     x = 0;
 
@@ -56,36 +56,44 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
     //store a map of the 16 preset maps
     presetMaps = jsonMasterMap["QuNeo Presets"].toMap();
     presetMapsCopy = jsonMasterMap["QuNeo Presets"].toMap();
-    qDebug() << "presetMaps" << presetMaps;
-    //instantiate pad edit pane, passing preset map and main window address, link value changed signal/slots
-    padEditPane = new PadEditPane(&presetMaps, &presetMapsCopy, mainWindow, 0);
-    connect(padEditPane, SIGNAL(signalValueChanged(int,QString,QString,int,QString, int)),
-            this, SLOT(slotValueChanged(int,QString,QString,int,QString, int)));//connect info about value to be saved to the preset handler when one changes.
-    connect(padEditPane, SIGNAL(signalToLabels(QString)), this, SLOT(slotDisplayAllLabels(QString)));
-    connect(padEditPane, SIGNAL(signalTableChanged(int,QString,QList<QVariant>)),
-            this, SLOT(slotPadVelocityTableChanged(int,QString,QList<QVariant>)));
-    connect(padEditPane, SIGNAL(signalSelectPreset(QString)), this, SLOT(slotRecallPreset(QString)));
+    //qDebug() << "presetMaps" << presetMaps;
 
+    //instantiate pad edit pane, passing preset map and main window address, link value changed signal/slots
+    qDebug() << "connect padEditPane";
+
+    padEditPane = new PadEditPane(&presetMaps, &presetMapsCopy, mainWindow, 0);
+    //connect(padEditPane, SIGNAL(signalValueChanged(int,QString,QString,int,QString, int)),
+            //this, SLOT(slotValueChanged(int,QString,QString,int,QString, int)));//connect info about value to be saved to the preset handler when one changes.
+    //connect(padEditPane, SIGNAL(signalToLabels(QString)), this, SLOT(slotDisplayAllLabels(QString)));
+    //connect(padEditPane, SIGNAL(signalTableChanged(int,QString,QList<QVariant>)),
+            //this, SLOT(slotPadVelocityTableChanged(int,QString,QList<QVariant>)));
+    //connect(padEditPane, SIGNAL(signalSelectPreset(QString)), this, SLOT(slotRecallPreset(QString)));
+
+    qDebug() << "connect hslider";
     hSliderEditPane = new HSliderEditPane(&presetMaps, &presetMapsCopy, mainWindow, 0);
     connect(hSliderEditPane, SIGNAL(signalValueChanged(int,QString,QString,int,QString,int)),
             this, SLOT(slotValueChanged(int,QString,QString,int,QString,int)));
     connect(hSliderEditPane, SIGNAL(signalToLabels(QString)), this, SLOT(slotDisplayAllLabels(QString)));
 
+    qDebug() << "connect vslider";
     vSliderEditPane = new VSliderEditPane(&presetMaps, &presetMapsCopy, mainWindow, 0);
     connect(vSliderEditPane, SIGNAL(signalValueChanged(int,QString,QString,int,QString,int)),
             this, SLOT(slotValueChanged(int,QString,QString,int,QString,int)));
     connect(vSliderEditPane, SIGNAL(signalToLabels(QString)), this, SLOT(slotDisplayAllLabels(QString)));
 
+    qDebug() << "connect rotary";
     rotaryEditPane = new RotaryEditPane(&presetMaps, &presetMapsCopy, mainWindow, 0);
     connect(rotaryEditPane, SIGNAL(signalValueChanged(int,QString,QString,int,QString,int)),
             this, SLOT(slotValueChanged(int,QString,QString,int,QString,int)));
     connect(rotaryEditPane, SIGNAL(signalToLabels(QString)), this, SLOT(slotDisplayAllLabels(QString)));
 
+    qDebug() << "connect lslider";
     lSliderEditPane = new LSliderEditPane(&presetMaps, &presetMapsCopy, mainWindow, 0);
     connect(lSliderEditPane, SIGNAL(signalValueChanged(int,QString,QString,int,QString,int)),
             this, SLOT(slotValueChanged(int,QString,QString,int,QString,int)));
     connect(lSliderEditPane, SIGNAL(signalToLabels(QString)), this, SLOT(slotDisplayAllLabels(QString)));
 
+    qDebug() << "connect transport";
     transportEditPane = new TransportEditPane(&presetMaps, &presetMapsCopy, mainWindow, 0);
     connect(transportEditPane, SIGNAL(signalValueChanged(int,QString,QString,int,QString,int)),
             this, SLOT(slotValueChanged(int,QString,QString,int,QString,int)));
@@ -95,25 +103,30 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
     // connect(modeEditPane, SIGNAL(signalValueChanged(int,QString,QString,int,QString,int)),
     //this, SLOT(slotValueChanged(int,QString,QString,int,QString,int)));
 
+    qDebug() << "connect lr edit";
     leftrightEditPane = new LeftrightEditPane(&presetMaps, &presetMapsCopy, mainWindow, 0);
     connect(leftrightEditPane, SIGNAL(signalValueChanged(int,QString,QString,int,QString,int)),
             this, SLOT(slotValueChanged(int,QString,QString,int,QString,int)));
     connect(leftrightEditPane, SIGNAL(signalToLabels(QString)), this, SLOT(slotDisplayAllLabels(QString)));
 
+    qDebug() << "connect rhombus";
     rhombusEditPane = new RhombusEditPane(&presetMaps, &presetMapsCopy, mainWindow, 0);
     connect(rhombusEditPane, SIGNAL(signalValueChanged(int,QString,QString,int,QString,int)),
             this, SLOT(slotValueChanged(int,QString,QString,int,QString,int)));
     connect(rhombusEditPane, SIGNAL(signalToLabels(QString)), this, SLOT(slotDisplayAllLabels(QString)));
 
+    qDebug() << "connect ud edit";
     updownEditPane = new UpdownEditPane(&presetMaps, &presetMapsCopy, mainWindow, 0);
     connect(updownEditPane, SIGNAL(signalValueChanged(int,QString,QString,int,QString,int)),
             this, SLOT(slotValueChanged(int,QString,QString,int,QString,int)));
     connect(updownEditPane, SIGNAL(signalToLabels(QString)), this, SLOT(slotDisplayAllLabels(QString)));
 
+    qDebug() << "connect global";
     globalParameters = new GlobalParameters(&presetMaps, &presetMapsCopy, mainWindow, 0);
     connect(globalParameters, SIGNAL(signalPresetNameChanged(QString)),
             this,SLOT(slotPresetNameChanged(QString)));
 
+    qDebug() << "connect ud indicator";
     updateIndicator = new UpdateIndicator(mainWindow, &presetMaps, &presetMapsCopy, 0);
     connect(this, SIGNAL(signalPresetModified(bool)), updateIndicator, SLOT(slotPresetModified(bool)));
 
@@ -123,11 +136,11 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
 void PresetHandler::slotRecallPreset(QString selected){
     qDebug() << "slotRecallPreset() called: " << selected;
     if(selected.contains("Preset ")){ //remove prepended preset
-        /* // EB Removing this asterisk to test if this causes the crash
+         // EB previously Removing this asterisk fixed a crash, adding it back fixed another
         if(selected.contains(" *")){    //remove asterisk if recalling unsaved/modified preset
             selected.remove(" *");
         }
-        */
+
 
         currentPreset = selected.remove(0,7).toInt() - 1;
 

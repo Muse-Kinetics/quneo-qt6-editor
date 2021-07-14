@@ -14,13 +14,16 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle("QuNeo Editor");
 
     //
+    qDebug() << "new DataValidator";
     dataValidator = new DataValidator();
 
-    //qDebug() << "DONE";
+    qDebug() << "DONE";
 
     //*****Setup Preset Handler*****//
+    qDebug() << "new presetHandler";
     presetHandler = new PresetHandler(this, 0);
 
+    qDebug() << "setup buttons";
     //*****create all the component buttons with instance numbers, main window address, parent arg (always 0 for now)
     for(int i=0; i<16; i++){
         padButton[i] = new PadButton(presetHandler, presetHandler->padEditPane, i, this, 0);
@@ -44,9 +47,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //*****MIDI*****//
 
 
-
+    qDebug() << "setup MIDI";
     midiDeviceAccess = new MidiDeviceAccess(&presetHandler->presetMapsCopy,this);
-    connect(presetHandler->presetMenu, SIGNAL(currentIndexChanged(QString)), midiDeviceAccess, SLOT(slotSetCurrentPreset(QString)));
+    connect(presetHandler->presetMenu, SIGNAL(currentTextChanged(QString)), midiDeviceAccess, SLOT(slotSetCurrentPreset(QString)));
     connect(midiDeviceAccess, SIGNAL(sigRogueWarning()), this, SLOT(slotRogueWarning()));
 
     copyPasteHandler = new CopyPasteHandler(presetHandler, midiDeviceAccess,this, dataValidator, 0);

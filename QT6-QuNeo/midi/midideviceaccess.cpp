@@ -84,14 +84,14 @@ MidiDeviceAccess::MidiDeviceAccess(QVariantMap* presetMapsCopy,QObject *parent) 
 
     //find device menu, connect it, set initial slot to "None"
     deviceMenu = mainWindow->findChild<QComboBox *>("deviceMenu");
-    connect(deviceMenu, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotSelectDevice(QString)));
+    connect(deviceMenu, SIGNAL(currentTextChanged(QString)), this, SLOT(slotSelectDevice(QString)));
     deviceMenu->setEnabled(false);
     selectedDevice = NULL;
 
     //initialize to preset 0, just like everything else, connect preset menu to gather preset num
     currentPreset = 0;
     presetMenu = mainWindow->findChild<QComboBox *>("presetMenu");
-    connect(presetMenu, SIGNAL(activated(QString)), this, SLOT(slotSetCurrentPreset(QString)));
+    connect(presetMenu, SIGNAL(currentTextChanged(QString)), this, SLOT(slotSetCurrentPreset(QString)));
 
     //find update button, connect it, used for single preset
     updateDeviceButton = mainWindow->findChild<QPushButton *>("updateButton");

@@ -3,22 +3,31 @@
 PadEditPane::PadEditPane(QVariantMap *variantMap, QVariantMap *variantMapCopy, QWidget *widget, QWidget *parent) :
     QWidget(parent)
 {
+    qDebug() << "new PadEditPane";
     prevObjectToLabel = QString("None");
+    qDebug() << "connect object references";
     mainWindow = widget;
     presetMap = variantMap;
     presetMapCopy = variantMapCopy;
     currentPreset = 0;
+    qDebug() << "find ui elements";
     findUiElements();
+
+    qDebug() << "connect signals";
     connect(mainWindow, SIGNAL(signalEvents(QString)), this, SLOT(slotEvents(QString)));
 
     connect(enableGridMode, SIGNAL(stateChanged(int)), this, SLOT(slotEnableGridMode(int)));
     connect(enableGridMode, SIGNAL(stateChanged(int)), this, SLOT(slotValueChanged(int)));
+
+    qDebug() << "setup padlabels";
     for(int i=0; i<16; i++) {
         padLabel[i] = new PadLabels(mainWindow, presetMapCopy, 0);
     }
 
+    qDebug() << "set stylesheets";
     this->setStyleSheet("QLabel { font: 10px }");
 
+    qDebug() << "init tables";
     //---- Velocity Tables ---- //
     //initialize the list of values for each kind of table and store them in qlists
 
@@ -70,7 +79,7 @@ PadEditPane::PadEditPane(QVariantMap *variantMap, QVariantMap *variantMapCopy, Q
     tableIDs = velocityTables.keys();
     velTableMenu = mainWindow->findChild<QComboBox *>("padVelocityTableMenu");
     velTableMenu->addItems(tableIDs);
-    connect(velTableMenu, SIGNAL(currentIndexChanged(QString)), this, SLOT(slotSelectVelocityTable(QString)));
+    connect(velTableMenu, SIGNAL(currentTextChanged(QString)), this, SLOT(slotSelectVelocityTable(QString)));
 
     //add menu icons named the same thing as each velocity table
     for(int n = 0; n < tableIDs.length(); n++){
@@ -79,6 +88,7 @@ PadEditPane::PadEditPane(QVariantMap *variantMap, QVariantMap *variantMapCopy, Q
         velTableMenu->setItemIcon(indexOfThisTableID, tablePic);
     }
 
+    qDebug() << "connect mainwindow ui";
     xSource = mainWindow->findChild<QSpinBox *>("outDmXCC");
     ySource = mainWindow->findChild<QSpinBox *>("outDmYCC");
     connect(xSource, SIGNAL(valueChanged(int)), this, SLOT(slotChangeXText(int)));
@@ -192,7 +202,7 @@ void PadEditPane::findUiElements() {
             } else
             {
                 padUiBlackList.append(padParamList.at(i));
-                qDebug() << "Pad GLobal Ui ***" << padParamList.at(i) << "Not Found";
+                qDebug() << "Pad GLobal Ui Checkbox ***" << padParamList.at(i) << "Not Found";
             }
 
             //find menus
@@ -227,7 +237,7 @@ void PadEditPane::findUiElements() {
                 } else
                 {
                     padUiBlackList.append(padParamList.at(i));
-                    qDebug() << "Pad GLobal Ui ***" << padParamList.at(i) << "Not Found";
+                    qDebug() << "Pad GLobal Ui ComboBox ***" << padParamList.at(i) << "Not Found";
                 }
             }
 

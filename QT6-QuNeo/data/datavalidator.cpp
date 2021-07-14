@@ -3,6 +3,9 @@
 DataValidator::DataValidator(QWidget *parent) :
     QWidget(parent)
 {
+    //load json into QFile - moved to main class
+    jsonFile = new QFile("../../../presets/QuNeo.json");
+
     slotLoadJSON();
     slotConstructDefultParamMap();
     slotCheckJSON();
@@ -19,6 +22,7 @@ void DataValidator::slotConstructDefultParamMap(){
       *************************************************************/
 
     QList<QVariant> mediumTable;
+    qDebug() << "slotConstructDefultParamMap called";
 
     mediumTable << 0 << 1 << 1 << 1 << 1 << 1 << 1 << 1 << 2 << 2 << 2 << 2 << 2 << 2 << 2 << 3 << 3 << 3 << 3 << 3 << 4 << 4 << 4 << 4 << 5 << 5 << 5 << 5 << 6 << 6 << 7 << 7 << 8 << 8 << 9 << 9 << 10 << 10 << 11 << 12 << 12 << 13 << 13 << 14 << 15 << 16 << 16 << 17 << 18 << 19 << 19 << 20 << 21 << 22 << 23 << 24 << 24 << 25 << 26 << 27 << 28 << 29 << 30 << 31 << 32 << 33 << 34 << 35 << 36 << 37 << 38 << 40 << 41 << 42 << 43 << 44 << 45 << 47 << 48 << 49 << 50 << 52 << 53 << 54 << 55 << 57 << 58 << 60 << 61 << 62 << 64 << 65 << 67 << 68 << 70 << 71 << 73 << 74 << 76 << 77 << 79 << 80 << 82 << 84 << 85 << 87 << 89 << 90 << 92 << 94 << 96 << 97 << 99 << 101 << 103 << 104 << 106 << 108 << 110 << 112 << 114 << 116 << 118 << 120 << 122 << 124 << 125 << 127;
     //for(int i=0; i<128; i++){
@@ -1489,8 +1493,9 @@ void DataValidator::slotConstructDefultParamMap(){
 
 void DataValidator::slotLoadJSON(){
 
-    //load json into QFile
-    jsonFile = new QFile("../../../presets/QuNeo.json");
+    qDebug() << "slotLoadJSON called";
+    //load json into QFile - moved to main class
+    //jsonFile = new QFile("../../../presets/QuNeo.json");
 
     if(jsonFile->open(QIODevice::ReadWrite | QIODevice::Text)){
         qDebug("jsonFound");
@@ -1525,11 +1530,13 @@ void DataValidator::slotLoadJSON(){
 
 void DataValidator::slotParseJSON(){
 
+    qDebug() << "slotCheckJSON called";
+
 }
 
 void DataValidator::slotCheckJSON(){
 
-
+    qDebug() << "slotCheckJSON called";
 
     /***************************************************************************/
     /***************************** QuNeo Globals *******************************/
@@ -3220,6 +3227,7 @@ void DataValidator::slotCheckJSON(){
 
 void DataValidator::slotSaveJSON(){
 
+    qDebug() << "slotSaveJSON called";
     jsonMasterMap.insert(QString("QuNeo Presets"), jsonQuNeoPresetsMap); //insert updated map into json map
 
 //    jsonByteArray = serializer.serialize(jsonMasterMap); //serialize the master json map into the byte array
@@ -3227,6 +3235,12 @@ void DataValidator::slotSaveJSON(){
     jsonByteArray = jsonPresets.toJson();
 
     //qDebug() << "byte array" << jsonByteArray;
+
+    if(jsonFile->open(QIODevice::ReadWrite | QIODevice::Text)){
+        qDebug("jsonFound");
+    } else {
+        qDebug() << "json not found";
+    }
 
     jsonFile->resize(0); //clear jsonFile (set to 0 byte size)
     jsonFile->write(jsonByteArray); //write json byte array to file
@@ -3236,7 +3250,7 @@ void DataValidator::slotSaveJSON(){
 
 QVariantMap DataValidator::slotValidatePreset(QVariantMap presetMap){
 
-
+    qDebug() << "slotValidatePreset called";
     for(int presetNum = 0; presetNum<1; presetNum++)
     {
 

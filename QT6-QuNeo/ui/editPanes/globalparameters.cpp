@@ -22,13 +22,14 @@ GlobalParameters::GlobalParameters(QVariantMap *variantMap, QVariantMap *variant
 }
 
 void GlobalParameters::slotPresetNameChanged(QString presetName){
+    qDebug() << "slotPresetNameChanged called";
     emit signalPresetNameChanged(presetName);
 }
 
 void GlobalParameters::slotRecallPreset(int preset){
     currentPreset = preset;
     presetNumMap = presetMapCopy->value(QString("Preset %1").arg(currentPreset)).toMap();
-    //presetNumMap.value("presetName").toString();
-    //qDebug()<< presetNumMap.value("presetName").toString();
+    presetNumMap.value("presetName").toString();
+    qDebug()<< presetNumMap.value("presetName").toString();
     presetName->setText(QString(presetNumMap.value("presetName").toString()));
 }
