@@ -20,20 +20,23 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
 
     /***********************************Load and Parse JSON***********************************/
 
+    qDebug() << "Load and parse JSON";
     QString jsonPath = QCoreApplication::applicationDirPath(); //get bundle path
 
 #if defined(Q_OS_MAC) && !defined(QT_DEBUG)
     jsonPath.remove(jsonPath.length() - 5, jsonPath.length());
     jsonPath.append("Resources/presets/QuNeo.json");
 #else
-    jsonPath = QString("../../../presets/QuNeo.json");
+    jsonPath = QString("./presets/QuNeo.json");
 #endif
 
     //load json into QFile
     jsonFile = new QFile(jsonPath);
 
     // open file
-    jsonFile->open(QIODevice::ReadWrite | QIODevice::Text);
+    if(jsonFile->open(QIODevice::ReadWrite | QIODevice::Text)){
+        qDebug("jsonFound");
+    }
 
     // error object
     QJsonParseError JsonParseError;

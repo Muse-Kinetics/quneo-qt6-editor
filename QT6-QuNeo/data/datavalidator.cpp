@@ -4,7 +4,12 @@ DataValidator::DataValidator(QWidget *parent) :
     QWidget(parent)
 {
     //load json into QFile - moved to main class
+#if defined(Q_OS_MAC) && !defined(QT_DEBUG)
     jsonFile = new QFile("../../../presets/QuNeo.json");
+#else
+    jsonFile = new QFile("./presets/QuNeo.json");
+#endif
+
 
     slotLoadJSON();
     slotConstructDefultParamMap();

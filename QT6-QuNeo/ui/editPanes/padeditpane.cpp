@@ -97,16 +97,20 @@ PadEditPane::PadEditPane(QVariantMap *variantMap, QVariantMap *variantMapCopy, Q
 #ifdef Q_OS_MAC
 
 #else
-    QLabel *sensitivityLabel = mainWindow->findChild<QLabel *>("padSensitivityLabel");
+    qDebug() << "Windows labels etc";
+    //QLabel *sensitivityLabel = mainWindow->findChild<QLabel *>("padSensitivityLabel");
     QLabel *sensitivityLabel2 = mainWindow->findChild<QLabel *>("padSensitivityLabel_2");
+    qDebug() << "Arial";
     QFont f( "Arial", 3, QFont::Normal);
-    sensitivityLabel->setFont(f);
+    qDebug() << "labels";
+    //sensitivityLabel->setFont(f);
     sensitivityLabel2->setFont(f);
+    qDebug() << "dial";
     sensitivityDial->move(9, 378);
-    sensitivityLabel->move(-10, 414);
+    //sensitivityLabel->move(-10, 414);
     sensitivityLabel2->move(-11, 403);
 #endif
-
+    qDebug() << "End padEditPane";
 }
 
 //this function looks up the table based on the ID selected in the menu and stores it in the json.

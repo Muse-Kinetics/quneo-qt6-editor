@@ -56,6 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(copyPasteHandler, SIGNAL(sigUpdateFirmware(bool)), this, SLOT(firmwareUpdateDialogMenu(bool)));
     //connect(midiDeviceAccess, SIGNAL(sigSetVersions(QString,QString)), copyPasteHandler, SLOT(slotSetVersions(QString,QString)));
 
+    qDebug() << "Button classes to copypaste";
     //button classes need a pointer to the copypastehandler, but since they are initialized before the copypastehandler
     //set the pointer this way. This allows you to enable the menu items after a sensor has been clicked.
     for(int i=0; i<16; i++){
@@ -77,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
         buttonButton[i]->copyPasteHandle = copyPasteHandler;
     }
 
+    qDebug() << "Connect signals from button classes";
     //--connect signals from button classes to slot which sets current sensor type and number--//
     //--to be used by slotCopySensor and slotPasteSensor to look up preset values--------------//
     for(int i=0; i<4; i++){
@@ -98,6 +100,7 @@ MainWindow::MainWindow(QWidget *parent) :
         connect(rotaryButton[i], SIGNAL(signalCurrentSensor(QString)), copyPasteHandler, SLOT(slotSetCurrentSensor(QString)));
     }
 
+    qDebug() << "Command arrow keys";
     //----Command Arrow Keys Actions------//
     toNextSensor = new QAction(tr("&Edit Next Sensor"), this);
     copyPasteHandler->editMenu->addAction(toNextSensor);
@@ -108,6 +111,8 @@ MainWindow::MainWindow(QWidget *parent) :
     copyPasteHandler->editMenu->addAction(toPrevSensor);
     toPrevSensor->setShortcut(Qt::CTRL + Qt::Key_Left);
     connect(toPrevSensor, SIGNAL(triggered()), this, SLOT(slotGoToPrevSensor()));
+
+    qDebug() << "Connect panes to copypase/handler";
 
     //connect each edit pane's copy/paste signals to the copypastehandler.
     //This allows you to copy/paste while a spinbox is in focus.
@@ -132,8 +137,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //Save button
     // EB commented out to avoid crash
+    qDebug() << "Connect PresetHandler save button";
     connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
 
+    qDebug() << "Firmware update stuff";
     //Firmware Updating Stuff ***********
     firmwareUpdate = this->findChild<QPushButton *>(QString("updateFirmwareButton"));
     firmwareUpdate->hide();
@@ -155,6 +162,7 @@ MainWindow::MainWindow(QWidget *parent) :
     fwUpdateDialogManual.setText(QString("Click OK to update your firmware."));
     fwUpdateDialogManual.move(this->width()/2, this->height()/2);
 
+    qDebug() << "setup Update All Presets Dialog";
     // moved this into slotShowUpdateAllDialog()
     updateAllPresetsProgressDialog = new QProgressDialog("Updating All Presets...","Cancel", 0,16,this);
     //updateAllPresetsProgressDialog->setWindowModality(Qt::WindowModal);
@@ -162,9 +170,11 @@ MainWindow::MainWindow(QWidget *parent) :
     updateAllPresetsProgressDialog->close();
     //updateAllPresetsProgressDialog->setValue(4);
 
+    qDebug() << "Connect midiDeviceAccess";
     connect(midiDeviceAccess, SIGNAL(sigUpdateAllPresetsCount(int)), this, SLOT(slotUpdateAllPresetsProgress(int)));
     connect(midiDeviceAccess, SIGNAL(sigShowUpdateAllPresetsDialog()), this, SLOT(slotShowUpdateAllDialog()));
 
+    qDebug() << "populate clicked sensor map";
     //populate clicked sensor map with 0's for initial state of editmultiple
     for(int i=0; i < 16; i++) {
         presetHandler->clickedSensors.insert(QString("padButton%1").arg(i), 0);
@@ -191,6 +201,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     totalFwBytes = midiDeviceAccess->sysExFirmwareBytes.size();
 
+    qDebug() << "mac/win progress bars";
     //mac progress bar...
 #ifdef Q_OS_MAC
 
@@ -221,13 +232,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 #endif
 
+    qDebug() << "setup Rogue warning";
     //rogueWarning.setWindowFlags(Qt::Widget);
     rogueWarning.setIcon(QMessageBox::Warning);
     rogueWarning.addButton(QMessageBox::Ok);
     rogueWarning.setText("Your QuNeo is either in Expander Mode or you are using a Rogue.");
     rogueWarning.setInformativeText("Please connect your QuNeo with a USB cable, and make sure it is not in \"expander\" mode.");
-
-
 
 }
 
