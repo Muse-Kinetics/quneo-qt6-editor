@@ -52,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(presetHandler->presetMenu, SIGNAL(currentTextChanged(QString)), midiDeviceAccess, SLOT(slotSetCurrentPreset(QString)));
     connect(midiDeviceAccess, SIGNAL(sigRogueWarning()), this, SLOT(slotRogueWarning()));
 
+    // cph needs a pointer to mda for fw version strings
     copyPasteHandler = new CopyPasteHandler(presetHandler, midiDeviceAccess,this, dataValidator, 0);
     connect(copyPasteHandler, SIGNAL(sigUpdateFirmware(bool)), this, SLOT(firmwareUpdateDialogMenu(bool)));
     //connect(midiDeviceAccess, SIGNAL(sigSetVersions(QString,QString)), copyPasteHandler, SLOT(slotSetVersions(QString,QString)));

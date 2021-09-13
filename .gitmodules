@@ -1,0 +1,9 @@
+[submodule "QT6-QuNeo/inc/KMI_MIDI_Device_Manager"]
+	path = QT6-QuNeo/inc/KMI_MIDI_Device_Manager
+	url = https://EricKMI@bitbucket.org/kmilabs/kmi_midi_device_manager.git
+[submodule "QT6-QuNeo/inc/KMI_Ports"]
+	path = QT6-QuNeo/inc/KMI_Ports
+	url = https://EricKMI@bitbucket.org/kmilabs/kmi_ports.git
+[submodule "QT6-QuNeo/inc/RtMidi"]
+	path = QT6-QuNeo/inc/RtMidi
+	url = https://github.com/thestk/rtmidi.git
