@@ -10,13 +10,17 @@ PadEditPane::PadEditPane(QVariantMap *variantMap, QVariantMap *variantMapCopy, Q
     presetMap = variantMap;
     presetMapCopy = variantMapCopy;
     currentPreset = 0;
-    qDebug() << "find ui elements";
+
+    qDebug() << "call findUiElements";
     findUiElements();
 
     qDebug() << "connect signals";
     connect(mainWindow, SIGNAL(signalEvents(QString)), this, SLOT(slotEvents(QString)));
 
+    qDebug() << "connect slotEnableGridMode";
     connect(enableGridMode, SIGNAL(stateChanged(int)), this, SLOT(slotEnableGridMode(int)));
+
+    qDebug() << "connect slotValueChanged";
     connect(enableGridMode, SIGNAL(stateChanged(int)), this, SLOT(slotValueChanged(int)));
 
     qDebug() << "setup padlabels";
@@ -121,7 +125,9 @@ void PadEditPane::slotSelectVelocityTable(QString tableID){
     emit signalTableChanged(currentPreset, tableID, selectedTable);
 }
 
-void PadEditPane::findUiElements() {
+void PadEditPane::findUiElements()
+{
+    qDebug() << "findUiElements called";
     padTabs = mainWindow->findChild<QTabWidget *>("padTabs");
     padTabs->setCurrentIndex(0); //set master pad tab widget to basic
 
@@ -134,6 +140,8 @@ void PadEditPane::findUiElements() {
             value("ComponentSettings").toMap().
             value("Pads").toMap().
             value(QString("Pad0")).toMap().keys();
+
+    qDebug() << "iterate through params - count: " << padParamList.count();
 
     //iterate through list of params and populate map of spin box addresses linked by param name
     for(int i=0; i<padParamList.count();i++)
@@ -202,11 +210,12 @@ void PadEditPane::findUiElements() {
 
             if(mainWindow->findChild<QCheckBox *>("enableGrid"))
             {
+                qDebug() << "Pad Global Ui Checkbox ***" << padParamList.at(i) << "Found";
                 enableGridMode = mainWindow->findChild<QCheckBox *>("enableGrid");
             } else
             {
                 padUiBlackList.append(padParamList.at(i));
-                qDebug() << "Pad GLobal Ui Checkbox ***" << padParamList.at(i) << "Not Found";
+                qDebug() << "Pad Global Ui Checkbox ***" << padParamList.at(i) << "Not Found";
             }
 
             //find menus
@@ -618,6 +627,8 @@ void PadEditPane::slotCalculatePadSensitivity(int changedValue)
 
 void PadEditPane::slotValueChanged(int num)
 {
+    qDebug() << "slotValueChanged - num: " << num;
+
     focusCheck = qobject_cast<QWidget *>(QObject::sender());
     if((!focusCheck->objectName().contains(QString("Enable"))) && (!focusCheck->objectName().contains(QString("enable"))))
     {
@@ -694,6 +705,7 @@ void PadEditPane::slotToLabels(QString parameter)
 
 void PadEditPane::slotEnableGridMode(int gridEnabled)
 {
+    qDebug() << "slotEnableGridMode - gridEnabled: " << gridEnabled;
     if(gridEnabled)
     {
         for (int i=0; i<padParamList.count(); i++)
@@ -807,7 +819,7 @@ void PadEditPane::slotStyleDefault()
     emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
 }
 
-void PadEditPane::slotStyleMachine()
+void PadEditPane::slotStyleMachine() // low
 {
     qDebug()<<QString("machine");
     int thisPreset = currentPreset;
@@ -815,25 +827,7 @@ void PadEditPane::slotStyleMachine()
     {
         emit signalSelectPreset(QString("Preset %1").arg(p+1));
         onThresh->setValue(25);
-        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),25);
-        offThresh->setValue(5);
-        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOffThreshold"),5);
-        sensitivityDial->setValue(100);
-        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padSensitivity"),93);
-        velTableMenu->setCurrentIndex(velTableMenu->findText(QString("Medium")));
-    }
-    emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
-}
-
-void PadEditPane::slotStyleAkaMP()
-{
-    qDebug()<<QString("akaMP");
-    int thisPreset = currentPreset;
-    for(int p = 0; p < 16; p++)
-    {
-        emit signalSelectPreset(QString("Preset %1").arg(p+1));
-        onThresh->setValue(25);
-        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),25);
+        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),15);
         offThresh->setValue(5);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOffThreshold"),5);
         sensitivityDial->setValue(100);
@@ -843,7 +837,25 @@ void PadEditPane::slotStyleAkaMP()
     emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
 }
 
-void PadEditPane::slotStyleKorPad()
+void PadEditPane::slotStyleAkaMP() // med
+{
+    qDebug()<<QString("akaMP");
+    int thisPreset = currentPreset;
+    for(int p = 0; p < 16; p++)
+    {
+        emit signalSelectPreset(QString("Preset %1").arg(p+1));
+        onThresh->setValue(25);
+        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),10);
+        offThresh->setValue(5);
+        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOffThreshold"),5);
+        sensitivityDial->setValue(100);
+        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padSensitivity"),100);
+        velTableMenu->setCurrentIndex(velTableMenu->findText(QString("Dynamic")));
+    }
+    emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
+}
+
+void PadEditPane::slotStyleKorPad() // high
 {
     qDebug()<<QString("korePad");
     int thisPreset = currentPreset;
@@ -851,30 +863,33 @@ void PadEditPane::slotStyleKorPad()
     {
         emit signalSelectPreset(QString("Preset %1").arg(p+1));
         onThresh->setValue(25);
-        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),25);
+        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),5);
         offThresh->setValue(5);
-        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOffThreshold"),5);
+        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOffThreshold"),3);
         sensitivityDial->setValue(100);
-        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padSensitivity"),127);
-        velTableMenu->setCurrentIndex(velTableMenu->findText(QString("Hard")));
+        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padSensitivity"),110);
+        velTableMenu->setCurrentIndex(velTableMenu->findText(QString("None")));
     }
     emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
 }
 
-void PadEditPane::slotStyleFullLevel()
+void PadEditPane::slotStyleFullLevel() // extreme
 {
     qDebug()<<QString("full");
+
+    sensitivityDial->setValue(127);
+
     int thisPreset = currentPreset;
     for(int p = 0; p < 16; p++)
     {
         emit signalSelectPreset(QString("Preset %1").arg(p+1));
         onThresh->setValue(25);
-        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),25);
+        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),3);
         offThresh->setValue(5);
-        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOffThreshold"),5);
+        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOffThreshold"),1);
         sensitivityDial->setValue(100);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padSensitivity"),127);
-        velTableMenu->setCurrentIndex(velTableMenu->findText(QString("Full Level")));
+        velTableMenu->setCurrentIndex(velTableMenu->findText(QString("None")));
     }
     emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
 }

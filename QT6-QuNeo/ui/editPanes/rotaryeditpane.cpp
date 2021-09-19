@@ -123,7 +123,7 @@ void RotaryEditPane::findUiElements(){
         }
         else {
             rotaryUiBlacklist.append(rotaryParamList.at(i));
-            qDebug() << "Rotary Ui  ***" << rotaryParamList.at(i) << "Not Found";
+            //qDebug() << "Rotary Ui  ***" << rotaryParamList.at(i) << "Not Found";
         }
     }
 

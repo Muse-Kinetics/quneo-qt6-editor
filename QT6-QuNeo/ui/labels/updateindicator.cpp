@@ -29,6 +29,10 @@ UpdateIndicator::UpdateIndicator(QWidget *widget, QVariantMap * presetMapOrig, Q
 
     slotPresetModified(false);
 
+    // timers have to be triggered by these signals from the main thread
+    connect(this, SIGNAL(signalStartButtonFlasher()), this, SLOT(slotStartButtonFlasher()));
+    connect(this, SIGNAL(signalStopButtonFlasher()), this, SLOT(slotStopButtonFlasher()));
+
 }
 
 bool UpdateIndicator::slotCompareMaps(int presetNumber){
@@ -408,11 +412,11 @@ void UpdateIndicator::slotPresetModified(bool state){
 
     if(state && !alreadyOn){
         alreadyOn = true;
-        buttonFlasher->start(500);
+        emit signalStartButtonFlasher();
         updateButton->setText("Audition Preset");
     }
     else if(!state && alreadyOn){ //if it is already on and state is false, turn off the indicator.
-        buttonFlasher->stop();
+        emit signalStopButtonFlasher();
         alreadyOn = false;
         indicatorButton->setStyleSheet("color: black");
         updateButton->setText("Update Preset");
@@ -449,4 +453,14 @@ bool UpdateIndicator::slotCheckThisPreset(int preset){
     }
     else {slotPresetModified(false);
     return false;}
+}
+
+void UpdateIndicator::slotStartButtonFlasher()
+{
+    buttonFlasher->start(500);
+}
+
+void UpdateIndicator::slotStopButtonFlasher()
+{
+    buttonFlasher->stop();
 }

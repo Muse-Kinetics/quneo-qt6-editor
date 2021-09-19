@@ -20,10 +20,11 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
 
     /***********************************Load and Parse JSON***********************************/
 
-    qDebug() << "Load and parse JSON";
     QString jsonPath = QCoreApplication::applicationDirPath(); //get bundle path
 
-#if defined(Q_OS_MAC) && !defined(QT_DEBUG)
+    qDebug() << "Load and parse JSON - jsonPath: " << jsonPath;
+
+#if defined(Q_OS_MAC)// && !defined(QT_DEBUG)
     jsonPath.remove(jsonPath.length() - 5, jsonPath.length());
     jsonPath.append("Resources/presets/QuNeo.json");
 #else
@@ -44,6 +45,9 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
     QJsonDocument JsonDocument = QJsonDocument::fromJson(jsonFile->readAll(), &JsonParseError);
     // close jsonFile
     jsonFile->close();
+
+    qDebug() << "JsonDocument isEmpty: " << JsonDocument.isEmpty();
+
     // convert QJsonDocument to QJsonObject. this can be queried and modified in a human-readable way
     QJsonObject RootObject = JsonDocument.object();
 
@@ -56,10 +60,12 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
 //    jsonMasterMap = parser.parse(jsonByteArray, &ok).toMap();
     jsonMasterMap = RootObject.toVariantMap();
 
+    qDebug() << "jsonMasterMap size: " << jsonMasterMap.size();
+
     //store a map of the 16 preset maps
     presetMaps = jsonMasterMap["QuNeo Presets"].toMap();
     presetMapsCopy = jsonMasterMap["QuNeo Presets"].toMap();
-    //qDebug() << "presetMaps" << presetMaps;
+    qDebug() << "presetMaps size:" << presetMaps.size();
 
     //instantiate pad edit pane, passing preset map and main window address, link value changed signal/slots
     qDebug() << "connect padEditPane";

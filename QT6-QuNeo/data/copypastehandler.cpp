@@ -100,12 +100,12 @@ CopyPasteHandler::CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess
     saveAllPresets->setDisabled(true);
 
     //---- DRUM STYLES ----//
-    drumStylesMenu = menuBar->addMenu(tr("&Drum Styles"));
+    drumStylesMenu = menuBar->addMenu(tr("&Pad Sensitivity"));
     styleDefault = new QAction(tr("Default"), this);
-    styleMachine = new QAction(tr("Machine"), this);
-    styleAkaMP = new QAction(tr("AkaMP"), this);
-    styleKorPad = new QAction(tr("KorPad"), this);
-    styleFullLevel = new QAction(tr("Full Level"), this);
+    styleMachine = new QAction(tr("Low"), this);
+    styleAkaMP = new QAction(tr("Medium"), this);
+    styleKorPad = new QAction(tr("High"), this);
+    styleFullLevel = new QAction(tr("Extreme"), this);
     drumStylesMenu->addAction(styleDefault);
     drumStylesMenu->addAction(styleMachine);
     drumStylesMenu->addAction(styleAkaMP);
@@ -129,13 +129,16 @@ CopyPasteHandler::CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess
     connect(swapPadLeds, SIGNAL(triggered()), mda, SLOT(slotSwapLeds()));
     hardwareMenu->addAction(swapPadLeds);
 
-    toggleProgramChangeOut = new QAction(tr("&Program Change Out"), this);
+    toggleProgramChangeOut = new QAction(tr("&Program Change Transmit"), this);
     connect(toggleProgramChangeOut, SIGNAL(triggered()), mda, SLOT(slotSendToggleProgramChangeOutput()));
+    connect(toggleProgramChangeOut, SIGNAL(triggered()), this, SLOT(slotTogglePCout()));
     hardwareMenu->addAction(toggleProgramChangeOut);
 
-    toggleProgramChangeIn = new QAction(tr("&Program Change In"), this);
+    toggleProgramChangeIn = new QAction(tr("&Program Change Receive"), this);
     connect(toggleProgramChangeIn, SIGNAL(triggered()), mda, SLOT(slotSendToggleProgramChangeInput()));
+    connect(toggleProgramChangeIn, SIGNAL(triggered()), this, SLOT(slotTogglePCin()));
     hardwareMenu->addAction(toggleProgramChangeIn);
+
 
     //----- HELP MENU ------//
     helpMenu = menuBar->addMenu(tr("&Help"));
@@ -375,7 +378,9 @@ void CopyPasteHandler::slotLoadFactoryAll(){
 
     QString factoryPath = QCoreApplication::applicationDirPath(); //get bundle path;
 
-#if defined(Q_OS_MAC) && !defined(QT_DEBUG)
+        qDebug() << "slotLoadFactoryAll called - factoryPath: " << factoryPath;
+
+#if defined(Q_OS_MAC)// && !defined(QT_DEBUG)
     factoryPath.remove(factoryPath.length() - 5, factoryPath.length());
     factoryPath.append("Resources/presets/QuNeo_FactoryPresets.json");
 #else
@@ -419,7 +424,7 @@ void CopyPasteHandler::slotLoadFactoryCurrent(){
 
     QString factoryPath = QCoreApplication::applicationDirPath(); //get bundle path;
 
-#if defined(Q_OS_MAC) && !defined(QT_DEBUG)
+#if defined(Q_OS_MAC)// && !defined(QT_DEBUG)
     factoryPath.remove(factoryPath.length() - 5, factoryPath.length());
     factoryPath.append("Resources/presets/QuNeo_FactoryPresets.json");
 #else
@@ -699,7 +704,7 @@ void CopyPasteHandler::slotSetCurrentSensor(QString sensorTypeName){
 }
 
 void CopyPasteHandler::slotUpdateFirmware(){
-    emit sigUpdateFirmware(false);
+    emit sigUpdateFirmware();
     qDebug() << "FW COPYPASTE UPDATE CALLED";
 }
 
@@ -726,4 +731,16 @@ void CopyPasteHandler::slotProgressDialogOpen(bool open){
     fwProgressOpen = open;
     qDebug() << open;
 
+}
+
+void CopyPasteHandler::slotTogglePCout()
+{
+    bool checkStatus = (toggleProgramChangeOut->isChecked()) ? false : true;
+    toggleProgramChangeOut->setChecked(checkStatus);
+}
+
+void CopyPasteHandler::slotTogglePCin()
+{
+    bool checkStatus = (toggleProgramChangeIn->isChecked()) ? false : true;
+    toggleProgramChangeIn->setChecked(checkStatus);
 }

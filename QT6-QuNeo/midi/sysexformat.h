@@ -77,6 +77,7 @@ signals:
 
 public slots:
     void slotEncodePreset(int);
+    void slotLoadPreset(int);
     void slotWriteFile(int);
 
 };

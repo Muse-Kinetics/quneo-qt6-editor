@@ -4,7 +4,7 @@ DataValidator::DataValidator(QWidget *parent) :
     QWidget(parent)
 {
     //load json into QFile - moved to main class
-#if defined(Q_OS_MAC) && !defined(QT_DEBUG)
+#if defined(Q_OS_MAC)// && !defined(QT_DEBUG)
     jsonFile = new QFile("../../../presets/QuNeo.json");
 #else
     jsonFile = new QFile("./presets/QuNeo.json");
@@ -1562,9 +1562,9 @@ void DataValidator::slotCheckJSON(){
     //iterate through all presets and check against default single preset map
     for(int presetNum = 0; presetNum<16; presetNum++){
 
-        qDebug() << "***************************************************";
-        qDebug() << "Preset" << presetNum;
-        qDebug() << "***************************************************";
+        //qDebug() << "***************************************************";
+        qDebug() << "Load preset" << presetNum;
+        //qDebug() << "***************************************************";
 
         /***************************************************************************/
         /***************************** Preset Globals ******************************/

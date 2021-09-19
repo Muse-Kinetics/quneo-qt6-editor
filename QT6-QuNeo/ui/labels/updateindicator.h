@@ -33,6 +33,8 @@ public:
     int presetNum;
 
 signals:
+    void signalStartButtonFlasher();
+    void signalStopButtonFlasher();
 
 public slots:
 
@@ -42,6 +44,8 @@ public slots:
     bool slotCheckThisPreset(int preset);//called when a preset is recalled. function calls compareMaps and then slotPresetModified.
     void slotPresetModified(bool);//controls graphics by starting or stopping qtimer, filters out repeat calls to turn on indicator.
     void slotFlasher();//called every 500ms by QTimer
+    void slotStartButtonFlasher();
+    void slotStopButtonFlasher();
 
 };
 

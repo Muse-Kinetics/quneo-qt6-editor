@@ -110,7 +110,7 @@ public:
     bool fwProgressOpen;
 
 signals:
-    void sigUpdateFirmware(bool);
+    void sigUpdateFirmware();
 
 public slots:
 
@@ -131,6 +131,9 @@ public slots:
 
     void slotQuNeoConnected(bool);
     void slotProgressDialogOpen(bool);
+    void slotTogglePCout();
+    void slotTogglePCin();
+
 
 };
 

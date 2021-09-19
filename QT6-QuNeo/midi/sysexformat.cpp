@@ -5,7 +5,7 @@ SysExFormat::SysExFormat(QVariantMap* variantMap, QObject *parent) :
     QObject(parent)
 {
 
-
+    qDebug() << "Initialize SysExFormat";
 
     pad_str  <<
                 "enableGrid"<<
@@ -352,7 +352,7 @@ SysExFormat::SysExFormat(QVariantMap* variantMap, QObject *parent) :
         presetSysEx[i] = new QFile(saveSyx);
         loadPresetSysEx[i] = new QFile(loadSyx);
 
-        /*
+
         if(presetSysEx[i]->open(QIODevice::ReadWrite)){
             qDebug("presetFound");
         } else {
@@ -368,7 +368,7 @@ SysExFormat::SysExFormat(QVariantMap* variantMap, QObject *parent) :
         //presetSysEx[i]->open(QIODevice::ReadWrite);
         qDebug() << "presetSysex[" << i << "] file: " << saveSyx << " debug: " << presetSysEx[i]->isReadable();
         qDebug() << "loadPresetSysEx[" << i << "] file: " << loadSyx << "debug: " << loadPresetSysEx[i]->isReadable();
-        */
+
     }
 
     //initialize encoding variables and sysex id
@@ -393,7 +393,7 @@ SysExFormat::SysExFormat(QVariantMap* variantMap, QObject *parent) :
 
 void SysExFormat::slotEncodePreset(int presetNum){
 
-    qDebug() << "slotEncodePreset called";
+    qDebug() << "slotEncodePreset called - presetNum: " << presetNum;
 
     PRESET_LENGTH = 1279; //****************** Doublecheck the fly.
     PRESET_START = 0xA1;
@@ -425,11 +425,13 @@ void SysExFormat::slotEncodePreset(int presetNum){
     //initialize crc and midi chunk
     crc_init();
     midi_chunk_init();
+
     //preamble type 2bytes
     midi_sx_encode_crc_char(0x00);
-    midi_sx_encode_crc_char(0x02);
-    //preamble length param 2 bytes
-    midi_sx_encode_crc_char(0x22);
+    midi_sx_encode_crc_char(0x02); // start of text
+
+    //message id 2 bytes
+    midi_sx_encode_crc_char(0x22); // load preset
     midi_sx_encode_crc_char(0x20);
     //crc
     midi_sx_encode_crc_int(crc);
@@ -441,7 +443,50 @@ void SysExFormat::slotEncodePreset(int presetNum){
     slotWriteFile(presetNum);
 }
 
+void SysExFormat::slotLoadPreset(int presetNum){
+
+    qDebug() << "slotLoadPreset called - presetNum: " << presetNum;
+
+    // reset the sysex encoding values and bytearray
+    count = 0;
+    sumByte = 0;
+    presetSysExByteArray.clear();
+
+    //begin sysex byte
+    sysex_out(sysex_start);
+
+    // identification bytes
+    for(int i=0; i<ID; i++){
+        sysex_out(sx_ident[i]);
+    }
+
+    //packet start signal byte
+    sysex_out(SX_PACKET_START);
+
+    //initialize crc and midi chunk
+    crc_init();
+    midi_chunk_init();
+
+    //preamble type 2bytes
+    midi_sx_encode_crc_char(0x00);
+    midi_sx_encode_crc_char(0x02);
+
+    //preamble length param 2 bytes
+    midi_sx_encode_crc_char(0x30);      // load preset
+    midi_sx_encode_crc_char(presetNum); // preset number
+
+    //crc
+    midi_sx_encode_crc_int(crc);        // encode the two bytes CRC
+
+    midi_sx_flush();                    // finish 8bit encoding
+    sysex_out(sysex_end);
+
+
+}
+
 void SysExFormat::slotWriteFile(int presetNum){
+
+    qDebug() << "slotWriteFile - presetNum: " << presetNum;
 
     presetSysEx[presetNum]->resize(0);
     presetSysEx[presetNum]->write(presetSysExByteArray);
@@ -453,6 +498,7 @@ void SysExFormat::slotWriteFile(int presetNum){
 
 void SysExFormat::sendPreset(unsigned int presetNum){
 
+    qDebug() << "sendPreset called - presetNum: " << presetNum;
     //reset global count
     count = 0;
     sumByte = 0;
