@@ -344,32 +344,32 @@ SysExFormat::SysExFormat(QVariantMap* variantMap, QObject *parent) :
     //set variant map to preset copy
     presetMapsCopyPointer =  variantMap;
 
-    //set data and load file arrays to correct path
-    for(int i = 0; i < 16; i ++){
-        QString saveSyx = QString("../../../sysex/data/dataPreset%1.syx").arg(i);
-        QString loadSyx = QString("../../../sysex/loadPresets/loadPreset%1.syx").arg(i);
+    //set data and load file arrays to correct path - this is now done by forming
+//    for(int i = 0; i < 16; i ++){
+//        QString saveSyx = QString("../../../sysex/data/dataPreset%1.syx").arg(i);
+//        QString loadSyx = QString("../../../sysex/loadPresets/loadPreset%1.syx").arg(i);
 
-        presetSysEx[i] = new QFile(saveSyx);
-        loadPresetSysEx[i] = new QFile(loadSyx);
+//        presetSysEx[i] = new QFile(saveSyx);
+//        loadPresetSysEx[i] = new QFile(loadSyx);
 
 
-        if(presetSysEx[i]->open(QIODevice::ReadWrite)){
-            qDebug("presetFound");
-        } else {
-            qDebug() << "preset not found";
-        }
+//        if(presetSysEx[i]->open(QIODevice::ReadWrite)){
+//            qDebug("presetFound");
+//        } else {
+//            qDebug() << "preset not found";
+//        }
 
-        if(loadPresetSysEx[i]->open(QIODevice::ReadWrite)){
-            qDebug("presetFound");
-        } else {
-            qDebug() << "preset not found";
-        }
+//        if(loadPresetSysEx[i]->open(QIODevice::ReadWrite)){
+//            qDebug("presetFound");
+//        } else {
+//            qDebug() << "preset not found";
+//        }
 
-        //presetSysEx[i]->open(QIODevice::ReadWrite);
-        qDebug() << "presetSysex[" << i << "] file: " << saveSyx << " debug: " << presetSysEx[i]->isReadable();
-        qDebug() << "loadPresetSysEx[" << i << "] file: " << loadSyx << "debug: " << loadPresetSysEx[i]->isReadable();
+//        //presetSysEx[i]->open(QIODevice::ReadWrite);
+//        qDebug() << "presetSysex[" << i << "] file: " << saveSyx << " debug: " << presetSysEx[i]->isReadable();
+//        qDebug() << "loadPresetSysEx[" << i << "] file: " << loadSyx << "debug: " << loadPresetSysEx[i]->isReadable();
 
-    }
+//    }
 
     //initialize encoding variables and sysex id
     size = 0;
