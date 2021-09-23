@@ -326,6 +326,7 @@ MainWindow::MainWindow(QWidget *parent) :
     totalFwBytes = midiDeviceAccess->sysExFirmwareBytes.size();
 
     qDebug() << "mac/win progress bars";
+
     //mac progress bar...
 #ifdef Q_OS_MAC
 
