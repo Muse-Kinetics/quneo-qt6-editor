@@ -18,7 +18,8 @@ PadEditPane::PadEditPane(QVariantMap *variantMap, QVariantMap *variantMapCopy, Q
     connect(mainWindow, SIGNAL(signalEvents(QString)), this, SLOT(slotEvents(QString)));
 
     qDebug() << "connect slotEnableGridMode";
-    connect(enableGridMode, SIGNAL(stateChanged(int)), this, SLOT(slotEnableGridMode(int)));
+    qDebug() << "enableGridMode: " << enableGridMode->objectName();
+    connect(enableGridMode, SIGNAL(toggled(bool)), this, SLOT(slotEnableGridMode(bool)));
 
     qDebug() << "connect slotValueChanged";
     connect(enableGridMode, SIGNAL(stateChanged(int)), this, SLOT(slotValueChanged(int)));
@@ -703,7 +704,7 @@ void PadEditPane::slotToLabels(QString parameter)
     }
 }
 
-void PadEditPane::slotEnableGridMode(int gridEnabled)
+void PadEditPane::slotEnableGridMode(bool gridEnabled)
 {
     qDebug() << "slotEnableGridMode - gridEnabled: " << gridEnabled;
     if(gridEnabled)

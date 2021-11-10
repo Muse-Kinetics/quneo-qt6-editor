@@ -189,24 +189,36 @@ void PresetHandler::slotSave(){
 
     //presetMaps.insert(QString("Preset %1").arg(currentPreset), presetNumMap);//*
     slotPresetNameValidator();
+    //If not opened
+    if(jsonFile->open(QIODevice::ReadWrite | QIODevice::Text))
+    {
+        qDebug() << "-------- slotSave:open ------";
 
-    presetMaps.insert(QString("Preset %1").arg(currentPreset), presetMapsCopy.value(QString("Preset %1").arg(currentPreset)));
-
-
-
-
-
-    jsonMasterMap.insert("QuNeo Presets", presetMaps);
+        presetMaps.insert(QString("Preset %1").arg(currentPreset), presetMapsCopy.value(QString("Preset %1").arg(currentPreset)));
+        jsonMasterMap.insert("QuNeo Presets", presetMaps);
 
 //    jsonByteArray = serializer.serialize(jsonMasterMap);//serialize the master json map into the byte array
-    QJsonDocument jsonPresets = QJsonDocument::fromVariant(jsonMasterMap);
-    jsonByteArray = jsonPresets.toJson();
-    jsonFile->resize(0);//clear jsonFile (set to 0 byte size)
-    jsonFile->write(jsonByteArray);//write json byte array to file
+        QJsonDocument jsonPresets = QJsonDocument::fromVariant(jsonMasterMap);
 
-    emit signalPresetModified(false);
-    //slotCheckPresets();
-    slotRecallPreset(QString("Preset %1").arg(currentPreset + 1));
+
+        jsonByteArray = jsonPresets.toJson();
+
+        jsonFile->resize(0);//clear jsonFile (set to 0 byte size)
+
+        jsonFile->write(jsonByteArray);//write json byte array to file
+
+        emit signalPresetModified(false);
+        //slotCheckPresets();
+        slotRecallPreset(QString("Preset %1").arg(currentPreset + 1));
+
+        //Close File
+        jsonFile->close(); //close file and finalize write
+    }
+    //If File not opened/found
+    else
+    {
+        qDebug() << "File could not be saved!";
+    }
 }
 
 void PresetHandler::slotEvents(QString string){

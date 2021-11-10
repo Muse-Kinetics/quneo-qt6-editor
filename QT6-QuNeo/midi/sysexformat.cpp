@@ -403,8 +403,8 @@ void SysExFormat::slotEncodePreset(int presetNum){
     count = 0;
     sumByte = 0;
     presetSysExByteArray.clear();
-    presetSysEx[presetNum]->open(QIODevice::ReadWrite);
-    presetSysEx[presetNum]->resize(0);
+    //presetSysEx[presetNum]->open(QIODevice::ReadWrite);
+    //presetSysEx[presetNum]->resize(0);
 
     //begin sysex byte
     sysex_out(sysex_start);
@@ -488,9 +488,9 @@ void SysExFormat::slotWriteFile(int presetNum){
 
     qDebug() << "slotWriteFile - presetNum: " << presetNum;
 
-    presetSysEx[presetNum]->resize(0);
-    presetSysEx[presetNum]->write(presetSysExByteArray);
-    presetSysEx[presetNum]->close();
+    //presetSysEx[presetNum]->resize(0);
+    //presetSysEx[presetNum]->write(presetSysExByteArray);
+    //presetSysEx[presetNum]->close();
 
     //emit sigSysExByteArray(&presetSysExByteArray); //emit byte array to mididevice access to send to deivce
 }

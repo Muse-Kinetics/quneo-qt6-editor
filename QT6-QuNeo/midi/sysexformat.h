@@ -20,8 +20,8 @@ public:
     QVariantMap* presetMapsCopyPointer;
 
     QByteArray presetSysExByteArray;
-    QFile* presetSysEx[16];
-    QFile* loadPresetSysEx[16];
+    //QFile* presetSysEx[16];
+    //QFile* loadPresetSysEx[16];
 
     QStringList pad_str;
     QStringList rot_str;

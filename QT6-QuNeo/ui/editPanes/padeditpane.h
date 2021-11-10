@@ -111,7 +111,7 @@ public slots:
     void slotEvents(QString);
     void slotRecallPreset(int);
     void slotValueChanged(int);
-    void slotEnableGridMode(int);
+    void slotEnableGridMode(bool);
     void slotToLabels(QString);
     void slotFocusParam(QWidget* oldObject, QWidget* newObject);
     void slotCalculatePadSensitivity(int);
