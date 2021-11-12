@@ -25,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent) :
     applicationVersion[1] = 0;
     applicationVersion[2] = 0;
 
+    betaVersion = "B"; // release, do not show beta string
+
     thisFw = QByteArray(reinterpret_cast<char*>(_fw_ver_quneo), sizeof(_fw_ver_quneo));
 
 
@@ -57,10 +59,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // setup firmware image
 
-    QString thisFwFile = QString(":/Quneo/sysex/resources/sysex/Quneo.syx");
-//            .arg(uchar(thisFw.at(0))) // for now don't implement versioning in the filename
-//            .arg(uchar(thisFw.at(1)))
-//            .arg(uchar(thisFw.at(2)));
+    QString thisFwFile = QString(":/Quneo/sysex/resources/sysex/Quneo_Firmware_v%1.%2.%3.syx")
+            .arg(uchar(thisFw.at(0)))
+            .arg(uchar(thisFw.at(1)))
+            .arg(uchar(thisFw.at(2)));
 
     //qDebug() << "fwFilename: " << thisFwFile;
 
@@ -137,8 +139,11 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(midiDeviceAccess, SIGNAL(sigRogueWarning()), this, SLOT(slotRogueWarning()));
 
     // cph needs a pointer to mda for fw version strings
-    copyPasteHandler = new CopyPasteHandler(presetHandler, midiDeviceAccess,this, dataValidator, 0);
+    copyPasteHandler = new CopyPasteHandler(presetHandler, midiDeviceAccess,this, dataValidator, this);
     connect(copyPasteHandler, SIGNAL(sigUpdateFirmware()), this, SLOT(slotForceFirmwareUpdate()));
+
+    // allow cph to update the device firmware strings before opening the about menu
+    connect(copyPasteHandler, SIGNAL(sigUpdateAboutMenuVersions()), this, SLOT(slotUpdateAboutMenuVersions()));
 
     // this was already commented out
     //connect(midiDeviceAccess, SIGNAL(sigSetVersions(QString,QString)), copyPasteHandler, SLOT(slotSetVersions(QString,QString)));
@@ -172,6 +177,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // handle device unexpectedly in bootloader mode
     connect(QuNeo, SIGNAL(signalBootloaderMode(bool)), this, SLOT(slotBootloaderMode(bool)));
+
+    // reset portlist after sending bootloader commands, catch changes to port names
+    connect(QuNeo, SIGNAL(signalBeginBlTimer()), this, SLOT(slotRefreshConnection()));
+    connect(QuNeo, SIGNAL(signalBeginFwTimer()), this, SLOT(slotRefreshConnection()));
+
 
     //---------------------------------- Connected Light
     connect(QuNeo, SIGNAL(signalConnected(bool)), this, SLOT(slotQuNeoConnected(bool)));
@@ -363,6 +373,11 @@ MainWindow::MainWindow(QWidget *parent) :
     rogueWarning.addButton(QMessageBox::Ok);
     rogueWarning.setText("Your QuNeo is either in Expander Mode or you are using a Rogue.");
     rogueWarning.setInformativeText("Please connect your QuNeo with a USB cable, and make sure it is not in \"expander\" mode.");
+
+    // update version string
+    QString versionLabelText = QString("%1.%2.%3%4").arg((uchar)applicationVersion[0]).arg((uchar)applicationVersion[1]).arg((uchar)applicationVersion[2]).arg(betaVersion);
+    ui->QuNeoVersionLabel->setText(versionLabelText);
+
 
 }
 
@@ -1196,7 +1211,7 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
     case PORT_CONNECT:
 
         // update dropdown
-        if (inOrOut == PORT_OUT && !portName.contains("QUNEO"))
+        if (inOrOut == PORT_OUT && !portName.toUpper().contains("QUNEO"))
         {
             // EB TODO - add this dropdown for the aux output
 //            QComboBox *thisDropDown = ui->midi_outputs;
@@ -1206,18 +1221,20 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         }
 
         // **** QuNeo connect *****************************************
-        if (portName == QUNEO_IN_P1 && inOrOut == PORT_IN)
+        // use .toUpper() because firmware < 1.31 is uppercase, 1.31 and later are "QuNeo"
+        if (portName.toUpper() == QString(QUNEO_IN_P1).toUpper() && inOrOut == PORT_IN)
         {
             QByteArray thisFw = QByteArray(reinterpret_cast<char*>(_fw_ver_quneo), sizeof(_fw_ver_quneo));
 
             QuNeo->slotSetExpectedFW(thisFw);
             //qDebug() << "qn deviceName: " << BopPad->deviceName << " curfw is: " << BopPad->currentFwVer;
             QuNeo->updatePortIn(portNum);
+            fwUpdateWindow->slotAppendTextToConsole("\nQuNeo Connected\n");
         }
-        else if (portName == QUNEO_OUT_P1 && inOrOut == PORT_OUT)
+        else if (portName.toUpper() == QString(QUNEO_OUT_P1).toUpper() && inOrOut == PORT_OUT)
         {
             QuNeo->updatePortOut(portNum);
-            QuNeo->slotStartPolling(); // start polling when output port is added
+            QuNeo->slotStartPolling("slotMIDIPortChange"); // start polling when output port is added
         }
 
         break;
@@ -1233,12 +1250,13 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         }
 
         // **** QuNeo disconnect ***************************************
-        if (portName == QUNEO_IN_P1)
+        if (portName.toUpper() == QString(QUNEO_IN_P1).toUpper())
         {
             // close ports and stop polling
             QuNeo->slotCloseMidiIn();
             QuNeo->slotCloseMidiOut();
-            QuNeo->slotStopPolling();
+            QuNeo->slotStopPolling("slotMIDIPortChange - disconnect");
+            if (inOrOut == PORT_IN) fwUpdateWindow->slotAppendTextToConsole("\nQuNeo Disconnected\n");
         }
 
         break;
@@ -1246,11 +1264,11 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         qDebug() << " PORT CHANGED - name: " << portName << portName << " inOrOut: " << kmiPorts->inOut[inOrOut] << " messageType: " << kmiPorts->mType[messageType] << " portNum: " << portNum << "\n";
 
         // **** QuNeo renumber *****************************************
-        if (portName == QUNEO_IN_P1 && inOrOut == PORT_IN)
+        if (portName.toUpper() == QString(QUNEO_IN_P1).toUpper() && inOrOut == PORT_IN)
         {
             QuNeo->updatePortIn(portNum);
         }
-        else if (portName == QUNEO_OUT_P1 && inOrOut == PORT_OUT)
+        else if (portName.toUpper() == QString(QUNEO_OUT_P1).toUpper() && inOrOut == PORT_OUT)
         {
             QuNeo->updatePortOut(portNum);
         }
@@ -1259,6 +1277,16 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
     default:
         break;
     }
+}
+
+// close and then reopen the QuNexus ports
+// this is needed when the bootloader and app port names do not match
+void MainWindow::slotRefreshConnection()
+{
+    qDebug() << "slotRefreshConnection called";
+#ifndef Q_OS_WIN
+    QuNeo->slotResetConnections(QUNEO_IN_P1, QUNEO_BL_PORT);
+#endif
 }
 
 void MainWindow::slotBootloaderMode(bool fwUpdateRequested)
@@ -1289,7 +1317,7 @@ void MainWindow::slotFwUpdateSuccessCloseDialog(bool success)
 
         slotUpdateMIDIaux();
 
-        //slotQuNeoConnected(true);
+        slotQuNeoConnected(true);
         //slotEnableDisableMidiFunctions(true);
         //slotSyncQuNeoDialog();
     }
@@ -1355,6 +1383,8 @@ void MainWindow::slotQuNeoConnected(bool state)
         connected = true;
         midiDeviceAccess->connected = true;
 
+        QuNeo->slotStopPolling("slotQuNeoConnected - true");
+
         //presetManager->syncFlag = true;
     }
     else
@@ -1404,7 +1434,7 @@ void MainWindow::slotUpdateMIDIaux()
 
 QString MainWindow::deviceBootloaderVersionString()
 {
-    return QString("Device Bootloader Version: %1.%2.\n\n")
+    return QString("Device Bootloader Version: %1.%2\n\n")
             .arg(uchar(QuNeo->devicebootloaderVersion.at(0)))
             .arg(uchar(QuNeo->devicebootloaderVersion.at(1)));
 }
@@ -1424,6 +1454,26 @@ QString MainWindow::applicationFirmwareVersionString()
             .arg(uchar(thisFw.at(0)))
             .arg(uchar(thisFw.at(1)))
             .arg(uchar(thisFw.at(2)));
+}
+
+QString MainWindow::applicationVersionString()
+{
+
+    return QString("Application Version: %1.%2.%3%4\n\n")
+            .arg(uchar(applicationVersion.at(0)))
+            .arg(uchar(applicationVersion.at(1)))
+            .arg(uchar(applicationVersion.at(2)))
+            .arg(betaVersion);
+
+}
+
+void MainWindow::slotUpdateAboutMenuVersions()
+{
+    // update cph version strings
+    copyPasteHandler->applicationFirmwareVersionString = applicationFirmwareVersionString();
+    copyPasteHandler->applicationVersionString = applicationVersionString();
+    copyPasteHandler->deviceFirmwareVersionString = deviceFirmwareVersionString();
+    copyPasteHandler->deviceBootloaderVersionString = deviceBootloaderVersionString();
 }
 
 

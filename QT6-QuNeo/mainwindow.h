@@ -124,7 +124,8 @@ public:
     QString deviceBootloaderVersionString();
     QString deviceFirmwareVersionString();
     QString applicationFirmwareVersionString();
-
+    QString applicationVersionString();
+    QString betaVersion;
     // ------ end midi overhaul --------------------------------------------------------
 
 
@@ -154,13 +155,14 @@ public slots:
 
     // ------ midi overhaul --------------------------------------------------------
     void slotMIDIPortChange(QString, uchar, uchar, int); // handles changes to MIDI i/o
+    void slotRefreshConnection();
     void slotBootloaderMode(bool fwUpdateRequested);
     void slotFwUpdateSuccessCloseDialog(bool);
     void slotForceFirmwareUpdate();
     void slotFirmwareDetected(MidiDeviceManager *thisMDM, bool);
     void slotQuNeoConnected(bool state);
     void slotUpdateMIDIaux();
-
+    void slotUpdateAboutMenuVersions();
     // ------ end midi overhaul --------------------------------------------------------
 
 

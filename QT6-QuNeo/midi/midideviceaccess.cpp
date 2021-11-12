@@ -68,22 +68,22 @@ MidiDeviceAccess::MidiDeviceAccess(QVariantMap* presetMapsCopy,QObject *parent) 
     // versionArray[0] = 2; //bootloader LSB
     //versionArray[1] = 1; //booloader MSB
 
-    versionArray[0] = 3; //bootloader LSB
-    versionArray[1] = 1; //booloader MSB
-    versionArray[2] = 30; //fw LSB
-    versionArray[3] = 2; //fw MSB 2
-    versionArray[4] = 1; //fw MSB 1
+//    versionArray[0] = 3; //bootloader LSB
+//    versionArray[1] = 1; //booloader MSB
+//    versionArray[2] = 30; //fw LSB
+//    versionArray[3] = 2; //fw MSB 2
+//    versionArray[4] = 1; //fw MSB 1
 
     mainWindow = parent; //assign mainwindow to parent
 
-    boardVersion = QString("Not Connected");
-    editorVersion = QString("%1.%2.%3").
-            arg(versionArray[4]).
-            arg(versionArray[3]).
-            arg(versionArray[2]);
+//    boardVersion = QString("Not Connected");
+//    editorVersion = QString("%1.%2.%3").
+//            arg(versionArray[4]).
+//            arg(versionArray[3]).
+//            arg(versionArray[2]);
 
-    boardVersionBoot = QString("Not Connected");
-    editorVersionBoot = QString("%1.%2").arg(versionArray[1]).arg(versionArray[0]);
+//    boardVersionBoot = QString("Not Connected");
+//    editorVersionBoot = QString("%1.%2").arg(versionArray[1]).arg(versionArray[0]);
 
     sysExFormat = new SysExFormat(presetMapsCopy, 0); //create new instance of sysExFormat to format presets
 
@@ -109,28 +109,28 @@ MidiDeviceAccess::MidiDeviceAccess(QVariantMap* presetMapsCopy,QObject *parent) 
     //pointer to this instance of the class, used in callback functions which are not part of the class
 //    callbackPointer = this;
 
-    //load sysEx firmware file from app package
-    pathSysex = QCoreApplication::applicationDirPath();
-    pathSysex.remove(pathSysex.length() - 5, pathSysex.length());
-    pathSysex.append("Resources/Quneo.syx");
-    //qDebug() << QString("path: %1").arg(pathSysex);
-    //sysExFirmware = new QFile(pathSysex);
-    sysExFirmware = new QFile(":Quneo/sysex/resources/sysex/Quneo.syx");
-    if(sysExFirmware->open(QIODevice::ReadOnly)){
-        qDebug("sysex open");
-    } else {
-        qDebug("couldn't find sysex");
-    }
+//    //load sysEx firmware file from app package
+//    pathSysex = QCoreApplication::applicationDirPath();
+//    pathSysex.remove(pathSysex.length() - 5, pathSysex.length());
+//    pathSysex.append("Resources/Quneo.syx");
+//    //qDebug() << QString("path: %1").arg(pathSysex);
+//    //sysExFirmware = new QFile(pathSysex);
+//    sysExFirmware = new QFile(":Quneo/sysex/resources/sysex/Quneo.syx");
+//    if(sysExFirmware->open(QIODevice::ReadOnly)){
+//        qDebug("sysex open");
+//    } else {
+//        qDebug("couldn't find sysex");
+//    }
 
-    //read all data from file, and store in a QByteArray
-    sysExFirmwareBytes = sysExFirmware->readAll();
-    //qDebug() <<"sysex size:" << sysExFirmwareBytes.size();
+//    //read all data from file, and store in a QByteArray
+//    sysExFirmwareBytes = sysExFirmware->readAll();
+//    //qDebug() <<"sysex size:" << sysExFirmwareBytes.size();
 
-    //create new char array of the above byte array size
-    sysExFirmwareData = new char[sysExFirmwareBytes.size()];
+//    //create new char array of the above byte array size
+//    sysExFirmwareData = new char[sysExFirmwareBytes.size()];
 
-    //assigne bytes to array, necessary for sending midi according to mac midi services
-    sysExFirmwareData = sysExFirmwareBytes.data();
+//    //assigne bytes to array, necessary for sending midi according to mac midi services
+//    sysExFirmwareData = sysExFirmwareBytes.data();
 
 //    //******* Load Preset SysEx Files ********//
 //    for(int i = 0; i<16; i++){
@@ -355,8 +355,10 @@ void MidiDeviceAccess::slotUpdateAllPresets() //used for updating all presets at
         {
 
             //encode current preset data
+            qDebug() << "encode preset sysex: " << i;
             sysExFormat->slotEncodePreset(i);
 
+            qDebug() << "send preset sysex: " << i;
             // MIDI Overhaul
             emit signalSendSysExBA(sysExFormat->presetSysExByteArray);
 
@@ -398,12 +400,13 @@ void MidiDeviceAccess::slotUpdateAllPresets() //used for updating all presets at
 //                    }
 //                }
 
-//                qDebug() << "done with preset" << i;
+                qDebug() << "done with preset" << i;
                 emit sigUpdateAllPresetsCount(i);
 //            }
         }
-
+        qDebug() << "load preset";
         slotLoadPreset();
+        qDebug() << "emit signal 16";
         emit sigUpdateAllPresetsCount(16);
     }
 
@@ -411,15 +414,17 @@ void MidiDeviceAccess::slotUpdateAllPresets() //used for updating all presets at
 
 void MidiDeviceAccess::slotUpdateSinglePreset()
 {
-    qDebug() << "slotUpdateSinglePreset called";
+    qDebug() << "slotUpdateSinglePreset called, current preset: " << currentPreset;
     //if(deviceMenu->currentText() == "QuNeo 1")
     if (connected)
     {
 
         //encode current preset
+        qDebug() << "encode preset";
         sysExFormat->slotEncodePreset(currentPreset);
 
         // MIDI Overhaul - send the preset byte array
+        qDebug() << "send preset sysex";
         emit signalSendSysExBA(sysExFormat->presetSysExByteArray);
 
 //        //create new char array using most recently encoded preset
@@ -460,6 +465,7 @@ void MidiDeviceAccess::slotUpdateSinglePreset()
 //        }
 
         //load the currently selected preset
+        qDebug() << "load preset";
         slotLoadPreset();
     }
 

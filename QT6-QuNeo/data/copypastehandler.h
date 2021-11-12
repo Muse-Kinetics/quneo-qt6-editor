@@ -11,6 +11,7 @@
 #include "midideviceaccess.h"
 #include "datavalidator.h"
 
+class MainWindow;
 
 class CopyPasteHandler : public QObject
 {
@@ -19,6 +20,13 @@ public:
     explicit CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess *mda, QWidget *mainWindow, DataValidator* dataValidator, QObject *parent = 0);
 
     PresetHandler *handlerOfPresets;
+
+    // pointers to functions that return QStrings
+    QString deviceBootloaderVersionString;
+    QString deviceFirmwareVersionString;
+    QString applicationFirmwareVersionString;
+    QString applicationVersionString;
+
     int copiedFrom;
 
     MidiDeviceAccess *midiDeviceAccess;
@@ -111,6 +119,7 @@ public:
 
 signals:
     void sigUpdateFirmware();
+    void sigUpdateAboutMenuVersions();
 
 public slots:
 

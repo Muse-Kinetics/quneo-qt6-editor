@@ -11,7 +11,6 @@ CopyPasteHandler::CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess
     mWindow = mainWindow;
     dataValidator = dV;
 
-
     menuBar = new QMenuBar(mainWindow);
 
     #ifdef Q_OS_MAC
@@ -315,12 +314,22 @@ void CopyPasteHandler::slotImportBlankPreset(){
     importedPresetMap.clear();
 }
 
-void CopyPasteHandler::slotOpenAbout(){
-    aboutScreen.setText(QString("QuNeo | Keith McMillen Instruments\n\n\nExpected Firmware Version: %1\nFound Firmware Version: %2\n\nExpected Bootloader Version: %4\nFound Bootloader Version: %3")
-                        .arg(midiDeviceAccess->editorVersion)
-                        .arg(midiDeviceAccess->boardVersion)
-                        .arg(midiDeviceAccess->boardVersionBoot)
-                        .arg(midiDeviceAccess->editorVersionBoot));
+void CopyPasteHandler::slotOpenAbout()
+{
+    emit sigUpdateAboutMenuVersions();
+    aboutScreen.setText(QString("QuNeo Version %1(c) 2022 Keith McMillen Instruments\n\n\n%2%3\n\n%4")
+                        .arg(applicationVersionString)
+                        .arg(applicationFirmwareVersionString)
+                        .arg(deviceFirmwareVersionString)
+                        .arg(deviceBootloaderVersionString));
+
+
+//                        .arg(midiDeviceAccess->editorVersion)
+//                        .arg(midiDeviceAccess->boardVersion)
+//                        .arg(midiDeviceAccess->boardVersionBoot)
+//                        .arg(midiDeviceAccess->editorVersionBoot));
+
+
     aboutScreen.open();
 }
 

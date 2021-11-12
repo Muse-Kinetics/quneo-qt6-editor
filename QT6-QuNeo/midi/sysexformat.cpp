@@ -510,6 +510,7 @@ void SysExFormat::sendPreset(unsigned int presetNum){
 
     //--------------------------------Component Iterations------------------------------------//
     //iterate through pads
+    qDebug() << "encode pads";
     for(int j = 0; j<16; j++){
         for(int i = 0; i< pad_str.size(); i++){
 
@@ -524,6 +525,7 @@ void SysExFormat::sendPreset(unsigned int presetNum){
     }
 
     //rotaries
+    qDebug() << "encode rotaries";
     for(int j = 0; j<2; j++){
         for(int i = 0; i< rot_str.size(); i++){
 
@@ -550,6 +552,7 @@ void SysExFormat::sendPreset(unsigned int presetNum){
     }
 
     //long slider
+    qDebug() << "encode long slider";
     for(int j = 0; j<1; j++){
         for(int i = 0; i< long_str.size(); i++){
 
@@ -564,6 +567,7 @@ void SysExFormat::sendPreset(unsigned int presetNum){
     }
 
     //h sliders
+    qDebug() << "encode h sliders";
     for(int j = 0; j<4; j++){
         for(int i = 0; i< hslid_str.size(); i++){
 
@@ -578,6 +582,7 @@ void SysExFormat::sendPreset(unsigned int presetNum){
     }
 
     //v sliders
+    qDebug() << "encode v sliders";
     for(int j = 0; j<4; j++){
         for(int i = 0; i< vslid_str.size(); i++){
 
@@ -592,6 +597,7 @@ void SysExFormat::sendPreset(unsigned int presetNum){
     }
 
     //lr buttons
+    qDebug() << "encode lr buttons";
     for(int j = 0; j<4; j++){
         for(int i = 0; i< lrswitch_str.size(); i++){
 
@@ -607,6 +613,7 @@ void SysExFormat::sendPreset(unsigned int presetNum){
     }
 
     //ud buttons
+    qDebug() << "encode ud buttons";
     for(int j = 0; j<2; j++){
         for(int i = 0; i< udswitch_str.size(); i++){
 
@@ -621,6 +628,7 @@ void SysExFormat::sendPreset(unsigned int presetNum){
     }
 
     //rhom button
+    qDebug() << "encode rhom";
     for(int j = 0; j<1; j++){
         for(int i = 0; i< rhswitch_str.size(); i++){
 
@@ -636,6 +644,7 @@ void SysExFormat::sendPreset(unsigned int presetNum){
     }
 
     //tansp button
+    qDebug() << "encode transp";
     for(int j = 0; j<3; j++){
         for(int i = 0; i< tbutt_str.size(); i++){
 
@@ -650,6 +659,7 @@ void SysExFormat::sendPreset(unsigned int presetNum){
     }
 
     //mode button
+    qDebug() << "encode mode";
     for(int j = 0; j<1; j++){
         for(int i = 0; i< mswitch_str.size(); i++){
 
@@ -666,7 +676,7 @@ void SysExFormat::sendPreset(unsigned int presetNum){
 
     //--------------------------------Globals Iterations------------------------------------//
 
-
+    qDebug() << "encode globals";
     //*********************
     encode("padBankChangeMode",
            presetMapsCopyPointer->value(QString("Preset %1").arg(presetNum)).
@@ -1125,7 +1135,7 @@ void SysExFormat::sendPreset(unsigned int presetNum){
            toMap().value("modeLocalLEDControl").
            toInt());
 
-
+    qDebug() << "encode velocity";
     for(int i=0; i<128; i++){
 
         encode("velocity - ", presetMapsCopyPointer->value(QString("Preset %1").arg(presetNum)).
@@ -1133,13 +1143,13 @@ void SysExFormat::sendPreset(unsigned int presetNum){
                toMap().value("Pads").
                toMap().value("padVelocityTable").toList().at(i).toInt());
 
-        /* qDebug() << "table val" << i << presetMapsCopyPointer->value(QString("Preset %1").arg(presetNum)).
+        qDebug() << "table val" << i << presetMapsCopyPointer->value(QString("Preset %1").arg(presetNum)).
                    toMap().value("ComponentSettings").
                    toMap().value("Pads").
-                   toMap().value("padVelocityTable").toList().at(i).toInt();*/
+                   toMap().value("padVelocityTable").toList().at(i).toInt();
     }
 
-
+    qDebug() << "finish sysex packet";
     midi_sx_encode_char(0);
     midi_sx_encode_char(0);
     midi_sx_encode_char(sumByte);
