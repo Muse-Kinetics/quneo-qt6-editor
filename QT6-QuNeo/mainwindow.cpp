@@ -1318,6 +1318,7 @@ void MainWindow::slotFwUpdateSuccessCloseDialog(bool success)
         slotUpdateMIDIaux();
 
         slotQuNeoConnected(true);
+        midiDeviceAccess->slotUpdateAllPresets(); // send all presets
         //slotEnableDisableMidiFunctions(true);
         //slotSyncQuNeoDialog();
     }
