@@ -268,6 +268,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(presetHandler->rhombusEditPane, SIGNAL(signalTriggerCopy()), copyPasteHandler, SLOT(slotCopySensor()));
     connect(presetHandler->rhombusEditPane, SIGNAL(signalTriggerPaste()), copyPasteHandler, SLOT(slotPasteSensor()));
 
+    // allow pad sensitivity menu to select pads for editing values
+    connect(presetHandler->padEditPane, SIGNAL(signalCurrentSensor(QString)), copyPasteHandler, SLOT(slotSetCurrentSensor(QString)));
+
     //Save button
     // EB commented out to avoid crash
     qDebug() << "Connect PresetHandler save button";

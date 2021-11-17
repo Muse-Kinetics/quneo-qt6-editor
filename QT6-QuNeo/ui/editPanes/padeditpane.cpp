@@ -570,6 +570,7 @@ void PadEditPane::displayPadValues()
 
 void PadEditPane::slotEvents(QString string)
 {
+    qDebug() << "slotEvents called - string: " << string;
     //format string from event into a single instance (pad number)
     if(string.contains("padButton", Qt::CaseSensitive)) {
         currentPad = string.remove(0,9).toInt();//remove "padButton" and convert last character to int
@@ -803,12 +804,13 @@ void PadEditPane::slotLoadVariableTable(QString table)
 }
 
 //drum styles
-void PadEditPane::slotStyleDefault()
+void PadEditPane::slotPadSensitivityDefault()
 {
-    int thisPreset = currentPreset;
-    for(int p = 0; p < 16; p++)
-    {
-        emit signalSelectPreset(QString("Preset %1").arg(p+1));
+    qDebug()<<QString("slotPadSensitivityDefault called");
+    //int thisPreset = currentPreset;
+    //for(int p = 0; p < 16; p++)
+    //{
+        //emit signalSelectPreset(QString("Preset %1").arg(p+1));
         onThresh->setValue(25);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),25);
         offThresh->setValue(5);
@@ -816,81 +818,106 @@ void PadEditPane::slotStyleDefault()
         sensitivityDial->setValue(100);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padSensitivity"),100);
         velTableMenu->setCurrentIndex(velTableMenu->findText(QString("Medium")));
-    }
-    emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
+    //}
+    //emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
 }
 
-void PadEditPane::slotStyleMachine() // low
+void PadEditPane::slotPadSensitivityLow() // low
 {
-    qDebug()<<QString("machine");
-    int thisPreset = currentPreset;
-    for(int p = 0; p < 16; p++)
-    {
-        emit signalSelectPreset(QString("Preset %1").arg(p+1));
-        onThresh->setValue(25);
+    qDebug()<<QString("slotPadSensitivityLow called");
+//    int thisPreset = currentPreset;
+//    for(int p = 0; p < 16; p++)
+//    {
+//        emit signalSelectPreset(QString("Preset %1").arg(p+1));
+        onThresh->setValue(30);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),15);
-        offThresh->setValue(5);
+        offThresh->setValue(15);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOffThreshold"),5);
-        sensitivityDial->setValue(100);
+        sensitivityDial->setValue(80);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padSensitivity"),75);
         velTableMenu->setCurrentIndex(velTableMenu->findText(QString("Light")));
-    }
-    emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
+//    }
+//    emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
 }
 
-void PadEditPane::slotStyleAkaMP() // med
+void PadEditPane::slotPadSensitivityMedium() // med
 {
-    qDebug()<<QString("akaMP");
-    int thisPreset = currentPreset;
-    for(int p = 0; p < 16; p++)
-    {
-        emit signalSelectPreset(QString("Preset %1").arg(p+1));
-        onThresh->setValue(25);
+    qDebug()<<QString("slotPadSensitivityMedium called");
+//    int thisPreset = currentPreset;
+//    for(int p = 0; p < 16; p++)
+//    {
+//        emit signalSelectPreset(QString("Preset %1").arg(p+1));
+        onThresh->setValue(10);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),10);
         offThresh->setValue(5);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOffThreshold"),5);
         sensitivityDial->setValue(100);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padSensitivity"),100);
         velTableMenu->setCurrentIndex(velTableMenu->findText(QString("Dynamic")));
-    }
-    emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
+//    }
+//    emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
 }
 
-void PadEditPane::slotStyleKorPad() // high
+void PadEditPane::slotPadSensitivityHigh() // high
 {
-    qDebug()<<QString("korePad");
-    int thisPreset = currentPreset;
-    for(int p = 0; p < 16; p++)
-    {
-        emit signalSelectPreset(QString("Preset %1").arg(p+1));
-        onThresh->setValue(25);
+    qDebug()<<QString("slotPadSensitivityHigh called");
+//    int thisPreset = currentPreset;
+//    for(int p = 0; p < 16; p++)
+//    {
+//        emit signalSelectPreset(QString("Preset %1").arg(p+1));
+        onThresh->setValue(8);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),5);
-        offThresh->setValue(5);
+        offThresh->setValue(4);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOffThreshold"),3);
-        sensitivityDial->setValue(100);
+        sensitivityDial->setValue(127);
         emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padSensitivity"),110);
         velTableMenu->setCurrentIndex(velTableMenu->findText(QString("None")));
-    }
-    emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
+//    }
+//    emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
 }
 
-void PadEditPane::slotStyleFullLevel() // extreme
+void PadEditPane::slotPadSensitivityExtreme() // extreme
 {
-    qDebug()<<QString("full");
+    qDebug()<<QString("slotPadSensitivityExtreme called");
+
+    int val_globalSensitivity = 127;
+    int val_perPadSensitivity = 20;
+    int val_onThreshold = 3;
+    int val_offThreshold = 1;
+    QString val_velTable = "None";
 
     sensitivityDial->setValue(127);
 
-    int thisPreset = currentPreset;
-    for(int p = 0; p < 16; p++)
+    int thisPad = currentPad;
+
+
+    sensitivityDial->setValue(val_globalSensitivity);
+    emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padSensitivity"),127);
+
+    onThresh->setValue(val_onThreshold);
+    emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),val_onThreshold);
+
+    offThresh->setValue(val_offThreshold);
+    emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOffThreshold"),val_offThreshold);
+
+
+    velTableMenu->setCurrentIndex(velTableMenu->findText(QString("None")));
+
+
+
+    for(int i =0; i<16; i++)
     {
-        emit signalSelectPreset(QString("Preset %1").arg(p+1));
-        onThresh->setValue(25);
-        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOnThreshold"),3);
-        offThresh->setValue(5);
-        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padOffThreshold"),1);
-        sensitivityDial->setValue(100);
-        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padSensitivity"),127);
-        velTableMenu->setCurrentIndex(velTableMenu->findText(QString("None")));
+        emit signalCurrentSensor(QString("padButton%1").arg(i));
+        perPadSensitivityUI->setValue(val_perPadSensitivity);
+        emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", i, QString("padSensitivityPerPadUI"), val_perPadSensitivity);
+        displayPadValues();
+        emit signalCurrentSensor(QString("padButton%1").arg(i));
+        padLabel[i]->slotDisplayParameter(QString("padSensitivityPerPadUI"), i, currentPreset);
     }
-    emit signalSelectPreset(QString("Preset %1").arg(thisPreset+1));
+
+    // select last pad
+    emit signalCurrentSensor(QString("padButton%1").arg(thisPad));
+
+
+
 }

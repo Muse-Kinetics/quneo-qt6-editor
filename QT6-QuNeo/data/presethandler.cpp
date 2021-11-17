@@ -311,6 +311,7 @@ void PresetHandler::slotPropogateValuesSelectMultiple(int presetNum, QString set
 
 void::PresetHandler::slotValueChanged(int presetNum, QString settingsType, QString paramType, int typeNum,
                                       QString paramName, int paramValue){
+    qDebug() << QString("slotValueChanged called - presetNum: %1, settingsType: %2, paramType: %3, typeNum: %4, paramName: %5, paramValue: %6").arg(presetNum).arg(settingsType).arg(paramType).arg(typeNum).arg(paramName).arg(paramValue);
     //Appending an s in the code in the next section doesn't work for Rotary because of the stupid English language.  This little bit accounts for that
     QString paramTypeName;
 

@@ -108,12 +108,12 @@ public:
     QFile *documentationLinkFile;
 
     //---- DRUM STYLES ----//
-    QMenu *drumStylesMenu;
-    QAction *styleDefault;
-    QAction *styleMachine;
-    QAction *styleAkaMP;
-    QAction *styleKorPad;
-    QAction *styleFullLevel;
+    QMenu *padSensitivityMenu;
+    QAction *padSensitivityDefault;
+    QAction *padSensitivityLow;
+    QAction *padSensitivityMedium;
+    QAction *padSensitivityHigh;
+    QAction *padSensitivityExtreme;
 
     bool fwProgressOpen;
 

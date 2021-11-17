@@ -55,6 +55,7 @@ void ButtonButton::slotEvents(QString string){
         }
         presetHandler->slotConnectDisconnectDisplayAllLabels(false);
         editPanes->setCurrentIndex(1);
+        qDebug() << "emit signalCurrentSensor: " << buttonButtonName;
         emit signalCurrentSensor(buttonButtonName);
         connect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), transportEdit, SLOT(slotFocusParam(QWidget*,QWidget*)));
         presetHandler->slotConnectDisconnectDisplayAllLabels(true);

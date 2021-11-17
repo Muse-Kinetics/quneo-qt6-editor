@@ -413,13 +413,13 @@ void UpdateIndicator::slotPresetModified(bool state){
     if(state && !alreadyOn){
         alreadyOn = true;
         emit signalStartButtonFlasher();
-        updateButton->setText("Audition Preset");
+        updateButton->setText("Audition Preset\nOn Device");
     }
     else if(!state && alreadyOn){ //if it is already on and state is false, turn off the indicator.
         emit signalStopButtonFlasher();
         alreadyOn = false;
-        indicatorButton->setStyleSheet("color: black");
-        updateButton->setText("Update Preset");
+        indicatorButton->setStyleSheet("color: white");
+        updateButton->setText("Send Preset\nto Device");
     }
     //otherwise do nothing (filtering out repeat calls to turn on the timer.)
 }

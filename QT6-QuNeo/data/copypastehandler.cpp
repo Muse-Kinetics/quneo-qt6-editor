@@ -99,22 +99,22 @@ CopyPasteHandler::CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess
     saveAllPresets->setDisabled(true);
 
     //---- DRUM STYLES ----//
-    drumStylesMenu = menuBar->addMenu(tr("&Pad Sensitivity"));
-    styleDefault = new QAction(tr("Default"), this);
-    styleMachine = new QAction(tr("Low"), this);
-    styleAkaMP = new QAction(tr("Medium"), this);
-    styleKorPad = new QAction(tr("High"), this);
-    styleFullLevel = new QAction(tr("Extreme"), this);
-    drumStylesMenu->addAction(styleDefault);
-    drumStylesMenu->addAction(styleMachine);
-    drumStylesMenu->addAction(styleAkaMP);
-    drumStylesMenu->addAction(styleKorPad);
-    drumStylesMenu->addAction(styleFullLevel);
-    connect(styleDefault, SIGNAL(triggered()), handlerOfPresets->padEditPane, SLOT(slotStyleDefault()));
-    connect(styleMachine, SIGNAL(triggered()), handlerOfPresets->padEditPane, SLOT(slotStyleMachine()));
-    connect(styleAkaMP, SIGNAL(triggered()), handlerOfPresets->padEditPane, SLOT(slotStyleAkaMP()));
-    connect(styleKorPad, SIGNAL(triggered()), handlerOfPresets->padEditPane, SLOT(slotStyleKorPad()));
-    connect(styleFullLevel, SIGNAL(triggered()), handlerOfPresets->padEditPane, SLOT(slotStyleFullLevel()));
+    padSensitivityMenu = menuBar->addMenu(tr("&Pad Sensitivity"));
+    padSensitivityDefault = new QAction(tr("Default"), this);
+    padSensitivityLow = new QAction(tr("Low"), this);
+    padSensitivityMedium = new QAction(tr("Medium"), this);
+    padSensitivityHigh = new QAction(tr("High"), this);
+    padSensitivityExtreme = new QAction(tr("Extreme"), this);
+    padSensitivityMenu->addAction(padSensitivityDefault);
+    padSensitivityMenu->addAction(padSensitivityLow);
+    padSensitivityMenu->addAction(padSensitivityMedium);
+    padSensitivityMenu->addAction(padSensitivityHigh);
+    padSensitivityMenu->addAction(padSensitivityExtreme);
+    connect(padSensitivityDefault, SIGNAL(triggered()), handlerOfPresets->padEditPane, SLOT(slotPadSensitivityDefault()));
+    connect(padSensitivityLow, SIGNAL(triggered()), handlerOfPresets->padEditPane, SLOT(slotPadSensitivityLow()));
+    connect(padSensitivityMedium, SIGNAL(triggered()), handlerOfPresets->padEditPane, SLOT(slotPadSensitivityMedium()));
+    connect(padSensitivityHigh, SIGNAL(triggered()), handlerOfPresets->padEditPane, SLOT(slotPadSensitivityHigh()));
+    connect(padSensitivityExtreme, SIGNAL(triggered()), handlerOfPresets->padEditPane, SLOT(slotPadSensitivityExtreme()));
 
     //------ HARDWARE MENU -------//
     hardwareMenu = menuBar->addMenu(tr("&Hardware"));

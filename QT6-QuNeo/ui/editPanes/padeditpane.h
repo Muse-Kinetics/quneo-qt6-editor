@@ -105,6 +105,7 @@ signals:
     void signalSelectPreset(QString);
     void signalTriggerCopy();
     void signalTriggerPaste();
+    void signalCurrentSensor(QString);
 
 public slots:
     void slotSelectVelocityTable(QString);
@@ -124,11 +125,11 @@ public slots:
     void slotUpdateXYText();
 
     //drum styles
-    void slotStyleDefault();
-    void slotStyleMachine();
-    void slotStyleAkaMP();
-    void slotStyleKorPad();
-    void slotStyleFullLevel();
+    void slotPadSensitivityDefault();
+    void slotPadSensitivityLow();
+    void slotPadSensitivityMedium();
+    void slotPadSensitivityHigh();
+    void slotPadSensitivityExtreme();
 };
 
 #endif // PADEDITPANE_H
