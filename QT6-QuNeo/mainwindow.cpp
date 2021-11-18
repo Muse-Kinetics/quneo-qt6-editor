@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     applicationVersion[1] = 0;
     applicationVersion[2] = 0;
 
-    betaVersion = "B"; // release, do not show beta string
+    betaVersion = "C"; // release, do not show beta string
 
     thisFw = QByteArray(reinterpret_cast<char*>(_fw_ver_quneo), sizeof(_fw_ver_quneo));
 

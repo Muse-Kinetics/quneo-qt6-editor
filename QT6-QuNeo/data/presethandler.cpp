@@ -74,8 +74,8 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
     //connect(padEditPane, SIGNAL(signalValueChanged(int,QString,QString,int,QString, int)),
             //this, SLOT(slotValueChanged(int,QString,QString,int,QString, int)));//connect info about value to be saved to the preset handler when one changes.
     //connect(padEditPane, SIGNAL(signalToLabels(QString)), this, SLOT(slotDisplayAllLabels(QString)));
-    //connect(padEditPane, SIGNAL(signalTableChanged(int,QString,QList<QVariant>)),
-            //this, SLOT(slotPadVelocityTableChanged(int,QString,QList<QVariant>)));
+    connect(padEditPane, SIGNAL(signalTableChanged(int,QString,QList<QVariant>)),
+            this, SLOT(slotPadVelocityTableChanged(int,QString,QList<QVariant>)));
     //connect(padEditPane, SIGNAL(signalSelectPreset(QString)), this, SLOT(slotRecallPreset(QString)));
 
     qDebug() << "connect hslider";

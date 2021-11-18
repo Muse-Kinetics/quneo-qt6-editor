@@ -130,6 +130,7 @@ public slots:
     void slotPadSensitivityMedium();
     void slotPadSensitivityHigh();
     void slotPadSensitivityExtreme();
+    void slotSetPadSensitivity(int val_globalSensitivity, int val_perPadSensitivity, int val_onThreshold, int val_offThreshold, QString val_velTable);
 };
 
 #endif // PADEDITPANE_H
