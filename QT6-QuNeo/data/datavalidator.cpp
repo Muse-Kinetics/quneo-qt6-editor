@@ -7,7 +7,7 @@ DataValidator::DataValidator(QWidget *parent) :
 #if defined(Q_OS_MAC)// && !defined(QT_DEBUG)
     jsonFile = new QFile("../../../presets/QuNeo.json");
 #else
-    jsonFile = new QFile("./presets/QuNeo.json");
+    jsonFile = new QFile("./Resources/presets/QuNeo.json");
 #endif
 
 

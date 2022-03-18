@@ -28,7 +28,7 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
     jsonPath.remove(jsonPath.length() - 5, jsonPath.length());
     jsonPath.append("Resources/presets/QuNeo.json");
 #else
-    jsonPath = QString("./presets/QuNeo.json");
+    jsonPath = QString("./Resources/presets/QuNeo.json");
 #endif
 
     //load json into QFile
@@ -235,6 +235,7 @@ void PresetHandler::slotEvents(QString string){
 
 void PresetHandler::slotPropogateValuesSelectMultiple(int presetNum, QString settingsType, QString paramType, int typeNum, QString paramName, int paramValue){
 
+    Q_UNUSED(typeNum);
     //query clickedSensors map to see if each sensor has been highlighted.
     //If it has beeen then insert incoming parameter.
     for(int i = 0; i < sensorList.count(); i++){

@@ -629,7 +629,7 @@ void PadEditPane::slotCalculatePadSensitivity(int changedValue)
 
 void PadEditPane::slotValueChanged(int num)
 {
-    qDebug() << "slotValueChanged - num: " << num;
+    //qDebug() << "slotValueChanged - num: " << num;
 
     focusCheck = qobject_cast<QWidget *>(QObject::sender());
     if((!focusCheck->objectName().contains(QString("Enable"))) && (!focusCheck->objectName().contains(QString("enable"))))
