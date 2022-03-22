@@ -9,14 +9,14 @@ int main(int argc, char *argv[])
 
     #ifdef Q_OS_MAC
     w.setMinimumHeight(678);
-    w.setMinimumWidth(1039);
+    w.setMinimumWidth(1080);
     w.setMaximumHeight(678);
-    w.setMaximumWidth(1039);
+    w.setMaximumWidth(1080);
     #else
     w.setMinimumHeight(678);
-    w.setMinimumWidth(1039);
+    w.setMinimumWidth(1080);
     w.setMaximumHeight(678);
-    w.setMaximumWidth(1039);
+    w.setMaximumWidth(1080);
     #endif
 
     w.show();

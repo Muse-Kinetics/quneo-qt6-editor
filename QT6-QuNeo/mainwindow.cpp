@@ -93,6 +93,25 @@ MainWindow::MainWindow(QWidget *parent) :
 
     qDebug() << "DONE";
 
+
+    // ---- FONTS --------------------------
+    qDebug() << "------------ [FONTS SETUP] ---------------------------------------------------";
+
+    QString droidFont = ":/fonts/DroidSansMono.ttf";
+    QString futuraFont = ":/fonts/futura-normal.ttf";
+    QString futuraBFont = ":/fonts/Futura-Bold.ttf";
+    QString corbelFont = ":/fonts/corbel.ttf";
+    QString corbelBFont = ":/fonts/corbelb.ttf";
+
+    if (QFontDatabase::addApplicationFont(droidFont) == -1) qDebug() << "Could not load font: " << droidFont;
+    if (QFontDatabase::addApplicationFont(futuraFont) == -1) qDebug() << "Could not load font: " << futuraFont;
+    if (QFontDatabase::addApplicationFont(futuraBFont) == -1) qDebug() << "Could not load font: " << futuraBFont;
+    if (QFontDatabase::addApplicationFont(corbelFont) == -1) qDebug() << "Could not load font: " << corbelFont;
+    if (QFontDatabase::addApplicationFont(corbelBFont) == -1) qDebug() << "Could not load font: " << corbelBFont;
+
+    // ---- end FONTS -------------------------
+
+
     //*****Setup Preset Handler*****//
     qDebug() << "new presetHandler";
     presetHandler = new PresetHandler(this, 0);
@@ -763,7 +782,7 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event){
                 presetHandler->clickedSensors.insert(QString("lSliderButton0"), 0);
                 //then set the current sensor to clicked so that it is
                 //included if the next click is a shift click on a different sensor
-                qDebug()<<QString("leftclick no shift: %1").arg(object->objectName());
+                //qDebug()<<QString("leftclick no shift: %1").arg(object->objectName());
                 presetHandler->clickedSensors.insert(object->objectName(), 1);
             }
         }
@@ -1256,8 +1275,8 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         if (portName.toUpper() == QString(QUNEO_IN_P1).toUpper())
         {
             // close ports and stop polling
-            QuNeo->slotCloseMidiIn();
-            QuNeo->slotCloseMidiOut();
+            QuNeo->slotCloseMidiIn(SIGNAL_SEND);
+            QuNeo->slotCloseMidiOut(SIGNAL_SEND);
             QuNeo->slotStopPolling("slotMIDIPortChange - disconnect");
             if (inOrOut == PORT_IN) fwUpdateWindow->slotAppendTextToConsole("\nQuNeo Disconnected\n");
         }
@@ -1387,6 +1406,9 @@ void MainWindow::slotQuNeoConnected(bool state)
         connected = true;
         midiDeviceAccess->connected = true;
 
+
+
+
         QuNeo->slotStopPolling("slotQuNeoConnected - true");
 
         //presetManager->syncFlag = true;
@@ -1407,6 +1429,7 @@ void MainWindow::slotQuNeoConnected(bool state)
         }
         connected = false;
         midiDeviceAccess->connected = false;
+
 
 //        presetManager->syncFlag = false; // update presetmanager
     }

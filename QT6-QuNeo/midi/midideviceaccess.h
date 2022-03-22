@@ -9,11 +9,11 @@
 #include <sysexformat.h>
 #include <QTimer>
 
-#ifdef Q_OS_MAC
-#include <CoreMIDI/CoreMIDI.h>
-#include <CoreServices/CoreServices.h>
-#include <CoreFoundation/CoreFoundation.h>
-#include <AudioUnit/AudioUnit.h>
+//#ifdef Q_OS_MAC
+//#include <CoreMIDI/CoreMIDI.h>
+//#include <CoreServices/CoreServices.h>
+//#include <CoreFoundation/CoreFoundation.h>
+//#include <AudioUnit/AudioUnit.h>
 //#include "copypastehandler.h"
 
 using std::vector;
@@ -129,122 +129,122 @@ public slots:
 
 };
 
-#else
-#include <QTimer>
-#include <Windows.h>
-#include <MMSystem.h>
-#include <Dbt.h>
+//#else
+//#include <QTimer>
+//#include <Windows.h>
+//#include <MMSystem.h>
+//#include <Dbt.h>
 
-class MidiDeviceAccess : public QObject
-{
-    Q_OBJECT
-public:
-    explicit MidiDeviceAccess(QVariantMap*,QObject *parent = 0);
+//class MidiDeviceAccess : public QObject
+//{
+//    Q_OBJECT
+//public:
+//    explicit MidiDeviceAccess(QVariantMap*,QObject *parent = 0);
 
-    QTimer* replyTimeout;
+//    QTimer* replyTimeout;
 
-    SysExFormat *sysExFormat;
-    int currentPreset;
-    int fwVersionLSB; //stores LSB of FW version when query returns in slotProcessSysExRx(int);
-    int fwVersionMSB; //stores MSB of FW version when query returns in slotProcessSysExRx(int);
-    int bootloaderVersionLSB; //stores LSB of bootloader version when query returns in slotProcessSysExRx(int);
-    int bootloaderVersionMSB;
-    int versionArray[5];
-    int isQuNeo;
-    QList<int> sysExMsg;    //used to process sysEx messages from start to finish in slotProcessSysExRx(int);
+//    SysExFormat *sysExFormat;
+//    int currentPreset;
+//    int fwVersionLSB; //stores LSB of FW version when query returns in slotProcessSysExRx(int);
+//    int fwVersionMSB; //stores MSB of FW version when query returns in slotProcessSysExRx(int);
+//    int bootloaderVersionLSB; //stores LSB of bootloader version when query returns in slotProcessSysExRx(int);
+//    int bootloaderVersionMSB;
+//    int versionArray[5];
+//    int isQuNeo;
+//    QList<int> sysExMsg;    //used to process sysEx messages from start to finish in slotProcessSysExRx(int);
 
-    QTimer *timer;
-    QTimer updatingAllTimer;
+//    QTimer *timer;
+//    QTimer updatingAllTimer;
 
-    QObject* mainWindow;
+//    QObject* mainWindow;
 
-    QComboBox* deviceMenu;
-    QPushButton* updateSingleButton;
-    QPushButton* updateAllButton;
-    int presetByteSize;
+//    QComboBox* deviceMenu;
+//    QPushButton* updateSingleButton;
+//    QPushButton* updateAllButton;
+//    int presetByteSize;
 
-    QVariantMap deviceOutList;//stores USB Audio Devices (including QuNeos)
-    int openOutDeviceIndex;
-    QVariantMap deviceInList;
-    int openInDeviceIndex;
+//    QVariantMap deviceOutList;//stores USB Audio Devices (including QuNeos)
+//    int openOutDeviceIndex;
+//    QVariantMap deviceInList;
+//    int openInDeviceIndex;
 
-    QVariantMap quNeoDeviceOutList; //stores QuNeo Devices, after USB Audio Device Checking
-    QVariantMap quNeoDeviceInList;
-    QString deviceBeingChecked;
+//    QVariantMap quNeoDeviceOutList; //stores QuNeo Devices, after USB Audio Device Checking
+//    QVariantMap quNeoDeviceInList;
+//    QString deviceBeingChecked;
 
-    QFile *sysExFirmware;
-    QByteArray sysExFirmwareBytes;
-    char *sysExFirmwareData;
-    int firmwareByteSize;
+//    QFile *sysExFirmware;
+//    QByteArray sysExFirmwareBytes;
+//    char *sysExFirmwareData;
+//    int firmwareByteSize;
 
-    QFile* loadPreset[16];
-    QByteArray loadPresetBytes[16];
-    char *loadPresetData[16];
-    int loadPresetSize[16];
+//    QFile* loadPreset[16];
+//    QByteArray loadPresetBytes[16];
+//    char *loadPresetData[16];
+//    int loadPresetSize[16];
 
-    QMessageBox deviceNumWarning;
+//    QMessageBox deviceNumWarning;
 
-    MIDIOUTCAPS mocs;
-    HMIDIOUT outHandle;
-    HANDLE sysExOutBuffer;
-    MIDIHDR sysExOutHdr;
-    UINT err;
-    int numOutDevices;
+//    MIDIOUTCAPS mocs;
+//    HMIDIOUT outHandle;
+//    HANDLE sysExOutBuffer;
+//    MIDIHDR sysExOutHdr;
+//    UINT err;
+//    int numOutDevices;
 
-    MIDIINCAPS mics;
-    HMIDIIN inHandle;
-    HANDLE sysExInBuffer;
-    MIDIHDR sysExInHdr;
-    int numInDevices;
+//    MIDIINCAPS mics;
+//    HMIDIIN inHandle;
+//    HANDLE sysExInBuffer;
+//    MIDIHDR sysExInHdr;
+//    int numInDevices;
 
-    HANDLE hBuffer;
+//    HANDLE hBuffer;
 
-    QString boardVersion;
-    QString editorVersion;
-    QString editorVersionBoot;
-    QString boardVersionBoot;
+//    QString boardVersion;
+//    QString editorVersion;
+//    QString editorVersionBoot;
+//    QString boardVersionBoot;
 
-    //char sysEx[] = {0xF0, 0x7F, 0x7F, 0x04, 0x04, 0x01, 0x7F, 0x7F, 0xF7};
+//    //char sysEx[] = {0xF0, 0x7F, 0x7F, 0x04, 0x04, 0x01, 0x7F, 0x7F, 0xF7};
 
-signals:
-    void sigFirmwareCurrent(bool);
-    void sigFwBytesLeft(int);
-    void sigUpdateAllPresetsCount(int);
-    //void sigSetVersions(QString,QString);
-    void sigQuNeoConnected(bool);
-    void sigRogueWarning();
+//signals:
+//    void sigFirmwareCurrent(bool);
+//    void sigFwBytesLeft(int);
+//    void sigUpdateAllPresetsCount(int);
+//    //void sigSetVersions(QString,QString);
+//    void sigQuNeoConnected(bool);
+//    void sigRogueWarning();
 
-    void signalStopRogueTimer();
+//    void signalStopRogueTimer();
 
-public slots:
-    void slotCheckDevices(); //checks for USB Audio devices if midi setup has changed
-    void slotCheckDevicesPulse(); //executes timer for checking the midi setup
-    void slotSetCurrentPreset(QString); //gets current preset number
-    void slotSelectDevice(QString);//not needed anymore with device number limit
-    void slotUpdateAllPresets();
-    void slotUpdateSinglePreset();
-    void slotLoadPreset(); //loads updated preste onto board
-    void slotUpdateFirmware(); //puts board into bootloader
-    void slotDownloadFirmware(); // downloads firmare
-    void slotCheckFirmwareVersion(); //sends device query
-    void slotProcessSysEx(QByteArray); //processes sysex, if this becomes too large, make new class
-    void slotIsDeviceQuneo(QString); //sends device id query, in device check mode
-    void slotPopulateDeviceMenu(); //checks the number of quneos connected, and populates menu
-    void slotSwapLeds(); //sends sysex message to swap leds
+//public slots:
+//    void slotCheckDevices(); //checks for USB Audio devices if midi setup has changed
+//    void slotCheckDevicesPulse(); //executes timer for checking the midi setup
+//    void slotSetCurrentPreset(QString); //gets current preset number
+//    void slotSelectDevice(QString);//not needed anymore with device number limit
+//    void slotUpdateAllPresets();
+//    void slotUpdateSinglePreset();
+//    void slotLoadPreset(); //loads updated preste onto board
+//    void slotUpdateFirmware(); //puts board into bootloader
+//    void slotDownloadFirmware(); // downloads firmare
+//    void slotCheckFirmwareVersion(); //sends device query
+//    void slotProcessSysEx(QByteArray); //processes sysex, if this becomes too large, make new class
+//    void slotIsDeviceQuneo(QString); //sends device id query, in device check mode
+//    void slotPopulateDeviceMenu(); //checks the number of quneos connected, and populates menu
+//    void slotSwapLeds(); //sends sysex message to swap leds
 
-    //these open and close midi ports/devices
-    void slotCloseMidiIn();
-    void slotCloseMidiOut();
-    void slotOpenMidiIn(int);
-    void slotOpenMidiOut(int);
+//    //these open and close midi ports/devices
+//    void slotCloseMidiIn();
+//    void slotCloseMidiOut();
+//    void slotOpenMidiIn(int);
+//    void slotOpenMidiOut(int);
 
-    void slotSendToggleProgramChangeOutput();
-    void slotSendToggleProgramChangeInput();
+//    void slotSendToggleProgramChangeOutput();
+//    void slotSendToggleProgramChangeInput();
 
-    void slotReplyTimeout();
-    void slotStopRogueTimer();
+//    void slotReplyTimeout();
+//    void slotStopRogueTimer();
 
-};
+//};
 
-#endif //Q_OS_MAC
+//#endif //Q_OS_MAC
 #endif // MIDIDEVICEACCESS_H
