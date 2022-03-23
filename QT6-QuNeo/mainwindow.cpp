@@ -97,11 +97,11 @@ MainWindow::MainWindow(QWidget *parent) :
     // ---- FONTS --------------------------
     qDebug() << "------------ [FONTS SETUP] ---------------------------------------------------";
 
-    QString droidFont = ":/fonts/DroidSansMono.ttf";
-    QString futuraFont = ":/fonts/futura-normal.ttf";
-    QString futuraBFont = ":/fonts/Futura-Bold.ttf";
-    QString corbelFont = ":/fonts/corbel.ttf";
-    QString corbelBFont = ":/fonts/corbelb.ttf";
+    QString droidFont = ":/fonts/droid-sans/DroidSansMono.ttf";
+    QString futuraFont = ":/fonts/futura/futura-normal.ttf";
+    QString futuraBFont = ":/fonts/futura/Futura-Bold.ttf";
+    QString corbelFont = ":/fonts/corbel/corbel.ttf";
+    QString corbelBFont = ":/fonts/corbel/corbelb.ttf";
 
     if (QFontDatabase::addApplicationFont(droidFont) == -1) qDebug() << "Could not load font: " << droidFont;
     if (QFontDatabase::addApplicationFont(futuraFont) == -1) qDebug() << "Could not load font: " << futuraFont;
@@ -1223,7 +1223,7 @@ void MainWindow::slotShowUpdateAllDialog()
 // --------------------------------------------------------------------------------------
 // ------ midi overhaul -----------------------------------------------------------------
 // --------------------------------------------------------------------------------------
-
+// kmiPorts monitors MIDI device connect/disconnects, this function handles those changes
 void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messageType, int portNum)
 {
     //qDebug() << "slotMIDIPortChange - " << kmiPorts->mType[messageType] << kmiPorts->inOut[inOrOut] << " portName:" << portName << " messageType: " << " portNum: " << portNum << "\n";
@@ -1250,12 +1250,12 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
 
             QuNeo->slotSetExpectedFW(thisFw);
             //qDebug() << "qn deviceName: " << BopPad->deviceName << " curfw is: " << BopPad->currentFwVer;
-            QuNeo->updatePortIn(portNum);
+            QuNeo->slotUpdatePortIn(portNum);
             fwUpdateWindow->slotAppendTextToConsole("\nQuNeo Connected\n");
         }
         else if (portName.toUpper() == QString(QUNEO_OUT_P1).toUpper() && inOrOut == PORT_OUT)
         {
-            QuNeo->updatePortOut(portNum);
+            QuNeo->slotUpdatePortOut(portNum);
             QuNeo->slotStartPolling("slotMIDIPortChange"); // start polling when output port is added
         }
 
@@ -1288,11 +1288,11 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         // **** QuNeo renumber *****************************************
         if (portName.toUpper() == QString(QUNEO_IN_P1).toUpper() && inOrOut == PORT_IN)
         {
-            QuNeo->updatePortIn(portNum);
+            QuNeo->slotUpdatePortIn(portNum);
         }
         else if (portName.toUpper() == QString(QUNEO_OUT_P1).toUpper() && inOrOut == PORT_OUT)
         {
-            QuNeo->updatePortOut(portNum);
+            QuNeo->slotUpdatePortOut(portNum);
         }
 
         break;
