@@ -26,8 +26,6 @@ LSliderEditPane::LSliderEditPane(QVariantMap *variantMap, QVariantMap *variantMa
     QLabel *sensitivityLabel = mainWindow->findChild<QLabel *>("lSliderSensitivityLabel");
     QFont f( "Arial", 3, QFont::Normal);
     sensitivityLabel->setFont(f);
-    sensitivityDial->move(9, 378);
-    sensitivityLabel->move(3, 405);
 
 
     QPushButton *buttonPointer = mainWindow->findChild<QPushButton *>("updateButton");

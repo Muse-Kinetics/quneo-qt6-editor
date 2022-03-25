@@ -29,8 +29,6 @@ VSliderEditPane::VSliderEditPane(QVariantMap *variantMap, QVariantMap *variantMa
     QLabel *sensitivityLabel = mainWindow->findChild<QLabel *>("vSliderSensitivityLabel");
     QFont f( "Arial", 3, QFont::Normal);
     sensitivityLabel->setFont(f);
-    sensitivityDial->move(9, 378);
-    sensitivityLabel->move(3, 405);
 #endif
 }
 

@@ -27,8 +27,6 @@ RotaryEditPane::RotaryEditPane(QVariantMap *variantMap, QVariantMap *variantMapC
     QLabel *sensitivityLabel = mainWindow->findChild<QLabel *>("rotarySensitivityLabel");
     QFont f( "Arial", 3, QFont::Normal);
     sensitivityLabel->setFont(f);
-    sensitivityDial->move(9, 378);
-    sensitivityLabel->move(3, 405);
 #endif
 
 }
