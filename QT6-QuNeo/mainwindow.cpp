@@ -400,7 +400,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QString versionLabelText = QString("%1.%2.%3%4").arg((uchar)applicationVersion[0]).arg((uchar)applicationVersion[1]).arg((uchar)applicationVersion[2]).arg(betaVersion);
     ui->QuNeoVersionLabel->setText(versionLabelText);
 
+    //fixing connected indicator label size on Windows
+#ifdef Q_OS_MAC
 
+#else
+    QLabel* connectedLabel = this->findChild<QLabel *>("QuNeo_Connected_Label");
+    connectedLabel->setStyleSheet("font: bold;color: white;font-size: 9px;");
+#endif
 }
 
 MainWindow::~MainWindow()
