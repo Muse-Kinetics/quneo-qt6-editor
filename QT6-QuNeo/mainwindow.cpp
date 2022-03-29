@@ -1250,7 +1250,7 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
 
         // **** QuNeo connect *****************************************
         // use .toUpper() because firmware < 1.31 is uppercase, 1.31 and later are "QuNeo"
-        if (portName.toUpper() == QString(QUNEO_IN_P1).toUpper() && inOrOut == PORT_IN)
+        if ((portName == QUNEO_IN_P1 || portName == QUNEO_BL_PORT) && inOrOut == PORT_IN)
         {
             QByteArray thisFw = QByteArray(reinterpret_cast<char*>(_fw_ver_quneo), sizeof(_fw_ver_quneo));
 
@@ -1259,7 +1259,7 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
             QuNeo->slotUpdatePortIn(portNum);
             fwUpdateWindow->slotAppendTextToConsole("\nQuNeo Connected\n");
         }
-        else if (portName.toUpper() == QString(QUNEO_OUT_P1).toUpper() && inOrOut == PORT_OUT)
+        else if ((portName == QUNEO_OUT_P1 || portName == QUNEO_BL_PORT) && inOrOut == PORT_OUT)
         {
             QuNeo->slotUpdatePortOut(portNum);
             QuNeo->slotStartPolling("slotMIDIPortChange"); // start polling when output port is added
@@ -1278,13 +1278,13 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         }
 
         // **** QuNeo disconnect ***************************************
-        if (portName.toUpper() == QString(QUNEO_IN_P1).toUpper())
+        if ((portName == QUNEO_IN_P1 || portName == QUNEO_BL_PORT) && inOrOut == PORT_IN)
         {
             // close ports and stop polling
             QuNeo->slotCloseMidiIn(SIGNAL_SEND);
             QuNeo->slotCloseMidiOut(SIGNAL_SEND);
             QuNeo->slotStopPolling("slotMIDIPortChange - disconnect");
-            if (inOrOut == PORT_IN) fwUpdateWindow->slotAppendTextToConsole("\nQuNeo Disconnected\n");
+            fwUpdateWindow->slotAppendTextToConsole("\nQuNeo Disconnected\n");
         }
 
         break;
@@ -1292,11 +1292,11 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         qDebug() << " PORT CHANGED - name: " << portName << portName << " inOrOut: " << kmiPorts->inOut[inOrOut] << " messageType: " << kmiPorts->mType[messageType] << " portNum: " << portNum << "\n";
 
         // **** QuNeo renumber *****************************************
-        if (portName.toUpper() == QString(QUNEO_IN_P1).toUpper() && inOrOut == PORT_IN)
+        if ((portName == QUNEO_IN_P1 || portName == QUNEO_BL_PORT) && inOrOut == PORT_IN)
         {
             QuNeo->slotUpdatePortIn(portNum);
         }
-        else if (portName.toUpper() == QString(QUNEO_OUT_P1).toUpper() && inOrOut == PORT_OUT)
+        else if ((portName == QUNEO_OUT_P1 || portName == QUNEO_BL_PORT) && inOrOut == PORT_OUT)
         {
             QuNeo->slotUpdatePortOut(portNum);
         }
@@ -1312,9 +1312,7 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
 void MainWindow::slotRefreshConnection()
 {
     qDebug() << "slotRefreshConnection called";
-#ifndef Q_OS_WIN
     QuNeo->slotResetConnections(QUNEO_IN_P1, QUNEO_BL_PORT);
-#endif
 }
 
 void MainWindow::slotBootloaderMode(bool fwUpdateRequested)
