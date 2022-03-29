@@ -226,7 +226,7 @@ void LeftrightEditPane::displayLeftrightValues() {
 }
 
 bool LeftrightEditPane::eventFilter(QObject *object, QEvent *event){
-
+    Q_UNUSED(object);
     if(event->type() == QEvent::KeyPress){
        QKeyEvent *keyEvent = (QKeyEvent *)event;
 
@@ -353,6 +353,7 @@ void LeftrightEditPane::slotToLabels(QString parameter) {
 }
 
 void LeftrightEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject) {
+    Q_UNUSED(oldObject);
     qDebug() << "LeftrightEditPane called";
     if(nowObject != nullptr) {
         clicked = nowObject;

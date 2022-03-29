@@ -479,6 +479,8 @@ void PadLabels::slotDisplayChannel(void){
 }
 
 void PadLabels::slotDisplayTranspose(QString objectName, int componentNum, int preset){
+    Q_UNUSED(componentNum);
+    Q_UNUSED(preset);
     QString bank = objectName;
     bank = bank.remove(0, 4);
     bank = bank.remove(1, bank.length());

@@ -265,7 +265,7 @@ void UpdownEditPane::displayUpdownValues() {
 }
 
 bool UpdownEditPane::eventFilter(QObject *object, QEvent *event){
-
+    Q_UNUSED(object);
     if(event->type() == QEvent::KeyPress){
        QKeyEvent *keyEvent = (QKeyEvent *)event;
 
@@ -395,6 +395,7 @@ void UpdownEditPane::slotToLabels(QString parameter) {
 }
 
 void UpdownEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject) {
+    Q_UNUSED(oldObject);
     qDebug() << "UpdownEditPane called";
     if(nowObject != nullptr) {
         clicked = nowObject;

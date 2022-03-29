@@ -56,7 +56,7 @@ void LSliderButton::slotEvents(QString string){
 }
 
 void LSliderButton::slotCheckToConnectFocus(QWidget *old, QWidget *now){
-
+    Q_UNUSED(old);
     if(now){
         if(!focusConnected && now->objectName().contains("lB")){
             connect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), lSliderEditPane, SLOT(slotFocusParam(QWidget*,QWidget*)));

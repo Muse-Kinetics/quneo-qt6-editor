@@ -330,6 +330,7 @@ void PadEditPane::findUiElements()
 }
 
 void PadEditPane::slotCalculateOffThreshFromOn(int onThreshChanged){
+    Q_UNUSED(onThreshChanged);
     if(offThresh->value() > (onThresh->value() - 2)){
         offThresh->setValue(onThresh->value() - 2);
     }
@@ -580,7 +581,7 @@ void PadEditPane::slotEvents(QString string)
 }
 
 bool PadEditPane::eventFilter(QObject *object, QEvent *event){
-
+    Q_UNUSED(object);
     if(event->type() == QEvent::KeyPress){
        QKeyEvent *keyEvent = (QKeyEvent *)event;
 
@@ -596,7 +597,7 @@ bool PadEditPane::eventFilter(QObject *object, QEvent *event){
 
 void PadEditPane::slotCalculatePadSensitivity(int changedValue)
 {
-
+    Q_UNUSED(changedValue);
     /* QWidget *sensitivitySender = qobject_cast<QWidget *>(QObject::sender());
 
     if(sensitivitySender->objectName() == QString("padSensitivity")){
@@ -675,6 +676,7 @@ void PadEditPane::slotValueChanged(int num)
 }
 
 void PadEditPane::slotFocusParam(QWidget* oldObject, QWidget* nowObject) {
+    Q_UNUSED(oldObject);
     qDebug() << "PadEditPane called";
 
     if(nowObject != nullptr) { // eb TODO - was nowObject > 0, see others

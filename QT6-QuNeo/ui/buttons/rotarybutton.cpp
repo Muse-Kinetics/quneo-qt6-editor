@@ -56,7 +56,7 @@ void RotaryButton::slotEvents(QString string){
 }
 
 void RotaryButton::slotCheckToConnectFocus(QWidget *old, QWidget *now){
-
+    Q_UNUSED(old);
     if(now){
         if(!focusConnected && now->objectName().contains("rB")){
             connect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), rotaryEditPane, SLOT(slotFocusParam(QWidget*,QWidget*)));

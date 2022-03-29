@@ -111,6 +111,7 @@ void ButtonButton::slotEvents(QString string){
     }
 }
 void ButtonButton::slotCheckToConnectFocus(QWidget* old, QWidget* now){
+    Q_UNUSED(old);
     if(now){
         if(!focusConnected){
               if(now->objectName().contains("transport")){

@@ -1250,7 +1250,7 @@ void SysExFormat::lineInit(){
 }
 
 void SysExFormat::encode(QString name, int b){
-
+    Q_UNUSED(name);
     char a = b;
     midi_sx_encode_crc_char(a);
 

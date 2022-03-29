@@ -27,6 +27,7 @@ PadButton::PadButton(PresetHandler *presetHandle, PadEditPane *editPaneWidget, i
 }
 
 void PadButton::slotTabChange(int currentTab){
+    Q_UNUSED(currentTab);
     padEditPane->slotUpdateXYText();
 }
 
@@ -66,6 +67,7 @@ void PadButton::slotEvents(QString string){
 }
 
 void  PadButton::slotCheckToConnectFocus(QWidget* old, QWidget* now){
+    Q_UNUSED(old);
     if(now){
         if(!focusConnected){
             if(now->objectName().contains("pad") || now->objectName().contains("Gm") || now->objectName().contains("Dm") || now->objectName().contains("Grid")){

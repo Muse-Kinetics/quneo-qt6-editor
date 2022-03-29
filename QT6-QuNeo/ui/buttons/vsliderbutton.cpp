@@ -57,7 +57,7 @@ void VSliderButton::slotEvents(QString string){
 }
 
 void VSliderButton::slotCheckToConnectFocus(QWidget *old, QWidget *now){
-
+    Q_UNUSED(old);
     if(now){
         if(!focusConnected && now->objectName().contains("vB")){
             connect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), vSliderEditPane, SLOT(slotFocusParam(QWidget*,QWidget*)));

@@ -33,7 +33,7 @@ VSliderEditPane::VSliderEditPane(QVariantMap *variantMap, QVariantMap *variantMa
 }
 
 bool VSliderEditPane::eventFilter(QObject *object, QEvent *event){
-
+    Q_UNUSED(object);
     if(event->type() == QEvent::KeyPress){
        QKeyEvent *keyEvent = (QKeyEvent *)event;
 
@@ -301,6 +301,7 @@ void VSliderEditPane::displayVSliderValues()
 }
 
 void VSliderEditPane::slotCalculateOffThreshFromOn(int onThreshChanged){
+    Q_UNUSED(onThreshChanged);
     if(offThresh->value() > (onThresh->value() - 2)){
         offThresh->setValue(onThresh->value() - 2);
     }
@@ -352,6 +353,7 @@ void VSliderEditPane::slotToLabels(QString parameter){
 }
 
 void VSliderEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject){
+    Q_UNUSED(oldObject);
     qDebug() << "VSliderEditPane called";
     if(nowObject != nullptr){
         clicked = nowObject;

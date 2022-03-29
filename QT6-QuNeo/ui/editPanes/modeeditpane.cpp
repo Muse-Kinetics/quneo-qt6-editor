@@ -200,6 +200,7 @@ void ModeEditPane::slotToLabels(QString parameter) {
 }
 
 void ModeEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject) {
+    Q_UNUSED(oldObject);
     qDebug() << "ModeEditPane called";
     if(nowObject != nullptr) {
         clicked = nowObject;

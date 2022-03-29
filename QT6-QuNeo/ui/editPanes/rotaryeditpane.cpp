@@ -410,6 +410,7 @@ void RotaryEditPane::displayRotaryValues() {
 }
 
 void RotaryEditPane::slotCalculateOffThreshFromOn(int onThreshChanged){
+    Q_UNUSED(onThreshChanged);
     if(offThresh->value() > (onThresh->value() - 2)){
         offThresh->setValue(onThresh->value() - 2);
     }
@@ -424,7 +425,7 @@ void RotaryEditPane::slotCheckOffThreshAgainstOn(int offThreshChanged){
 }
 
 bool RotaryEditPane::eventFilter(QObject *object, QEvent *event){
-
+    Q_UNUSED(object);
     if(event->type() == QEvent::KeyPress){
        QKeyEvent *keyEvent = (QKeyEvent *)event;
 
@@ -607,6 +608,7 @@ void RotaryEditPane::slotValueChanged(double num) {
 
 
 void RotaryEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject){
+    Q_UNUSED(oldObject);
     qDebug() << "RotaryEditPane called";
     if(nowObject != nullptr) {
         clicked = nowObject;

@@ -55,6 +55,7 @@ void HSliderButton::slotEvents(QString string){
 }
 
 void  HSliderButton::slotCheckToConnectFocus(QWidget* old, QWidget* now){
+    Q_UNUSED(old);
     if(now){
         if(!focusConnected && now->objectName().contains("hB")){
             connect(qApp, SIGNAL(focusChanged(QWidget*,QWidget*)), hSliderEditPane, SLOT(slotFocusParam(QWidget*,QWidget*)));

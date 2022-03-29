@@ -178,7 +178,7 @@ void TransportEditPane::displayTransportValues() {
                 else {spinBoxMap.value(QString(transportParamList.at(i)))->setValue(transportMap.value(QString(transportParamList.at(i))).toInt());}
                 if(QString(transportParamList.at(i)).contains("In")){
                     spinBoxMap.value(QString(transportParamList.at(i)))->hide();
-                    QLabel *ledParamToHide = mainWindow->findChild<QLabel *>(QString("%1Label").arg(transportParamList.at(i)));
+                    //QLabel *ledParamToHide = mainWindow->findChild<QLabel *>(QString("%1Label").arg(transportParamList.at(i)));
                     //ledParamToHide->hide();
                     //ledParamToHide = mainWindow->findChild<QLabel *>(QString("transportInLabel"));
                     //ledParamToHide->hide();
@@ -213,7 +213,7 @@ void TransportEditPane::displayTransportValues() {
 }
 
 bool TransportEditPane::eventFilter(QObject *object, QEvent *event){
-
+    Q_UNUSED(object);
     if(event->type() == QEvent::KeyPress){
        QKeyEvent *keyEvent = (QKeyEvent *)event;
 
@@ -277,6 +277,7 @@ void TransportEditPane::slotToLabels(QString parameter) {
 }
 
 void TransportEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject) {
+    Q_UNUSED(oldObject);
     qDebug() << "TransportEditPane called";
     if(nowObject != nullptr) {
         clicked = nowObject;

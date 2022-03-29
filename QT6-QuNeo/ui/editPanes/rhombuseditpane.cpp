@@ -248,7 +248,7 @@ void RhombusEditPane::displayRhombusValues() {
 }
 
 bool RhombusEditPane::eventFilter(QObject *object, QEvent *event){
-
+    Q_UNUSED(object);
     if(event->type() == QEvent::KeyPress){
        QKeyEvent *keyEvent = (QKeyEvent *)event;
 
@@ -386,6 +386,7 @@ void RhombusEditPane::slotToLabels(QString parameter) {
 }
 
 void RhombusEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject) {
+    Q_UNUSED(oldObject);
     if (nowObject != nullptr) {
         clicked = nowObject;
         if(clicked->parent()->objectName().contains("rhombus")) {

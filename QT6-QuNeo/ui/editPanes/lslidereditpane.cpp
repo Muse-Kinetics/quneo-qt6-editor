@@ -45,7 +45,7 @@ LSliderEditPane::LSliderEditPane(QVariantMap *variantMap, QVariantMap *variantMa
 }
 
 bool LSliderEditPane::eventFilter(QObject *object, QEvent *event){
-
+    Q_UNUSED(object);
     if(event->type() == QEvent::KeyPress){
        QKeyEvent *keyEvent = (QKeyEvent *)event;
 
@@ -309,6 +309,7 @@ void LSliderEditPane::displayLSliderValues()
 }
 
 void LSliderEditPane::slotCalculateOffThreshFromOn(int onThreshChanged){
+    Q_UNUSED(onThreshChanged);
     if(offThresh->value() > (onThresh->value() - 2)){
         offThresh->setValue(onThresh->value() - 2);
     }
@@ -361,6 +362,7 @@ void LSliderEditPane::slotValueChanged(int num){
 }
 
 void LSliderEditPane::slotFocusParam(QWidget *oldObject, QWidget *nowObject){
+    Q_UNUSED(oldObject);
     qDebug() << "LSliderEditPane called";
     if(nowObject != nullptr){
         clicked = nowObject;
