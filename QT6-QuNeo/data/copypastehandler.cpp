@@ -174,26 +174,21 @@ void CopyPasteHandler::slotExportPreset(){
     QString filename = QFileDialog::getSaveFileName(mWindow, tr("Save Preset"), QString("./"),tr("QuNeo Preset Files (*.quneopreset)"));
     presetFile = new QFile(filename);
 
-    presetFile->open(QIODevice::WriteOnly | QIODevice::Text);
+    if (presetFile->open(QIODevice::ReadWrite | QIODevice::Text))
+    {
+        QJsonDocument jsonPresets = QJsonDocument::fromVariant(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(handlerOfPresets->currentPreset)).toMap());
 
-    // error object
-    QJsonParseError JsonParseError;
-    // convert file to QJsonDocument. this can be read/written to
-    QJsonDocument JsonDocument = QJsonDocument::fromJson(presetFile->readAll(), &JsonParseError);
-    // close jsonFile
-    presetFile->close();
-    // convert QJsonDocument to QJsonObject. this can be queried and modified in a human-readable way
-    QJsonObject RootObject = JsonDocument.object();
+        presetByteArray = jsonPresets.toJson();
 
-//    presetByteArray = serializer.serialize(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(handlerOfPresets->currentPreset)).toMap());
-    QJsonDocument jsonPresets = QJsonDocument::fromVariant(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(handlerOfPresets->currentPreset)).toMap());
-
-    presetByteArray = jsonPresets.toJson();
-
-    presetFile->resize(0);
-    presetFile->write(presetByteArray);
-    presetFile->close();
-    presetByteArray.clear();
+        presetFile->resize(0);
+        presetFile->write(presetByteArray);
+        presetFile->close();
+        presetByteArray.clear();
+    }
+    else
+    {
+        qDebug() << "Error: cannot find file " << filename;
+    }
 }
 
 void CopyPasteHandler::slotExportAllPresets(){
