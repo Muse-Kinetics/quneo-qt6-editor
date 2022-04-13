@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "connect signalFirmwareDetected";
 
     // setup MIDI aux output
-    midiAuxOut = new MidiDeviceManager(this, PID_AUX, "MIDI Thru");
+    MIDIThru = new MidiDeviceManager(this, PID_AUX, "MIDI Thru");
 
     // ******************************
     // end KMI_Ports and device handlers
@@ -139,8 +139,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // EB TODO - implement this
     // connect dropdowns and connection status to MIDI aux ports
-    //connect(ui->midi_outputs, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdateMIDIaux()));
-    //connect(QuNeo, SIGNAL(signalConnected(bool)), this, SLOT(slotUpdateMIDIaux()));
+    connect(ui->midi_thru, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdateMIDIaux()));
+    connect(QuNeo, SIGNAL(signalConnected(bool)), this, SLOT(slotUpdateMIDIaux()));
 
 
     // Firmware update Window
@@ -1242,10 +1242,10 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         if (inOrOut == PORT_OUT && !portName.toUpper().contains("QUNEO"))
         {
             // EB TODO - add this dropdown for the aux output
-//            QComboBox *thisDropDown = ui->midi_outputs;
+            QComboBox *thisDropDown = ui->midi_thru;
 
-//            thisDropDown->addItem(portName); // update dropdown
-//            slotFixDropDownWidth(thisDropDown);
+            thisDropDown->addItem(portName); // update dropdown
+            //slotFixDropDownWidth(thisDropDown);
         }
 
         // **** QuNeo connect *****************************************
@@ -1271,10 +1271,10 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         if (inOrOut == PORT_OUT)
         {
             // update dropdown EB TODO - implement this
-//            if (ui->midi_outputs->currentText() == portName)
-//                ui->midi_outputs->setCurrentIndex(0);
+            if (ui->midi_thru->currentText() == portName)
+                ui->midi_thru->setCurrentIndex(0);
 
-//            ui->midi_outputs->removeItem(ui->midi_outputs->findText(portName));
+            ui->midi_thru->removeItem(ui->midi_thru->findText(portName));
         }
 
         // **** QuNeo disconnect ***************************************
@@ -1449,18 +1449,18 @@ void MainWindow::slotUpdateMIDIaux()
     if (!connected) return; // don't continue if we aren't connected
 
     // EB TODO - implement midi aux ports
-//    if (ui->midi_outputs->currentText() != "None")
-//    {
-//        // set and open the ports
-//        int thisOutPort = kmiPorts->getOutPortNumber(ui->midi_outputs->currentText());
-//        midiAuxOut->updatePortOut(thisOutPort);
-//        midiAuxOut->slotOpenMidiOut();
-//        connect(QuNeo, SIGNAL(signalRxMidi_raw(uchar, uchar, uchar, uchar)), midiAuxOut, SLOT(slotSendMIDI(uchar, uchar, uchar, uchar)));
-//    }
-//    else
-//    {
-//        midiAuxOut->slotCloseMidiOut();
-//    }
+    if (ui->midi_thru->currentText() != "None")
+    {
+        // set and open the ports
+        int thisOutPort = kmiPorts->getOutPortNumber(ui->midi_thru->currentText());
+        MIDIThru->slotUpdatePortOut(thisOutPort);
+        MIDIThru->slotOpenMidiOut();
+        connect(QuNeo, SIGNAL(signalRxMidi_raw(uchar, uchar, uchar, uchar)), MIDIThru, SLOT(slotSendMIDI(uchar, uchar, uchar, uchar)));
+    }
+    else
+    {
+        MIDIThru->slotCloseMidiOut();
+    }
 }
 
 QString MainWindow::deviceBootloaderVersionString()

@@ -54,7 +54,7 @@ public:
     // and one output for hosted mode. For other editors you would likely define one output port for to mirror the
     // incoming MIDI from the controller, as a workaround for Windows not sharing ports.
     // For KMI_Central we are using these for the input/output dropdowns as a simple MIDI route demo.
-    MidiDeviceManager* midiAuxOut;
+    MidiDeviceManager* MIDIThru;
 
     // ------ quneo ------------------------------------------------------------
 
