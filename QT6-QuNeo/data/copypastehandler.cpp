@@ -170,12 +170,43 @@ void CopyPasteHandler::pastePreset(){
 }
 
 void CopyPasteHandler::slotExportPreset(){
+    // pull the last stored file location
+    QSettings settings;
+    const QString DEFAULT_DIR_KEY("default_dir");
 
-    QString filename = QFileDialog::getSaveFileName(mWindow, tr("Save Preset"), QString("./"),tr("QuNeo Preset Files (*.quneopreset)"));
-    presetFile = new QFile(filename);
+    QString presetFileName = handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(handlerOfPresets->currentPreset)).toMap().value(QString("presetName")).toString();
 
-    if (presetFile->open(QIODevice::ReadWrite | QIODevice::Text))
+    // Removing slashes that confuse the getSaveFileName prompt window
+    if (presetFileName.contains(QString("/"))){
+        presetFileName.replace(QString("/"), QString("_"));
+    }
+
+    // Discarding the last saved file name because we want the current preset name to be the new default
+    QString dirPath = settings.value(DEFAULT_DIR_KEY).toString();
+    int pos = dirPath.lastIndexOf(QChar('/'));
+    dirPath = dirPath.left(pos + 1);
+
+    dirPath.append(presetFileName);
+
+    //Set path and filename (default filename is Preset_Name
+    QString filename = QFileDialog::getSaveFileName(mWindow, tr("Save Preset"),
+                                                    dirPath,
+                                                    tr("QuNeo Preset Files (*.quneopreset)"));
+
+    if(!filename.isEmpty() && !filename.isNull())
     {
+        // store this folder location for the next time we open a file
+        QDir CurrentDir;
+        settings.setValue(DEFAULT_DIR_KEY, CurrentDir.absoluteFilePath(filename));
+
+        //This gets the file name without the path
+        QFileInfo fileInfo(filename);
+
+        //Open new file to be saved
+        QFile* presetFile = new QFile(filename);
+
+        presetFile->open(QIODevice::ReadWrite | QIODevice::Text);
+
         QJsonDocument jsonPresets = QJsonDocument::fromVariant(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(handlerOfPresets->currentPreset)).toMap());
 
         presetByteArray = jsonPresets.toJson();
