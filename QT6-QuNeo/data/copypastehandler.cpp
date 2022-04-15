@@ -266,40 +266,44 @@ for(int i=0; i<16; i++){
 }
 
 void CopyPasteHandler::slotImportPreset(){
+    QSettings settings;
+    const QString DEFAULT_DIR_KEY("default_dir");
 
     QString filename = NULL;
-    filename = QFileDialog::getOpenFileName(mWindow, tr("Import Preset"), QString("./"),tr("QuNeo Preset Files (*.quneopreset)"));
-    if(!filename.isNull()){
-       presetFile = new QFile(filename);
-//     presetFile->open(QIODevice::ReadOnly);
-       presetFile->open(QIODevice::ReadOnly | QIODevice::Text);
-       // error object
-       QJsonParseError JsonParseError;
-       // convert file to QJsonDocument. this can be read/written to
-       QJsonDocument JsonDocument = QJsonDocument::fromJson(presetFile->readAll(), &JsonParseError);
-       // close jsonFile
-       presetFile->close();
-       // convert QJsonDocument to QJsonObject. this can be queried and modified in a human-readable way
-       QJsonObject RootObject = JsonDocument.object();
 
-       presetByteArray = JsonDocument.toJson();
+    filename = QFileDialog::getOpenFileName(mWindow, tr("Import Preset"), settings.value(DEFAULT_DIR_KEY).toString(),tr("QuNeo Preset Files (*.quneopreset)"));
+    if(!filename.isNull()){
+        // store this folder location for the next time we open a file
+        QDir CurrentDir;
+        settings.setValue(DEFAULT_DIR_KEY, CurrentDir.absoluteFilePath(filename));
+
+        presetFile = new QFile(filename);
+        presetFile->open(QIODevice::ReadOnly | QIODevice::Text);
+
+        // error object
+        QJsonParseError JsonParseError;
+        // convert file to QJsonDocument. this can be read/written to
+        QJsonDocument JsonDocument = QJsonDocument::fromJson(presetFile->readAll(), &JsonParseError);
+        // close jsonFile
+        presetFile->close();
+        // convert QJsonDocument to QJsonObject. this can be queried and modified in a human-readable way
+        QJsonObject RootObject = JsonDocument.object();
+
+        presetByteArray = JsonDocument.toJson();
 
 //       importedPresetMap = dataValidator->slotValidatePreset(parser.parse(presetByteArray, &ok).toMap());
-       importedPresetMap = RootObject.toVariantMap();
+        importedPresetMap = RootObject.toVariantMap();
 
-       handlerOfPresets->presetMapsCopy.insert(QString("Preset %1").arg(handlerOfPresets->currentPreset), importedPresetMap);
-       handlerOfPresets->slotRecallPreset(QString("Preset %1").arg(handlerOfPresets->currentPreset + 1));
-       handlerOfPresets->slotCheckPresets();
+        handlerOfPresets->presetMapsCopy.insert(QString("Preset %1").arg(handlerOfPresets->currentPreset), importedPresetMap);
+        handlerOfPresets->slotRecallPreset(QString("Preset %1").arg(handlerOfPresets->currentPreset + 1));
+        handlerOfPresets->slotCheckPresets();
 
-       presetByteArray.clear();
-       presetFile->close();
-       importedPresetMap.clear();
+        presetByteArray.clear();
+        presetFile->close();
+        importedPresetMap.clear();
     } else {
         qDebug("nothing selected");
     }
-
-
-
 }
 
 void CopyPasteHandler::slotImportBlankPreset(){
@@ -371,7 +375,7 @@ void CopyPasteHandler::slotOpenDocumentation(){
 
     if(documentationLinkFile->open(QIODevice::ReadOnly)){
         //qDebug("open!");
-      } else {
+    } else {
         //qDebug() << docFilePath;
     }
 
@@ -383,7 +387,7 @@ void CopyPasteHandler::slotOpenDocumentation(){
 
     qDebug() << "URL loaded?" << docUrl;
 
-        QDesktopServices::openUrl(QUrl(docUrl));
+    QDesktopServices::openUrl(QUrl(docUrl));
 
 #else
 
