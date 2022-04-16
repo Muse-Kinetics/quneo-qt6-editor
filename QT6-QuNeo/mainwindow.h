@@ -22,6 +22,7 @@
 #include "KMI_DevData.h"
 #include "midi.h"
 #include <fwupdate.h>
+#include "kmi_updates.h"
 
 namespace Ui {
     class MainWindow;
@@ -44,6 +45,9 @@ public:
 
     // create KMI devices
     MidiDeviceManager* QuNeo;
+
+    // handle updates
+    KMI_Updates * checkUpdates;
 
     // create a virtual port on MacOS, iOS, and Linux. Not supported on Windows.
 #ifndef Q_OS_WIN
@@ -116,6 +120,7 @@ public:
     int eLimit;
     int eStart;
 
+    QSettings* settings;
     bool connected;
 
     // ------ midi overhaul --------------------------------------------------------

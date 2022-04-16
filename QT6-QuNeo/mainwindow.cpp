@@ -4,6 +4,7 @@
 #include <QEvent>
 #include <QMouseEvent>
 #include "KMI_FwVersions.h"
+#include "inc/KMI_Updates/kmi_updates.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -79,6 +80,12 @@ MainWindow::MainWindow(QWidget *parent) :
     // ******************************
 
     connected = false;
+
+    settings = new QSettings();
+
+    qDebug() << "Qsettings file name" << settings->fileName();
+    // check for updates
+    checkUpdates = new KMI_Updates(this, "QuNeo", settings, applicationVersion);
 
     // ---- End MIDI Overhaul --------------------------------------------
 

@@ -102,6 +102,7 @@ public:
     QMenu *helpMenu;
     QAction *quNeoManual;
     QAction *aboutQuNeo;
+    QAction *updateCheckAct;
 
     QMessageBox aboutScreen;
 

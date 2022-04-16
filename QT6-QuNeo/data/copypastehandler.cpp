@@ -1,4 +1,5 @@
 #include "copypastehandler.h"
+#include "mainwindow.h"
 
 
 CopyPasteHandler::CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess *mda, QWidget *mainWindow, DataValidator* dV,QObject *parent) :
@@ -143,11 +144,19 @@ CopyPasteHandler::CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess
     helpMenu = menuBar->addMenu(tr("&Help"));
     aboutQuNeo = new QAction(tr("&About QuNeo"), this);
     quNeoManual = new QAction(tr("&Documentaion"), this);
+    updateCheckAct = new QAction(tr("Check for Updates..."), this);
+
     helpMenu->addAction(aboutQuNeo);
     helpMenu->addAction(quNeoManual);
+    helpMenu->addAction(updateCheckAct);
+
+    updateCheckAct->setEnabled(true);
 
     connect(aboutQuNeo, SIGNAL(triggered()), this, SLOT(slotOpenAbout()));
     connect(quNeoManual, SIGNAL(triggered()), this, SLOT(slotOpenDocumentation()));
+
+    MainWindow *w = qobject_cast<MainWindow*>(mWindow);
+    connect(updateCheckAct, SIGNAL(triggered()), w->checkUpdates, SLOT(slotManualCheckForUpdates()));
 
     slotSetCurrentSensor(QString("buttonButton10"));
 }
