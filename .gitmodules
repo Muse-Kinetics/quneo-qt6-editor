@@ -7,3 +7,6 @@ url=https://bitbucket.org/keith-mcmillen-instruments/kmi_ports.git
 [submodule "QT6-QuNeo/inc/RtMidi"]
 	path = QT6-QuNeo/inc/RtMidi
 	url = https://github.com/thestk/rtmidi.git
+[submodule "QT6-QuNeo/inc/KMI_Updates"]
+	path = QT6-QuNeo/inc/KMI_Updates
+	url = https://bitbucket.org/keith-mcmillen-instruments/kmi_updates.git
