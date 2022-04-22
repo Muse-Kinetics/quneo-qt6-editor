@@ -56,7 +56,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // create KMI device handlers
     // ******************************
 
-    QuNeo = new MidiDeviceManager(this, PID_QUNEO, "QuNeo");
+    QuNeo = new MidiDeviceManager(this, PID_QUNEO, "QuNeo", kmiPorts);
 
     // setup firmware image
 
@@ -206,8 +206,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(QuNeo, SIGNAL(signalBootloaderMode(bool)), this, SLOT(slotBootloaderMode(bool)));
 
     // reset portlist after sending bootloader commands, catch changes to port names
-    connect(QuNeo, SIGNAL(signalBeginBlTimer()), this, SLOT(slotRefreshConnection()));
-    connect(QuNeo, SIGNAL(signalBeginFwTimer()), this, SLOT(slotRefreshConnection()));
+//    connect(QuNeo, SIGNAL(signalBeginBlTimer()), this, SLOT(slotRefreshConnection()));
+//    connect(QuNeo, SIGNAL(signalBeginFwTimer()), this, SLOT(slotRefreshConnection()));
 
 
     //---------------------------------- Connected Light
@@ -1270,7 +1270,8 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         else if ((portName == QUNEO_OUT_P1 || portName == QUNEO_BL_PORT) && inOrOut == PORT_OUT)
         {
             QuNeo->slotUpdatePortOut(portNum);
-            QuNeo->slotStartPolling("slotMIDIPortChange"); // start polling when output port is added
+            //QuNeo->slotStartPolling("slotMIDIPortChange"); // start polling when output port is added
+            QuNeo->pollingStatus = true;
         }
 
         break;
@@ -1347,8 +1348,6 @@ void MainWindow::slotFwUpdateSuccessCloseDialog(bool success)
 
     if (success)
     {
-        QuNeo->fwUpdateRequested = false;
-
         slotUpdateMIDIaux();
 
         slotQuNeoConnected(true);
@@ -1395,6 +1394,7 @@ void MainWindow::slotFirmwareDetected(MidiDeviceManager *thisMDM, bool matches)
 
         qDebug() << "prepare fwUpdateWindow";
         fwUpdateWindow->slotClearText();
+        fwUpdateWindow->slotUpdateProgressBar(0);
         fwUpdateWindow->slotAppendTextToConsole(deviceBootloaderVersionString());
         fwUpdateWindow->slotAppendTextToConsole(deviceFirmwareVersionString());
 
