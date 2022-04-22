@@ -85,7 +85,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     qDebug() << "Qsettings file name" << settings->fileName();
     // check for updates
-    checkUpdates = new KMI_Updates(this, "QuNeo", settings, applicationVersion);
+    QString JSONVersionCheckUrl = "https://files.keithmcmillen.com/products/quneo/editor/softwareVersionCheck.json";
+    checkUpdates = new KMI_Updates(this, "QuNeo", settings, applicationVersion, JSONVersionCheckUrl);
 
     // ---- End MIDI Overhaul --------------------------------------------
 
