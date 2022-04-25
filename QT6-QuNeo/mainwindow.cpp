@@ -1317,11 +1317,11 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
 
 // close and then reopen the QuNexus ports
 // this is needed when the bootloader and app port names do not match
-void MainWindow::slotRefreshConnection()
-{
-    qDebug() << "slotRefreshConnection called";
-    QuNeo->slotResetConnections(QUNEO_IN_P1, QUNEO_BL_PORT);
-}
+//void MainWindow::slotRefreshConnection()
+//{
+//    qDebug() << "slotRefreshConnection called";
+//    QuNeo->slotResetConnections(QUNEO_IN_P1, QUNEO_BL_PORT);
+//}
 
 void MainWindow::slotBootloaderMode(bool fwUpdateRequested)
 {
