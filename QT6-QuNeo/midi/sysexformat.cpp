@@ -1251,11 +1251,11 @@ void SysExFormat::lineInit(){
 
 void SysExFormat::encode(QString name, int b){
     Q_UNUSED(name);
-    char a = b;
+    unsigned char a = (unsigned char) b;
     midi_sx_encode_crc_char(a);
 
-    if (a < 0)			//write text file for use in explicitly initializing variables
-    { a += 256; }
+//    if (a < 0)			//write text file for use in explicitly initializing variables
+//    { a += 256; }
 
     /*if (typeof(eeprom) != 'undefined')
             {	f.writeByte(a); }
