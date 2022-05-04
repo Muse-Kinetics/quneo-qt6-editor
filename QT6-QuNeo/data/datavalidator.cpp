@@ -3,15 +3,116 @@
 DataValidator::DataValidator(QWidget *parent) :
     QWidget(parent)
 {
-    //load json into QFile - moved to main class
-#if defined(Q_OS_MAC)// && !defined(QT_DEBUG)
-    jsonFile = new QFile("../../../presets/QuNeo.json");
+
+    /***********************************Load and Parse JSON***********************************/
+
+    QString jsonPath = QCoreApplication::applicationDirPath(); //get bundle path
+
+    qDebug() << "Data Validator: Load and parse JSON - jsonPath: " << jsonPath;
+
+#if defined(Q_OS_MAC)
+#if defined(Q_OS_IOS)
+    QString m_dataLocation = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    if (QDir(m_dataLocation).exists()) {
+        qDebug() << "App data directory exists. " << m_dataLocation;
+    } else {
+        if (QDir("").mkpath(m_dataLocation)) {
+            qDebug() << "Created app data directory. " << m_dataLocation;
+        } else {
+            qDebug() << "Failed to create app data directory. " << m_dataLocation;
+        }
+    }
+
+    jsonPath = m_dataLocation.append("/QuNeo.json");
+    qDebug() << "jsonPath: " << jsonPath;
 #else
-    jsonFile = new QFile("./Resources/presets/QuNeo.json");
+    jsonPath.remove(jsonPath.length() - 5, jsonPath.length());
+    jsonPath.append("Resources/presets/QuNeo.json");
+#endif
+#else
+    jsonPath = QString("./Resources/presets/QuNeo.json");
 #endif
 
+    //load json into QFile
+    jsonFile = new QFile(jsonPath);
 
-    slotLoadJSON();
+    // open file
+    if(jsonFile->exists())
+    {
+        qDebug("jsonFound");
+    }
+    else
+    {
+        QFile sourceJson(":/Quneo/preset/resources/QuNeo.json");
+        if (!sourceJson.exists())
+        {
+            qDebug() << "ERROR: QuNeo.json resource file does not exist!";
+        }
+        else
+        {
+            qDebug() << "json not found, copying from resources to: " << jsonPath;
+            if (QFile::copy(":/Quneo/preset/resources/QuNeo.json", jsonPath))
+            {
+                qDebug() << "file copied";
+            }
+            else
+            {
+                qDebug() << "copy failed!";
+            }
+        }
+
+        jsonFile = new QFile(jsonPath);
+        qDebug() << "file exists? : " << jsonFile->exists();
+    }
+
+    QFileInfo jf(jsonPath);
+
+    qDebug() << "writable: " << jf.isWritable();
+    
+    if (jsonFile->setPermissions(QFileDevice::ReadUser | QFileDevice::WriteUser))
+    {
+        qDebug() << "Set permissions to readwrite";
+    }
+    else
+    {
+        qDebug() << "ERROR setting read/write permissions!";
+    }
+    
+    QFileInfo jf2(jsonPath);
+
+    qDebug() << "writable: " << jf2.isWritable();
+
+    if(jsonFile->open(QIODevice::ReadWrite | QIODevice::Text))
+    {
+        qDebug("Open Success");
+    }
+    else
+    {
+        qDebug() << "Open Failed";
+    }
+
+    // error object
+    QJsonParseError JsonParseError;
+    // convert file to QJsonDocument. this can be read/written to
+    QJsonDocument JsonDocument = QJsonDocument::fromJson(jsonFile->readAll(), &JsonParseError);
+    // close jsonFile
+    jsonFile->close();
+
+    // convert QJsonDocument to QJsonObject. this can be queried and modified in a human-readable way
+    QJsonObject RootObject = JsonDocument.object();
+
+    //load json file into a byte array to be processd by the parser
+    jsonByteArray = JsonDocument.toJson();
+
+    //parse the json data, convert it to a map and set it equal to the master jsonMap
+    jsonMasterMap = RootObject.toVariantMap();
+
+    //store a map of the 16 preset maps
+    jsonQuNeoPresetsMap = jsonMasterMap["QuNeo Presets"].toMap();
+
+
+
+    //slotLoadJSON();
     slotConstructDefultParamMap();
     slotCheckJSON();
     slotSaveJSON();
@@ -41,7 +142,7 @@ void DataValidator::slotConstructDefultParamMap(){
     defaultSinglePresetMap["revisionNumber"] = 576;
     defaultSinglePresetMap["presetName"] = "Preset";
 
-    defaultComponentSettingsMap; //Nothing to set yet
+    //defaultComponentSettingsMap; //Nothing to set yet
 
     defaultHSlidersMap["hSliderInChannel"] = 0;
     defaultHSlidersMap["hSliderLocalLEDControl"] = 2;
@@ -1502,11 +1603,11 @@ void DataValidator::slotLoadJSON(){
     //load json into QFile - moved to main class
     //jsonFile = new QFile("../../../presets/QuNeo.json");
 
-    if(jsonFile->open(QIODevice::ReadWrite | QIODevice::Text)){
-        qDebug("jsonFound");
-    } else {
-        qDebug() << "json not found";
-    }
+//    if(jsonFile->open(QIODevice::ReadWrite | QIODevice::Text)){
+//        qDebug("jsonFound");
+//    } else {
+//        qDebug() << "json not found";
+//    }
 
     // error object
     QJsonParseError JsonParseError;

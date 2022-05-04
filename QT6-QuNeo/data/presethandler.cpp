@@ -22,11 +22,27 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
 
     QString jsonPath = QCoreApplication::applicationDirPath(); //get bundle path
 
-    qDebug() << "Load and parse JSON - jsonPath: " << jsonPath;
+    qDebug() << "Preset Handler: Load and parse JSON - jsonPath: " << jsonPath;
 
-#if defined(Q_OS_MAC)// && !defined(QT_DEBUG)
+#if defined(Q_OS_MAC)
+#if defined(Q_OS_IOS)
+    QString m_dataLocation = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0];
+    if (QDir(m_dataLocation).exists()) {
+        qDebug() << "App data directory exists. " << m_dataLocation;
+    } else {
+        if (QDir("").mkpath(m_dataLocation)) {
+            qDebug() << "Created app data directory. " << m_dataLocation;
+        } else {
+            qDebug() << "Failed to create app data directory. " << m_dataLocation;
+        }
+    }
+
+    jsonPath = m_dataLocation.append("/QuNeo.json");
+    qDebug() << "jsonPath: " << jsonPath;
+#else
     jsonPath.remove(jsonPath.length() - 5, jsonPath.length());
     jsonPath.append("Resources/presets/QuNeo.json");
+#endif
 #else
     jsonPath = QString("./Resources/presets/QuNeo.json");
 #endif
@@ -35,8 +51,45 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
     jsonFile = new QFile(jsonPath);
 
     // open file
-    if(jsonFile->open(QIODevice::ReadWrite | QIODevice::Text)){
+    if(jsonFile->exists())
+    {
         qDebug("jsonFound");
+    }
+    else
+    {
+        QFile sourceJson(":/Quneo/preset/resources/QuNeo.json");
+        if (!sourceJson.exists())
+        {
+            qDebug() << "ERROR: QuNeo.json resource file does not exist!";
+        }
+        else
+        {
+            qDebug() << "json not found, copying from resources to: " << jsonPath;
+            if (QFile::copy(":/Quneo/preset/resources/QuNeo.json", jsonPath))
+            {
+                qDebug() << "file copied";
+            }
+            else
+            {
+                qDebug() << "copy failed!";
+            }
+        }
+
+        jsonFile = new QFile(jsonPath);
+
+    }
+    qDebug() << "file exists? : " << jsonFile->exists();
+    
+    QFileInfo jf(jsonPath);
+
+    qDebug() << "writable: " << jf.isWritable();
+
+    if(jsonFile->open(QIODevice::ReadWrite | QIODevice::Text))
+    {
+        qDebug("open success");
+    } else
+    {
+        qDebug() << "open fail";
     }
 
     // error object

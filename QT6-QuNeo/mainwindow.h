@@ -156,6 +156,7 @@ public slots:
     void slotRogueWarning();
 
     void slotShowUpdateAllDialog();
+    void addUIToLayouts();
 //    void slotShowFWUpdateDialog();
 
     // ------ midi overhaul --------------------------------------------------------

@@ -92,6 +92,9 @@ MainWindow::MainWindow(QWidget *parent) :
     //*****set up the ui
     ui->setupUi(this);
 
+    // uncomment to work with layouts
+    //this->addUIToLayouts();
+
     this->setWindowTitle("QuNeo Editor");
 
     //
@@ -1219,6 +1222,52 @@ void MainWindow::slotShowUpdateAllDialog()
 {
     updateAllPresetsProgressDialog->open();
     updateAllPresetsProgressDialog->show();
+}
+
+void MainWindow::addUIToLayouts()
+{
+    // Left section
+    QHBoxLayout *transportLayout = new QHBoxLayout();
+    transportLayout->addWidget(ui->buttonButton0);
+    transportLayout->addWidget(ui->buttonButton1);
+    transportLayout->addWidget(ui->buttonButton2);
+    transportLayout->addWidget(ui->buttonButton3);
+    QGridLayout *hArrowSliderLayout = new QGridLayout();
+    hArrowSliderLayout->addWidget(ui->padButton0,0,0,1,1);
+    hArrowSliderLayout->addWidget(ui->padButton1,0,1,1,1);
+    hArrowSliderLayout->addWidget(ui->padButton2,0,2,1,1);
+    hArrowSliderLayout->addWidget(ui->padButton3,0,3,1,1);
+    QHBoxLayout *rotaryLayout = new QHBoxLayout();
+    QHBoxLayout *vSliderLayout = new QHBoxLayout();
+
+    QVBoxLayout *leftLayout = new QVBoxLayout();
+    leftLayout->addLayout(transportLayout);
+    leftLayout->addLayout(hArrowSliderLayout);
+    leftLayout->addLayout(rotaryLayout);
+    leftLayout->addLayout(vSliderLayout);
+
+    // Right section
+    QGridLayout *padLayout = new QGridLayout();
+
+    QVBoxLayout *leftVArrowLayout = new QVBoxLayout();
+    QVBoxLayout *lSliderLayout = new QVBoxLayout();
+    QVBoxLayout *rightVArrowLayout = new QVBoxLayout();
+    QHBoxLayout *bottomRightLayout = new QHBoxLayout();
+    bottomRightLayout->addLayout(leftVArrowLayout);
+    bottomRightLayout->addLayout(lSliderLayout);
+    bottomRightLayout->addLayout(rightVArrowLayout);
+
+    QVBoxLayout *rightLayout = new QVBoxLayout();
+    rightLayout->addLayout(padLayout);
+    rightLayout->addLayout(bottomRightLayout);
+
+    // Add the left and right halves to the main layout
+    QHBoxLayout *mainLayout = new QHBoxLayout();
+    mainLayout->addLayout(leftLayout);
+    mainLayout->addLayout(rightLayout);
+
+    // Add finished layout to main QWidget
+    ui->QuNeo->setLayout(mainLayout);
 }
 
 //void MainWindow::slotShowFWUpdateDialog()
