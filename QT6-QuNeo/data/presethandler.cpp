@@ -302,10 +302,10 @@ void PresetHandler::slotPropogateValuesSelectMultiple(int presetNum, QString set
         else {
             paramTypeName = paramType;
         }
-        if(paramName.contains("Channel")){
-            int channelParam = paramValue;
-            channelParam = (paramValue - 1);
-        }
+//        if(paramName.contains("Channel")){
+//            int channelParam = paramValue;
+//            channelParam = (paramValue - 1);
+//        }
 
         //account for typenum. since I am counting through all sensors in the sensor list, not just pads, I need to
         //subtract x from i to get the correct typenum.

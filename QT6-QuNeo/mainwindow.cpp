@@ -26,7 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     applicationVersion[1] = 0;
     applicationVersion[2] = 0;
 
-    betaVersion = "D"; // release, do not show beta string
+    betaVersion = "E"; // release, do not show beta string
 
     thisFw = QByteArray(reinterpret_cast<char*>(_fw_ver_quneo), sizeof(_fw_ver_quneo));
 
@@ -1289,6 +1289,8 @@ void MainWindow::addUIToLayouts()
 void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messageType, int portNum)
 {
     //qDebug() << "slotMIDIPortChange - " << kmiPorts->mType[messageType] << kmiPorts->inOut[inOrOut] << " portName:" << portName << " messageType: " << " portNum: " << portNum << "\n";
+    QLabel* connectedLabel = this->findChild<QLabel *>("QuNeo_Connected_Label");
+    QFrame* connectedFrame = this->findChild<QFrame *>("QuNeo_Connected_Frame");
 
     switch (messageType)
     {
@@ -1311,6 +1313,8 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
             QuNeo->slotSetExpectedFW(thisFw);
             QuNeo->slotUpdatePortIn(portNum);
             fwUpdateWindow->slotAppendTextToConsole("\nQuNeo Connected\n");
+            connectedLabel->setText("Detected");
+            connectedFrame->setStyleSheet("border: 1px solid rgb(67,67,67); background:rgb(255,128,0); border-radius:6;");
         }
         else if ((portName == QUNEO_OUT_P1 || portName == QUNEO_BL_PORT) && inOrOut == PORT_OUT)
         {
@@ -1337,6 +1341,9 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
             // close ports and stop polling
             QuNeo->slotCloseMidiIn(SIGNAL_SEND);
             fwUpdateWindow->slotAppendTextToConsole("\nQuNeo Disconnected\n");
+            connectedLabel->setText("Not Connected");
+            connectedFrame->setStyleSheet("border: 1px solid rgb(67,67,67); background: rgb(100,100,100); border-radius:6;");
+            midiDeviceAccess->connected = false; // failsafe for allowing editor to talk to old firmware
         }
         else if (inOrOut == PORT_OUT && portName == QuNeo->portName_out)
         {
@@ -1375,6 +1382,13 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
 void MainWindow::slotBootloaderMode(bool fwUpdateRequested)
 {
     qDebug() << "slotBootloaderMode called - fwUpdateRequested: "<< fwUpdateRequested;
+
+    QLabel* connectedLabel = this->findChild<QLabel *>("QuNeo_Connected_Label");
+    QFrame* connectedFrame = this->findChild<QFrame *>("QuNeo_Connected_Frame");
+
+    connectedLabel->setText("BOOTLOADER");
+    connectedFrame->setStyleSheet("border: 1px solid rgb(67,67,67); background:rgb(0,0,255); border-radius:6;");
+
     if (!fwUpdateRequested)
     {
         QMessageBox msgBox;
@@ -1432,6 +1446,13 @@ void MainWindow::slotFirmwareDetected(MidiDeviceManager *thisMDM, bool matches)
     else
     {
         qDebug() << "Firmware MisMatch: " << thisMDM->PID << "name:" << thisMDM->deviceName;
+        QLabel* connectedLabel = this->findChild<QLabel *>("QuNeo_Connected_Label");
+        QFrame* connectedFrame = this->findChild<QFrame *>("QuNeo_Connected_Frame");
+
+        midiDeviceAccess->connected = true; // experiment with allowing editor to talk to older firmware
+
+        connectedLabel->setText("OUT OF DATE");
+        connectedFrame->setStyleSheet("border: 1px solid rgb(67,67,67); background:rgb(255,0,0); border-radius:6;");
 
         // setup sysex connections to receive globals data
         QuNeo->disconnect(SIGNAL(signalRxSysExBA(QByteArray))); // disconnect to be safe
@@ -1469,7 +1490,7 @@ void MainWindow::slotQuNeoConnected(bool state)
 
 
 
-        QuNeo->slotStopPolling("slotQuNeoConnected - true");
+        //QuNeo->slotStopPolling("slotQuNeoConnected - true");
 
         //presetManager->syncFlag = true;
     }

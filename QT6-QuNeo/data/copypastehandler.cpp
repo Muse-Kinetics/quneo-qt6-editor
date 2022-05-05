@@ -374,52 +374,54 @@ void CopyPasteHandler::slotOpenAbout()
 
 void CopyPasteHandler::slotOpenDocumentation(){
 
-#ifdef Q_OS_MAC
+    QDesktopServices::openUrl(QUrl("https://files.keithmcmillen.com/products/quneo/Manuals/QuNeo_Manual_2.pdf"));
 
-    QString docFilePath = QCoreApplication::applicationDirPath();
-    docFilePath.remove(docFilePath.length() - 5, docFilePath.length());
-    docFilePath.append("Resources/help.txt");
+//#ifdef Q_OS_MAC
 
-    documentationLinkFile = new QFile(docFilePath);
+//    QString docFilePath = QCoreApplication::applicationDirPath();
+//    docFilePath.remove(docFilePath.length() - 5, docFilePath.length());
+//    docFilePath.append("Resources/help.txt");
 
-    if(documentationLinkFile->open(QIODevice::ReadOnly)){
-        //qDebug("open!");
-    } else {
-        //qDebug() << docFilePath;
-    }
+//    documentationLinkFile = new QFile(docFilePath);
 
-    QTextStream docTextStream(documentationLinkFile);
-    QString docUrl;
-    //while(!docTextStream.atEnd()){
-        docUrl = docTextStream.readLine();
-    //}
+//    if(documentationLinkFile->open(QIODevice::ReadOnly)){
+//        //qDebug("open!");
+//    } else {
+//        //qDebug() << docFilePath;
+//    }
 
-    qDebug() << "URL loaded?" << docUrl;
+//    QTextStream docTextStream(documentationLinkFile);
+//    QString docUrl;
+//    //while(!docTextStream.atEnd()){
+//        docUrl = docTextStream.readLine();
+//    //}
 
-    QDesktopServices::openUrl(QUrl(docUrl));
+//    qDebug() << "URL loaded?" << docUrl;
 
-#else
+//    QDesktopServices::openUrl(QUrl(docUrl));
 
-    documentationLinkFile = new QFile("./help.txt");
+//#else
 
-    if(documentationLinkFile->open(QIODevice::ReadOnly)){
-        //qDebug("open!");
-      } else {
-        //qDebug() << docFilePath;
-    }
+//    documentationLinkFile = new QFile("./help.txt");
 
-    QTextStream docTextStream(documentationLinkFile);
-    QString docUrl;
-    //while(!docTextStream.atEnd()){
-        docUrl = docTextStream.readLine();
-    //}
+//    if(documentationLinkFile->open(QIODevice::ReadOnly)){
+//        //qDebug("open!");
+//      } else {
+//        //qDebug() << docFilePath;
+//    }
 
-    //qDebug() << "URL loaded?" << docUrl;
+//    QTextStream docTextStream(documentationLinkFile);
+//    QString docUrl;
+//    //while(!docTextStream.atEnd()){
+//        docUrl = docTextStream.readLine();
+//    //}
 
-        QDesktopServices::openUrl(QUrl(docUrl));
+//    //qDebug() << "URL loaded?" << docUrl;
+
+//        QDesktopServices::openUrl(QUrl(docUrl));
 
 
-#endif
+//#endif
 }
 
 void CopyPasteHandler::slotLoadFactoryAll(){
