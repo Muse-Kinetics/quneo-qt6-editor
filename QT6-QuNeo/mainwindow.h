@@ -22,6 +22,7 @@
 #include "KMI_DevData.h"
 #include "midi.h"
 #include <fwupdate.h>
+#include <troubleshoot.h>
 #include "kmi_updates.h"
 
 namespace Ui {
@@ -49,6 +50,12 @@ public:
     // handle updates
     KMI_Updates * checkUpdates;
 
+    // Firmware Update Window
+    fwUpdate* fwUpdateWindow;
+
+    // Connection Troubleshooter
+    troubleshoot* troubleshootWindow;
+
     // create a virtual port on MacOS, iOS, and Linux. Not supported on Windows.
 #ifndef Q_OS_WIN
     MidiDeviceManager* virtualMidiPort;
@@ -68,11 +75,17 @@ public:
     //intercept exit app signal
     void closeEvent(QCloseEvent *event);
 
+    //----------------------------------- Stylesheets
+    // Dialog Styles
+    QFile*              dialogStylesFile;
+    QString             dialogStylesString;
+
+    //Buttons
+    QFile* grayStyleFile;
+    QString grayStyleString;
+
     //Data Validator
     DataValidator* dataValidator;
-
-    // Firmware Update Window
-    fwUpdate* fwUpdateWindow;
 
     //highlight button instances
     PadButton* padButton[16];
@@ -122,6 +135,7 @@ public:
 
     QSettings* settings;
     bool connected;
+    bool forceFirmwareUpdate;
 
     // ------ midi overhaul --------------------------------------------------------
 
@@ -147,6 +161,7 @@ public slots:
 //    void progressDialog(void);
 //    void firmwareUpdateCompleteDialog(void);
 
+    void slotCreateDialog(QString dialogText);
     void centerWidgetOnScreen(QWidget*);
 //    void slotUpdateFwProgressDialog(int);
 
@@ -169,6 +184,7 @@ public slots:
     void slotQuNeoConnected(bool state);
     void slotUpdateMIDIaux();
     void slotUpdateAboutMenuVersions();
+    void slotOpenTroubleshooting();
     // ------ end midi overhaul --------------------------------------------------------
 
 

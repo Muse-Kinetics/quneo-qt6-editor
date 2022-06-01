@@ -103,6 +103,7 @@ public:
     QAction *quNeoManual;
     QAction *aboutQuNeo;
     QAction *updateCheckAct;
+    QAction* troubleShooting;
 
     QMessageBox aboutScreen;
 

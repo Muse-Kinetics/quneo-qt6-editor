@@ -24,9 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     applicationVersion[0] = 2;
     applicationVersion[1] = 0;
-    applicationVersion[2] = 0;
+    applicationVersion[2] = 1;
 
-    betaVersion = "E"; // release, do not show beta string
+    betaVersion = ""; // release, do not show beta string
 
     thisFw = QByteArray(reinterpret_cast<char*>(_fw_ver_quneo), sizeof(_fw_ver_quneo));
 
@@ -121,6 +121,26 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // ---- end FONTS -------------------------
 
+    // general stylesheets
+#ifdef Q_OS_MAC
+    dialogStylesFile = new QFile(":/stylesheets/appDialog_QuNexus.qss");
+#else
+    dialogStylesFile = new QFile(":/stylesheets/appDialog_QuNexus_WIN.qss");
+#endif
+
+    if (!dialogStylesFile->open(QFile::ReadOnly))
+    {
+        qDebug() << "ERROR: could not open stylesheet: " << dialogStylesFile->fileName();
+    }
+    else
+    {
+        dialogStylesString = QLatin1String(dialogStylesFile->readAll());
+    }
+
+    //StyleSheets for "grey" pushbuttons
+    grayStyleFile = new QFile(":/stylesheets/GrayButtonStyleSheet.qss");
+    grayStyleFile->open(QFile::ReadOnly);
+    grayStyleString = QLatin1String(grayStyleFile->readAll());
 
     //*****Setup Preset Handler*****//
     qDebug() << "new presetHandler";
@@ -157,6 +177,16 @@ MainWindow::MainWindow(QWidget *parent) :
     fwUpdateWindow = new fwUpdate(this, "QuNeo", applicationFirmwareVersionString());
     //fwUpdateWindow->setStyleSheet(generalStylesString);
 
+    // Troubleshooting Window
+    troubleshootWindow = new troubleshoot(this, "QuNeo", applicationFirmwareVersionString());
+    //troubleshootWindow->setStyleSheet(generalStylesString);
+    troubleshootWindow->hide();
+
+    connect(kmiPorts, SIGNAL(signalInputCount(int)), troubleshootWindow, SLOT(slotInputCount(int)));
+    connect(kmiPorts, SIGNAL(signalOutputCount(int)), troubleshootWindow, SLOT(slotOutputCount(int)));
+    connect(kmiPorts, SIGNAL(signalInputPort(QString, int)), troubleshootWindow, SLOT(slotInputPort(QString, int)));
+    connect(kmiPorts, SIGNAL(signalOutputPort(QString, int)), troubleshootWindow, SLOT(slotOutputPort(QString, int)));
+
     //*****MIDI*****//
 
 
@@ -173,6 +203,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // allow cph to update the device firmware strings before opening the about menu
     connect(copyPasteHandler, SIGNAL(sigUpdateAboutMenuVersions()), this, SLOT(slotUpdateAboutMenuVersions()));
+
+    // cph also handles the menu so we need to connect the connected label to troubleshooter here
+    connect(ui->QuNeo_Connected_Label, SIGNAL(clicked()), this, SLOT(slotOpenTroubleshooting()));
+    connect(copyPasteHandler->troubleShooting, SIGNAL(triggered()), this, SLOT(slotOpenTroubleshooting()));
 
     // this was already commented out
     //connect(midiDeviceAccess, SIGNAL(sigSetVersions(QString,QString)), copyPasteHandler, SLOT(slotSetVersions(QString,QString)));
@@ -198,11 +232,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(fwUpdateWindow, SIGNAL(signalFwUpdateSuccess()), QuNeo, SLOT(slotFirmwareUpdateReset()));                   // stop timeout timers
     connect(fwUpdateWindow, SIGNAL(signalFwUpdateSuccessCloseDialog(bool)), this, SLOT(slotFwUpdateSuccessCloseDialog(bool)));      // close fw dialog and connect
 
-    // EB TODO - confirm no globals to save/recall on QuNeo?
-    //connect(QuNeo, SIGNAL(signalRequestGlobals()), this, SLOT(slotSendGlobalsRequest()));                                 // request globals
-    //connect(sysExEncDecode, SIGNAL(signalGlobalsReceivedDoFwUd()), QuNeo, SLOT(slotRequestFirmwareUpdate()));                      // if fwupdate requested globals then alert that we've saved them
-    //connect(sysExEncDecode, SIGNAL(signalGlobalsReceived()), this, SLOT(slotEnableGlobalsWindows()));                       // enable globals window when we receive this
-    //connect(QuNeo, SIGNAL(signalRestoreGlobals()), this, SLOT(slotEncodeGlobals()));                                      // restore the globals after fw update
+    // connect fwUpdate console messages to connection troubleshooter
+    connect(QuNeo, SIGNAL(signalFwConsoleMessage(QString)), troubleshootWindow, SLOT(slotAppendToStatusLog(QString)));
+    connect(fwUpdateWindow, SIGNAL(signalRequestFwUpdate()), troubleshootWindow, SLOT(slotRequestFwUpdate()));
+    connect(QuNeo, SIGNAL(signalFirmwareUpdateComplete(bool)), troubleshootWindow, SLOT(slotFirmwareUpdated(bool)));
 
     // handle device unexpectedly in bootloader mode
     connect(QuNeo, SIGNAL(signalBootloaderMode(bool)), this, SLOT(slotBootloaderMode(bool)));
@@ -367,30 +400,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     totalFwBytes = midiDeviceAccess->sysExFirmwareBytes.size();
 
-    qDebug() << "mac/win progress bars";
-
-    //mac progress bar...
 #ifdef Q_OS_MAC
 
-//    connect(midiDeviceAccess, SIGNAL(sigFwBytesLeft(int)), this, SLOT(slotUpdateFwProgressDialog(int)));
-    //connect(midiDeviceAccess, SIGNAL(sigShowFWUpdateDialog()), this, SLOT(slotShowFWUpdateDialog()));
-    // this is moved to slotShowFWUpdateDialog()
-//    progress = new QProgressDialog("Updating Firmware...", "Cancel", 0, totalFwBytes, this);
-    //progress->setWindowModality(Qt::WindowModal);
-//    progress->setCancelButton(0);
-    //progress->setValue(1000);
-//    progress->close();
-
-    //************ THIS SHOULD BE DONE LAST, AFTER APP IS "CONSTRUCTED" / LOADED ****************//
-    //midiDeviceAccess->getSourcesDests(); //populate midi devices
-
 #else
-    //windows progress bar...
-
-//    progress = new QProgressDialog("Updating Firmware...", "Cancel", 0, 0, this);
-//    progress->setWindowModality(Qt::WindowModal);
-//    progress->setCancelButton(0);
-
     //windows edit pane fonts
     QGroupBox* gb = this->findChild<QGroupBox *>(QString("groupBox"));
     gb->setStyleSheet("QLabel { font: 10px } QLineEdit { font: 8px } QCheckBox {font:9px} QSpinBox {font: 10px} QDoubleSpinBox {font: 10px} QComboBox {font: 10px}");
@@ -422,6 +434,53 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+#define DIALOG_WIDTH 400
+#define DIALOG_HEIGHT 125
+#define DIALOG_TEXT_PADDING 10
+#define DIALOG_W_CENTER (DIALOG_WIDTH / 2)
+#define DIALOG_BUTT_W 70
+#define DIALOG_BUTT_H 28
+#define DIALOG_BUTT_X DIALOG_W_CENTER - (DIALOG_BUTT_W / 2)
+#define DIALOG_BUTT_Y DIALOG_HEIGHT - DIALOG_BUTT_H - (DIALOG_TEXT_PADDING * 2)
+#define DIALOG_TEXT_W (DIALOG_WIDTH - (DIALOG_TEXT_PADDING * 2))
+#define DIALOG_TEXT_H (DIALOG_HEIGHT - DIALOG_BUTT_H - (DIALOG_TEXT_PADDING * 2))
+
+void MainWindow::slotCreateDialog(QString dialogText)
+{
+    QDialog *msgBox = new QDialog(this);
+    msgBox->setModal(true);
+    msgBox->setWindowFlags(Qt::FramelessWindowHint);
+    msgBox->setStyleSheet(dialogStylesString);
+
+
+    msgBox->setMinimumSize(DIALOG_WIDTH, DIALOG_HEIGHT);
+    msgBox->setFixedSize(DIALOG_WIDTH, DIALOG_HEIGHT);
+
+    int x = this->width();
+    int y = this->height();
+
+    int dialogX = ((x / 2) - (DIALOG_WIDTH / 2));
+    int dialogY = ((y / 2) - (DIALOG_HEIGHT / 2));
+
+    qDebug() << "parent x: " << x << " y: " << y << " dialogX: " << dialogX << "dialogY: " << dialogY;
+
+    msgBox->move(dialogX, dialogY);
+
+    QLabel* text = new QLabel(dialogText, msgBox, Qt::WindowFlags());
+    text->setAlignment(Qt::AlignCenter);
+    text->setMinimumSize(DIALOG_TEXT_W, DIALOG_TEXT_H);
+    text->setFixedSize(DIALOG_TEXT_W, DIALOG_TEXT_H);
+    text->move(DIALOG_TEXT_PADDING, DIALOG_TEXT_PADDING);
+
+    QPushButton* okButton = new QPushButton(msgBox);
+    okButton->setStyleSheet(grayStyleString);
+    okButton->setText("Ok");
+    okButton->setGeometry(QRect(DIALOG_BUTT_X, DIALOG_BUTT_Y, DIALOG_BUTT_W,DIALOG_BUTT_H));
+    connect(okButton, SIGNAL(clicked()), msgBox, SLOT(close()));
+
+    msgBox->exec();
 }
 
 bool MainWindow::eventFilter(QObject *object, QEvent *event){
@@ -983,10 +1042,6 @@ void MainWindow::slotGoToPrevSensor(){
     connect(presetHandler, SIGNAL(signalPresetModified(bool)), presetHandler->updateIndicator, SLOT(slotPresetModified(bool)));
 }
 
-//void MainWindow::slotPopulateDeviceMenu(QList<QString> list){
-//deviceMenu->clear();
-//deviceMenu->insertItems(0,list);
-//}
 
 void MainWindow::closeEvent(QCloseEvent *event){
 
@@ -1032,93 +1087,6 @@ int MainWindow::maybeSave()
     //if there are unsaved changes on close, open message box.
 }
 
-//int MainWindow::firmwareUpdateDialog(bool upToDate)
-//{
-//    //return 1; // debug
-//    qDebug() << "fw update DIALOG";
-
-//    rogueQueryDevice = false;
-
-//    if(rogueWarning.isVisible())
-//    {
-//        rogueWarning.close();
-//        //midiDeviceAccess->replyTimeout->stop();
-//    }
-
-//    if(!fwUpdateDialogAuto.isVisible())
-//    {
-//        if(!upToDate)
-//        {
-//            int ret = fwUpdateDialogAuto.exec();
-//            qDebug() << "FW UPDATE CALLED";
-
-//            if(ret == QMessageBox::Ok)
-//            {
-
-//                slotShowFWUpdateDialog();
-//                midiDeviceAccess->slotUpdateFirmware();
-//                progressDialog();
-
-//                //firmwareUpdateCompleteDialog();
-//                return 1;
-//            }
-//            else if(ret == QMessageBox::Cancel)
-//            {
-//                qDebug() << "CAncleelll";
-//                return 0;
-//            }
-//        }
-//        else
-//        {
-//            if(progress->isVisible())
-//            {
-//                progress->close();
-//                firmwareUpdateCompleteDialog();
-//            }
-//            return 1; // added to clear warning
-
-//        }
-//    }
-//    return 0; // added to clear warning
-//}
-
-//void MainWindow::progressDialog(){
-
-//    emit sigFwProgressDialogOpen(true);
-//    //progress->show(); // debug
-//}
-
-//void MainWindow::firmwareUpdateCompleteDialog(){
-
-
-
-//    updateComplete.exec();
-
-//    emit sigFwProgressDialogOpen(false);
-
-//    midiDeviceAccess->slotLoadPreset();
-
-//    //*************************//
-//    // Here we will need to later instantiate preset acquisition
-//    //and reformatting if versions differ instead of loading preset
-//    //*************************//
-
-//    //qDebug() << "update completed";
-//}
-
-//void MainWindow::slotUpdateFwProgressDialog(int val){
-
-//    qDebug() << "called slotUpdateFwProgressDialog";
-
-//    if(val != 0){
-//        qDebug() << "setvalue: " << val;
-//        progress->setValue(totalFwBytes - val);
-//    } else {
-//        progress->setValue(totalFwBytes - val);
-
-//        firmwareUpdateCompleteDialog();
-//    }
-//}
 
 void MainWindow::slotUpdateAllPresetsProgress(int val){
 
@@ -1153,41 +1121,6 @@ void MainWindow::centerWidgetOnScreen (QWidget * widget) {
     widget->move(screenGeometry.center() - widget->rect().center());
 }
 
-//int MainWindow::firmwareUpdateDialogMenu(bool upToDate)
-//{
-//    if(!fwUpdateDialogManual.isVisible())
-//    {
-//        if(!upToDate)
-//        {
-//            int ret = fwUpdateDialogManual.exec();
-//            //qDebug() << "FW UPDATE CALLED";
-
-//            if(ret == QMessageBox::Ok)
-//            {
-//                slotShowFWUpdateDialog();
-//                midiDeviceAccess->slotUpdateFirmware();
-//                progressDialog();
-
-//                //firmwareUpdateCompleteDialog();
-//                return 1;
-//            }
-//            else if(ret == QMessageBox::Cancel)
-//            {
-//                return 0;
-//            }
-//        }
-//        else
-//        {
-//            if(progress->isVisible())
-//            {
-//                progress->close();
-//                firmwareUpdateCompleteDialog();
-//            }
-//            return 1; // added to clear warning
-//        }
-//    }
-//    return 0; // added to clear warning
-//}
 
 void MainWindow::slotRogueWarning()
 {
@@ -1270,17 +1203,6 @@ void MainWindow::addUIToLayouts()
     ui->QuNeo->setLayout(mainLayout);
 }
 
-//void MainWindow::slotShowFWUpdateDialog()
-//{
-//    /*
-//    progress = new QProgressDialog("Updating Firmware...", "Cancel", 0, totalFwBytes, this);
-//    progress->setWindowModality(Qt::WindowModal);
-//    progress->setCancelButton(0);
-//    */
-//    progress->open();
-//    progress->show();
-//}
-
 
 // --------------------------------------------------------------------------------------
 // ------ midi overhaul -----------------------------------------------------------------
@@ -1289,7 +1211,7 @@ void MainWindow::addUIToLayouts()
 void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messageType, int portNum)
 {
     //qDebug() << "slotMIDIPortChange - " << kmiPorts->mType[messageType] << kmiPorts->inOut[inOrOut] << " portName:" << portName << " messageType: " << " portNum: " << portNum << "\n";
-    QLabel* connectedLabel = this->findChild<QLabel *>("QuNeo_Connected_Label");
+    QPushButton* connectedLabel = this->findChild<QPushButton *>("QuNeo_Connected_Label");
     QFrame* connectedFrame = this->findChild<QFrame *>("QuNeo_Connected_Frame");
 
     switch (messageType)
@@ -1311,16 +1233,30 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         if ((portName == QUNEO_IN_P1 || portName == QUNEO_BL_PORT) && inOrOut == PORT_IN)
         {
             QuNeo->slotSetExpectedFW(thisFw);
-            QuNeo->slotUpdatePortIn(portNum);
-            fwUpdateWindow->slotAppendTextToConsole("\nQuNeo Connected\n");
+            troubleshootWindow->slotDetected();
             connectedLabel->setText("Detected");
             connectedFrame->setStyleSheet("border: 1px solid rgb(67,67,67); background:rgb(255,128,0); border-radius:6;");
+
+            if (!QuNeo->slotUpdatePortIn(portNum))
+            {
+                slotCreateDialog(QString("ERROR: MIDI input port \"%1\"\nis currently being used by another program or process!").arg(portName));
+            }
+            else
+            {
+                fwUpdateWindow->slotAppendTextToConsole("\nQuNeo Connected\n");
+            }
+
         }
         else if ((portName == QUNEO_OUT_P1 || portName == QUNEO_BL_PORT) && inOrOut == PORT_OUT)
         {
-            QuNeo->slotUpdatePortOut(portNum);
-            //QuNeo->slotStartPolling("slotMIDIPortChange"); // start polling when output port is added
-            QuNeo->pollingStatus = true;
+            if (!QuNeo->slotUpdatePortOut(portNum))
+            {
+                slotCreateDialog(QString("ERROR: MIDI output port \"%1\"\nis currently being used by another program or process!").arg(portName));
+            }
+            else
+            {
+                QuNeo->pollingStatus = true;
+            }
         }
 
         break;
@@ -1330,7 +1266,9 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         {
             // update dropdown EB TODO - implement this
             if (ui->midi_thru->currentText() == portName)
+            {
                 ui->midi_thru->setCurrentIndex(0);
+            }
 
             ui->midi_thru->removeItem(ui->midi_thru->findText(portName));
         }
@@ -1349,6 +1287,12 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         {
             QuNeo->slotCloseMidiOut(SIGNAL_SEND);
             QuNeo->pollingStatus = false;
+        }
+        else if (inOrOut == PORT_OUT && (portName == QUNEO_OUT_P1 || portName == QUNEO_BL_PORT) )
+        {
+            troubleshootWindow->slotConnected(false);
+            connectedLabel->setText("Not Connected");
+            connectedFrame->setStyleSheet("QFrame{border: 1px solid rgb(67,67,67); background: rgb(100,100,100); border-radius:6;}");
         }
 
         break;
@@ -1371,23 +1315,18 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
     }
 }
 
-// close and then reopen the QuNexus ports
-// this is needed when the bootloader and app port names do not match
-//void MainWindow::slotRefreshConnection()
-//{
-//    qDebug() << "slotRefreshConnection called";
-//    QuNeo->slotResetConnections(QUNEO_IN_P1, QUNEO_BL_PORT);
-//}
-
 void MainWindow::slotBootloaderMode(bool fwUpdateRequested)
 {
     qDebug() << "slotBootloaderMode called - fwUpdateRequested: "<< fwUpdateRequested;
 
-    QLabel* connectedLabel = this->findChild<QLabel *>("QuNeo_Connected_Label");
+    QPushButton* connectedLabel = this->findChild<QPushButton *>("QuNeo_Connected_Label");
     QFrame* connectedFrame = this->findChild<QFrame *>("QuNeo_Connected_Frame");
 
     connectedLabel->setText("BOOTLOADER");
     connectedFrame->setStyleSheet("border: 1px solid rgb(67,67,67); background:rgb(0,0,255); border-radius:6;");
+
+    troubleshootWindow->slotSetDevVersion(deviceFirmwareVersionString(), deviceBootloaderVersionString());
+    troubleshootWindow->slotBootloaderMode();
 
     if (!fwUpdateRequested)
     {
@@ -1428,25 +1367,31 @@ void MainWindow::slotFwUpdateSuccessCloseDialog(bool success)
 
 void MainWindow::slotForceFirmwareUpdate()
 {
+    if (!QuNeo->port_out_open) return;
+
     slotFirmwareDetected(QuNeo, false); // act as if we received a firmware mismatch
+    forceFirmwareUpdate = true;
 }
 
 void MainWindow::slotFirmwareDetected(MidiDeviceManager *thisMDM, bool matches)
 {
     qDebug() << "slotFirmwareDetected called";
+
+    troubleshootWindow->slotSetDevVersion(deviceFirmwareVersionString(), deviceBootloaderVersionString());
+    if (forceFirmwareUpdate)
+    {
+        troubleshootWindow->slotRequestFwUpdate();
+        forceFirmwareUpdate = false;
+    }
+
     if (matches)
     {
         qDebug() << "FirmwareMatch: " << thisMDM->PID << "name:" << thisMDM->deviceName;
-
-        //---------------------------------- Sync QuNeo Dialog
-        // MIDI Overhaul
-
-        //slotSyncQuNeoDialog();
     }
     else
     {
         qDebug() << "Firmware MisMatch: " << thisMDM->PID << "name:" << thisMDM->deviceName;
-        QLabel* connectedLabel = this->findChild<QLabel *>("QuNeo_Connected_Label");
+        QPushButton* connectedLabel = this->findChild<QPushButton *>("QuNeo_Connected_Label");
         QFrame* connectedFrame = this->findChild<QFrame *>("QuNeo_Connected_Frame");
 
         midiDeviceAccess->connected = true; // experiment with allowing editor to talk to older firmware
@@ -1478,7 +1423,7 @@ void MainWindow::slotQuNeoConnected(bool state)
     qDebug() << "slotQuNeoConnected called - state: " << state;
     if(state)
     {
-        QLabel* connectedLabel = this->findChild<QLabel *>("QuNeo_Connected_Label");
+        QPushButton* connectedLabel = this->findChild<QPushButton *>("QuNeo_Connected_Label");
         connectedLabel->setText("Connected");
 
         QFrame* connectedFrame = this->findChild<QFrame *>("QuNeo_Connected_Frame");
@@ -1487,16 +1432,11 @@ void MainWindow::slotQuNeoConnected(bool state)
         connected = true;
         midiDeviceAccess->connected = true;
 
-
-
-
-        //QuNeo->slotStopPolling("slotQuNeoConnected - true");
-
-        //presetManager->syncFlag = true;
+        troubleshootWindow->slotConnected(true);
     }
     else
     {
-        QLabel* connectedLabel = this->findChild<QLabel *>("QuNeo_Connected_Label");
+        QPushButton* connectedLabel = this->findChild<QPushButton *>("QuNeo_Connected_Label");
         connectedLabel->setText("Not Connected");
 
         QFrame* connectedFrame = this->findChild<QFrame *>("QuNeo_Connected_Frame");
@@ -1511,8 +1451,7 @@ void MainWindow::slotQuNeoConnected(bool state)
         connected = false;
         midiDeviceAccess->connected = false;
 
-
-//        presetManager->syncFlag = false; // update presetmanager
+        troubleshootWindow->slotConnected(false);
     }
 }
 
@@ -1584,6 +1523,11 @@ void MainWindow::slotUpdateAboutMenuVersions()
     copyPasteHandler->deviceBootloaderVersionString = deviceBootloaderVersionString();
 }
 
+void MainWindow::slotOpenTroubleshooting()
+{
+    troubleshootWindow->show();
+    troubleshootWindow->slotScrollTroubleUp();
+}
 
 // --------------------------------------------------------------------------------------
 // ------ end midi overhaul -------------------------------------------------------------

@@ -147,6 +147,11 @@ CopyPasteHandler::CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess
     updateCheckAct = new QAction(tr("Check for Updates..."), this);
 
     helpMenu->addAction(aboutQuNeo);
+
+    //Troubleshooting
+    troubleShooting = new QAction("Troubleshoot Connection", helpMenu);
+
+    helpMenu->addAction(troubleShooting);
     helpMenu->addAction(quNeoManual);
     helpMenu->addAction(updateCheckAct);
 
@@ -374,7 +379,7 @@ void CopyPasteHandler::slotOpenAbout()
 
 void CopyPasteHandler::slotOpenDocumentation(){
 
-    QDesktopServices::openUrl(QUrl("https://files.keithmcmillen.com/products/quneo/Manuals/QuNeo_Manual_2.pdf"));
+    QDesktopServices::openUrl(QUrl("https://files.keithmcmillen.com/products/quneo/Manuals/QuNeo_FullManual_v2.pdf"));
 
 //#ifdef Q_OS_MAC
 
