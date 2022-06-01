@@ -1,12 +1,12 @@
 [submodule "QT6-QuNeo/inc/KMI_MIDI_Device_Manager"]
 	path = QT6-QuNeo/inc/KMI_MIDI_Device_Manager
-url=https://bitbucket.org/keith-mcmillen-instruments/kmi_midi_device_manager.git
+url=ssh://git@bitbucket.org/keith-mcmillen-instruments/kmi_midi_device_manager.git
 [submodule "QT6-QuNeo/inc/KMI_Ports"]
 	path = QT6-QuNeo/inc/KMI_Ports
-url=https://bitbucket.org/keith-mcmillen-instruments/kmi_ports.git
+url=ssh://git@bitbucket.org/keith-mcmillen-instruments/kmi_ports.git
 [submodule "QT6-QuNeo/inc/RtMidi"]
 	path = QT6-QuNeo/inc/RtMidi
 	url = https://github.com/thestk/rtmidi.git
 [submodule "QT6-QuNeo/inc/KMI_Updates"]
 	path = QT6-QuNeo/inc/KMI_Updates
-	url = https://bitbucket.org/keith-mcmillen-instruments/kmi_updates.git
+url=ssh://git@bitbucket.org/keith-mcmillen-instruments/kmi_updates.git

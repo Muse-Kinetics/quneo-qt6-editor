@@ -76,6 +76,11 @@ public:
     void closeEvent(QCloseEvent *event);
 
     //----------------------------------- Stylesheets
+
+    // QuNeo Styles
+    QFile*              QuNeoStylesFile;
+    QString             QuNeoStylesString;
+
     // Dialog Styles
     QFile*              dialogStylesFile;
     QString             dialogStylesString;

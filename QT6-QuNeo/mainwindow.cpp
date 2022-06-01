@@ -123,10 +123,22 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // general stylesheets
 #ifdef Q_OS_MAC
+    QuNeoStylesFile = new QFile(":/resources/stylesheets/QuNeoStyles.qss");
     dialogStylesFile = new QFile(":/stylesheets/appDialog_QuNexus.qss");
 #else
+    QuNeoStylesFile = new QFile(":/resources/stylesheets/QuNeoStylesWindows.qss");
     dialogStylesFile = new QFile(":/stylesheets/appDialog_QuNexus_WIN.qss");
 #endif
+
+    if (!QuNeoStylesFile->open(QFile::ReadOnly))
+    {
+        qDebug() << "ERROR: could not open stylesheet: " << QuNeoStylesFile->fileName();
+    }
+    else
+    {
+        QuNeoStylesString = QLatin1String(QuNeoStylesFile->readAll());
+        QMainWindow::setStyleSheet(QuNeoStylesString);
+    }
 
     if (!dialogStylesFile->open(QFile::ReadOnly))
     {
@@ -404,10 +416,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 #else
     //windows edit pane fonts
-    QGroupBox* gb = this->findChild<QGroupBox *>(QString("groupBox"));
-    gb->setStyleSheet("QLabel { font: 10px } QLineEdit { font: 8px } QCheckBox {font:9px} QSpinBox {font: 10px} QDoubleSpinBox {font: 10px} QComboBox {font: 10px}");
-    QLineEdit* qle = this->findChild<QLineEdit *>(QString("presetName"));
-    qle->setStyleSheet("QLineEdit {font:8px}");
+    //QGroupBox* gb = this->findChild<QGroupBox *>(QString("groupBox"));
+    //gb->setStyleSheet("QLabel { font: 10px } QLineEdit { font: 8px } QCheckBox {font:9px} QSpinBox {font: 10px} QDoubleSpinBox {font: 10px} QComboBox {font: 10px}");
+    //QLineEdit* qle = this->findChild<QLineEdit *>(QString("presetName"));
+    //qle->setStyleSheet("QLineEdit {font:8px}");
 
 #endif
 
@@ -426,8 +438,8 @@ MainWindow::MainWindow(QWidget *parent) :
 #ifdef Q_OS_MAC
 
 #else
-    QLabel* connectedLabel = this->findChild<QLabel *>("QuNeo_Connected_Label");
-    connectedLabel->setStyleSheet("font: bold;color: white;font-size: 9px;");
+    QPushButton* connectedLabel = this->findChild<QPushButton *>("QuNeo_Connected_Label");
+    connectedLabel->setStyleSheet("font: bold; color: white; background-color:rgba(0,0,0,0); font-size: 9px;");
 #endif
 }
 
@@ -1280,7 +1292,7 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
             QuNeo->slotCloseMidiIn(SIGNAL_SEND);
             fwUpdateWindow->slotAppendTextToConsole("\nQuNeo Disconnected\n");
             connectedLabel->setText("Not Connected");
-            connectedFrame->setStyleSheet("border: 1px solid rgb(67,67,67); background: rgb(100,100,100); border-radius:6;");
+            connectedFrame->setStyleSheet("border: 1px solid rgb(67,67,67); background: rgba(100,100,100,0); border-radius:6;");
             midiDeviceAccess->connected = false; // failsafe for allowing editor to talk to old firmware
         }
         else if (inOrOut == PORT_OUT && portName == QuNeo->portName_out)
@@ -1292,7 +1304,7 @@ void MainWindow::slotMIDIPortChange(QString portName, uchar inOrOut, uchar messa
         {
             troubleshootWindow->slotConnected(false);
             connectedLabel->setText("Not Connected");
-            connectedFrame->setStyleSheet("QFrame{border: 1px solid rgb(67,67,67); background: rgb(100,100,100); border-radius:6;}");
+            connectedFrame->setStyleSheet("QFrame{border: 1px solid rgb(67,67,67); background: rgba(100,100,100,0); border-radius:6;}");
         }
 
         break;
@@ -1440,7 +1452,7 @@ void MainWindow::slotQuNeoConnected(bool state)
         connectedLabel->setText("Not Connected");
 
         QFrame* connectedFrame = this->findChild<QFrame *>("QuNeo_Connected_Frame");
-        connectedFrame->setStyleSheet("border: 1px solid rgb(67,67,67); background: rgb(100,100,100); border-radius:6;");
+        connectedFrame->setStyleSheet("border: 1px solid rgb(67,67,67); background: rgba(100,100,100,0); border-radius:6;");
         qDebug() << "<< set connected: false";
 
         // safety to ensure we don't connect this twice

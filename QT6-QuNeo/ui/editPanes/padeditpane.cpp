@@ -29,8 +29,8 @@ PadEditPane::PadEditPane(QVariantMap *variantMap, QVariantMap *variantMapCopy, Q
         padLabel[i] = new PadLabels(mainWindow, presetMapCopy, 0);
     }
 
-    qDebug() << "set stylesheets";
-    this->setStyleSheet("QLabel { font: 10px }");
+//    qDebug() << "set stylesheets";
+//    this->setStyleSheet("QLabel { font: 10px }");
 
     qDebug() << "init tables";
     //---- Velocity Tables ---- //
