@@ -50,7 +50,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                 ("HSliders").toMap().value(QString(GlobalParamList.at(nx))).toInt();
         if (copyValue != origValue) {
             presetState = true;
-            qDebug() << "mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "HSliders globals mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
             break;
             }
     }
@@ -66,7 +66,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                  ("HSliders").toMap().value(QString("HSlider%1").arg(i)).toMap().value(QString(ParamList.at(n))).toInt();
         if (copyValue != origValue){ //if they are not equal, that parameter has been modified in this preset.
             presetState = true;      //so turn the indicator on and break stop testing.
-            qDebug() << "mismatch ??" << ParamList.at(n) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "HSliders mismatch " << ParamList.at(n) << "copied" << copyValue << "orig" << origValue;
             break;
         }
     }
@@ -85,7 +85,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                 ("VSliders").toMap().value(QString(GlobalParamList.at(nx))).toInt();
         if (copyValue != origValue) {
             presetState = true;
-            qDebug() << "mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "VSliders globals mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
             break;
             }
     }
@@ -103,7 +103,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                  ("VSliders").toMap().value(QString("VSlider%1").arg(j)).toMap().value(QString(ParamList.at(m))).toInt();
         if (copyValue != origValue){ //if they are not equal, that parameter has been modified in this preset.
             presetState = true;      //so turn the indicator on and break stop testing.
-            qDebug() << "mismatch" << ParamList.at(m) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "VSliders mismatch" << ParamList.at(m) << "copied" << copyValue << "orig" << origValue;
             break;
         }
     }
@@ -120,7 +120,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
         origValue = presetOrig->value(QString("Preset %1").arg(presetNumber)).toMap().value("ComponentSettings").toMap().value
                 ("Rotaries").toMap().value(QString(GlobalParamList.at(nx))).toInt();
         if (copyValue != origValue) {
-            qDebug() << "mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "Rotaries globals mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
             presetState = true;
             break;
             }
@@ -139,7 +139,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                  ("Rotaries").toMap().value(QString("Rotary%1").arg(k)).toMap().value(QString(ParamList.at(r))).toInt();
         if (copyValue != origValue){ //if they are not equal, that parameter has been modified in this preset.
             presetState = true;      //so turn the indicator on and break stop testing.
-            qDebug() << "mismatch" << ParamList.at(r) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "Rotaries mismatch" << ParamList.at(r) << "copied" << copyValue << "orig" << origValue;
             break;
         }
     }
@@ -156,7 +156,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                 ("LongSliders").toMap().value(QString(GlobalParamList.at(nx))).toInt();
         if (copyValue != origValue) {
             presetState = true;
-             qDebug() << "mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
+             qDebug() << "LongSliders globals mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
             break;
             }
     }
@@ -174,7 +174,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                  ("LongSliders").toMap().value(QString("LongSlider%1").arg(l)).toMap().value(QString(ParamList.at(x))).toInt();
         if (copyValue != origValue){ //if they are not equal, that parameter has been modified in this preset.
             presetState = true;      //so turn the indicator on and break stop testing.
-            qDebug() << "mismatch" << ParamList.at(x) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "LongSliders mismatch" << ParamList.at(x) << "copied" << copyValue << "orig" << origValue;
             break;
         }
     }
@@ -198,13 +198,13 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                         ("Pads").toMap().value(QString(GlobalParamList.at(nx))).toString();
                 if (copyString != origString){
                     presetState = true;
-                    qDebug() << "mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
+                    qDebug() << "Pads globals mismatch" << GlobalParamList.at(nx) << " copyString: " << copyString << " copyValue" << copyValue << " origString: " << origString << " origValue:" << origValue;
                     break;
                 }
             }
         if (copyValue != origValue) {
             presetState = true;
-            qDebug() << "mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "Pads globals2 mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
             break;
             }
     }
@@ -222,7 +222,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                  ("Pads").toMap().value(QString("Pad%1").arg(p)).toMap().value(QString(ParamList.at(P))).toInt();
         if (copyValue != origValue){ //if they are not equal, that parameter has been modified in this preset.
             presetState = true;      //so turn the indicator on and break stop testing.
-            qDebug() << "mismatch" << ParamList.at(P) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "Pads mismatch" << ParamList.at(P) << "copied" << copyValue << "orig" << origValue;
             break;
         }
     }
@@ -239,7 +239,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                 ("UpDownButtons").toMap().value(QString(GlobalParamList.at(nx))).toInt();
         if (copyValue != origValue) {
             presetState = true;
-            qDebug() << "mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "UpDownButtons globals mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
             break;
             }
     }
@@ -257,7 +257,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                  ("UpDownButtons").toMap().value(QString("UpDownButton%1").arg(u)).toMap().value(QString(ParamList.at(y))).toInt();
         if (copyValue != origValue){ //if they are not equal, that parameter has been modified in this preset.
             presetState = true;      //so turn the indicator on and break stop testing.
-            qDebug() << "mismatch" << ParamList.at(y) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "UpDownButtons mismatch" << ParamList.at(y) << "copied" << copyValue << "orig" << origValue;
             break;
         }
     }
@@ -275,7 +275,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                 ("LeftRightButtons").toMap().value(QString(GlobalParamList.at(nx))).toInt();
         if (copyValue != origValue) {
             presetState = true;
-            qDebug() << "mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "LeftRightButtons globals mismatch" << GlobalParamList.at(nx) << "copied" << copyValue << "orig" << origValue;
             break;
             }
     }
@@ -294,7 +294,7 @@ bool UpdateIndicator::slotCompareMaps(int presetNumber){
                  ("LeftRightButtons").toMap().value(QString("LeftRightButton%1").arg(z)).toMap().value(QString(ParamList.at(Z))).toInt();
         if (copyValue != origValue){ //if they are not equal, that parameter has been modified in this preset.
             presetState = true;      //so turn the indicator on and break stop testing.
-            qDebug() << "mismatch" << ParamList.at(Z) << "copied" << copyValue << "orig" << origValue;
+            qDebug() << "LeftRightButtons mismatch" << ParamList.at(Z) << "copied" << copyValue << "orig" << origValue;
             break;
         }
     }

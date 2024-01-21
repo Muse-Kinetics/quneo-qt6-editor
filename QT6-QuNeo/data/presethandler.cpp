@@ -568,7 +568,9 @@ void::PresetHandler::slotPresetNameValidator(){
 
 }
 
-void PresetHandler::slotPadVelocityTableChanged(int presetNum, QString selectedTableID, QList<QVariant> selectedTableValues){
+void PresetHandler::slotPadVelocityTableChanged(int presetNum, QString selectedTableID, QList<QVariant> selectedTableValues)
+{
+    qDebug() << "presetHandler slotPadVelocityTableChanged called - presetNum: " << presetNum << " selectedTableID: " << selectedTableID;
     //this function saves both the table ID and the table array into the json file.
     //print selected table
     /*for(int z = 0; z < selectedTableValues.size(); z++){

@@ -119,11 +119,16 @@ PadEditPane::PadEditPane(QVariantMap *variantMap, QVariantMap *variantMapCopy, Q
 }
 
 //this function looks up the table based on the ID selected in the menu and stores it in the json.
-void PadEditPane::slotSelectVelocityTable(QString tableID){
+void PadEditPane::slotSelectVelocityTable(QString tableID)
+{
     QList<QVariant> selectedTable;
     selectedTable = velocityTables.value(tableID);
+
+    qDebug() << "slotSelectVelocityTable called - currentPreset: " << currentPreset << " tableID: " << tableID;// << " selectedTable: " << selectedTable;
+
     //emit table name and QList of values to store in json as 2 parameters.
     emit signalTableChanged(currentPreset, tableID, selectedTable);
+
 }
 
 void PadEditPane::findUiElements()
@@ -525,6 +530,7 @@ void PadEditPane::displayPadValues()
 
     if(!padUiBlackList.contains("padVelocityTableID")){
         VelTableID = presetMapCopy->value(QString("Preset %1").arg(currentPreset)).toMap().value("ComponentSettings").toMap().value("Pads").toMap().value(QString("padVelocityTableID")).toString();
+        qDebug() << "displayPadValues - currentPreset: " << currentPreset << " VelTableID: " << VelTableID;
     }
 
     if(velTableMenu){
@@ -630,9 +636,12 @@ void PadEditPane::slotCalculatePadSensitivity(int changedValue)
 
 void PadEditPane::slotValueChanged(int num)
 {
-    //qDebug() << "slotValueChanged - num: " << num;
+
 
     focusCheck = qobject_cast<QWidget *>(QObject::sender());
+
+    qDebug() << "slotValueChanged - sender: " << focusCheck->objectName() << " num: " << num;
+
     if((!focusCheck->objectName().contains(QString("Enable"))) && (!focusCheck->objectName().contains(QString("enable"))))
     {
 
@@ -675,27 +684,28 @@ void PadEditPane::slotValueChanged(int num)
 
 }
 
+// this is called a LOT, not sure what Conner was doing here
 void PadEditPane::slotFocusParam(QWidget* oldObject, QWidget* nowObject) {
     Q_UNUSED(oldObject);
-    qDebug() << "PadEditPane called";
+    //qDebug() << "PadEditPane called";
 
     if(nowObject != nullptr) { // eb TODO - was nowObject > 0, see others
-        qDebug() << "slotFocusParam called: " << nowObject->objectName() << " Parent: " << nowObject->parent()->objectName();
+        //qDebug() << "slotFocusParam called: " << nowObject->objectName() << " Parent: " << nowObject->parent()->objectName();
 
         clicked = nowObject;
 
         if(clicked->parent()->objectName().contains("pad") && clicked->objectName() != justClicked) {
-            qDebug() << "first if";
+            //qDebug() << "first if";
             this->slotUpdateXYText();
             justClicked = clicked->objectName();
         }
 
         if(clicked->parent()->objectName().contains("pad")){
-            qDebug() << "second if";
+            //qDebug() << "second if";
                 emit signalToLabels(clicked->objectName()); //whenever a value is changed, this should be emitted, but it shouldn't always have an effect.
         }
     }
-    qDebug() << "Survived nowObject";
+    //qDebug() << "Survived nowObject";
 }
 
 void PadEditPane::slotToLabels(QString parameter)
@@ -874,6 +884,7 @@ void PadEditPane::slotPadSensitivityExtreme() // extreme
 void PadEditPane::slotSetPadSensitivity(int val_globalSensitivity, int val_perPadSensitivity, int val_onThreshold, int val_offThreshold, QString val_velTable)
 {
     int thisPad = currentPad;
+    qDebug() << "slotSetPadSensitivity - currentPreset: " << currentPreset << " currentPad: " << currentPad << " val_globalSensitivity: " << val_globalSensitivity << " val_perPadSensitivity: " << val_perPadSensitivity << " val_onThreshold: " << val_onThreshold << " val_offThreshold: " << val_offThreshold << " val_velTable: " << val_velTable;
 
     sensitivityDial->setValue(val_globalSensitivity);
     emit signalValueChanged(currentPreset, "ComponentSettings", "Pad", currentPad, QString("padSensitivity"),127);
