@@ -160,11 +160,7 @@ signals:
     void sigFwProgressDialogOpen(bool);
 
 public slots:
-   // void slotPopulateDeviceMenu(QList<QString>);
-//    int firmwareUpdateDialogMenu(bool);
-//    int firmwareUpdateDialog(bool);
-//    void progressDialog(void);
-//    void firmwareUpdateCompleteDialog(void);
+    void windowHasLoaded();
 
     void slotCreateDialog(QString dialogText);
     void centerWidgetOnScreen(QWidget*);

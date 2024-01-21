@@ -71,6 +71,7 @@ public:
     QAction *exportAllPresets;
     QAction *savePreset;
     QAction *saveAllPresets;
+    QAction *openAppDataDir;
 
     QVariantMap importedPresetMap;
 
@@ -125,6 +126,7 @@ signals:
 
 public slots:
 
+    void slotOpenPresetDirectory();
     void copyPreset();
     void pastePreset();
     void slotExportPreset();
