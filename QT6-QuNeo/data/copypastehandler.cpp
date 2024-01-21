@@ -34,12 +34,14 @@ CopyPasteHandler::CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess
     exportAllPresets = new QAction(tr("&Export All Presets..."), this);
     savePreset = new QAction(tr("&Save Preset"), this);
     saveAllPresets = new QAction(tr("&Save All Presets"), this);
+    openAppDataDir = new QAction(tr("Open Editor Preset Directory"), this);
 
     fileMenu->addAction(savePreset);
     fileMenu->addAction(saveAllPresets);
     fileMenu->addAction(importPreset);
     fileMenu->addAction(exportPreset);
     fileMenu->addAction(exportAllPresets);
+    fileMenu->addAction(openAppDataDir);
 
     connect(exportPreset, SIGNAL(triggered()), this, SLOT(slotExportPreset()));
     connect(importPreset, SIGNAL(triggered()), this, SLOT(slotImportPreset()));
@@ -47,6 +49,7 @@ CopyPasteHandler::CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess
     //connect(savePreset, SIGNAL(triggered()), handlerOfPresets, SLOT(slotSave()));
     connect(saveAllPresets, SIGNAL(triggered()), handlerOfPresets, SLOT(slotSaveAllPresets()));
     connect(exportAllPresets, SIGNAL(triggered()), this, SLOT(slotExportAllPresets()));
+    connect(openAppDataDir, SIGNAL(triggered()), this, SLOT(slotOpenPresetDirectory()));
 
     //------ EDIT MENU -------//
     editMenu = menuBar->addMenu(tr("&Edit"));
@@ -166,6 +169,11 @@ CopyPasteHandler::CopyPasteHandler(PresetHandler *presetHandle, MidiDeviceAccess
     slotSetCurrentSensor(QString("buttonButton10"));
 }
 
+void CopyPasteHandler::slotOpenPresetDirectory()
+{
+    QString presetDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    QDesktopServices::openUrl(QUrl::fromLocalFile(presetDir));
+}
 
 void CopyPasteHandler::copyPreset(){
 
@@ -245,37 +253,37 @@ void CopyPasteHandler::slotExportAllPresets(){
                                                     | QFileDialog::DontResolveSymlinks);
 
     //save each preset to a file within path held in foldername.
-for(int i=0; i<16; i++){
+    for(int i=0; i<16; i++){
 
-    //load preset i
-//    presetByteArray = serializer.serialize(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(i)).toMap());
-    QJsonDocument jsonPresets = QJsonDocument::fromVariant(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(i)).toMap());
+        //load preset i
+    //    presetByteArray = serializer.serialize(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(i)).toMap());
+        QJsonDocument jsonPresets = QJsonDocument::fromVariant(handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(i)).toMap());
 
-    presetByteArray = jsonPresets.toJson();
+        presetByteArray = jsonPresets.toJson();
 
-    //Get preset i's name.
-    QString presetFileName = handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(i)).toMap().value(QString("presetName")).toString();
+        //Get preset i's name.
+        QString presetFileName = handlerOfPresets->presetMapsCopy.value(QString("Preset %1").arg(i)).toMap().value(QString("presetName")).toString();
 
-    //validate preset name for use in creating destination file path
-    if (presetFileName.contains(QString("/"))){
-        //presetFileName.remove(QString("/"));
-        presetFileName.replace(QString("/"), QString("_"));
+        //validate preset name for use in creating destination file path
+        if (presetFileName.contains(QString("/"))){
+            //presetFileName.remove(QString("/"));
+            presetFileName.replace(QString("/"), QString("_"));
+        }
+
+        //Construct destination file name using parameters presetName and foldername.
+        //Open it with a Qfile and create if it doesn't exist.
+        qDebug()<<QString("%1/%2.quneopreset").arg(foldername).arg(presetFileName);
+        presetFile = new QFile(QString("%1/%2.quneopreset").arg(foldername).arg(presetFileName));
+
+        //open it, clear it, write preset i into it.
+        presetFile->open(QIODevice::WriteOnly);
+        presetFile->resize(0);
+        presetFile->write(presetByteArray);
+
+        //cleanup. close file, clear byte array for next one.
+        presetFile->close();
+        presetByteArray.clear();
     }
-
-    //Construct destination file name using parameters presetName and foldername.
-    //Open it with a Qfile and create if it doesn't exist.
-    qDebug()<<QString("%1/%2.quneopreset").arg(foldername).arg(presetFileName);
-    presetFile = new QFile(QString("%1/%2.quneopreset").arg(foldername).arg(presetFileName));
-
-    //open it, clear it, write preset i into it.
-    presetFile->open(QIODevice::WriteOnly);
-    presetFile->resize(0);
-    presetFile->write(presetByteArray);
-
-    //cleanup. close file, clear byte array for next one.
-    presetFile->close();
-    presetByteArray.clear();
-}
 
 }
 

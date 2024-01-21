@@ -24,9 +24,7 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
 
     qDebug() << "Preset Handler: Load and parse JSON - jsonPath: " << jsonPath;
 
-#if defined(Q_OS_MAC)
-#if defined(Q_OS_IOS)
-    QString m_dataLocation = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation)[0];
+    QString m_dataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     if (QDir(m_dataLocation).exists()) {
         qDebug() << "App data directory exists. " << m_dataLocation;
     } else {
@@ -39,13 +37,6 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
 
     jsonPath = m_dataLocation.append("/QuNeo.json");
     qDebug() << "jsonPath: " << jsonPath;
-#else
-    jsonPath.remove(jsonPath.length() - 5, jsonPath.length());
-    jsonPath.append("Resources/presets/QuNeo.json");
-#endif
-#else
-    jsonPath = QString("./Resources/presets/QuNeo.json");
-#endif
 
     //load json into QFile
     jsonFile = new QFile(jsonPath);
@@ -53,18 +44,21 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
     // open file
     if(jsonFile->exists())
     {
-        qDebug("jsonFound");
+        qDebug() << "Preset JSON found (jsonFound): " << jsonPath;
     }
     else
     {
+        qDebug() << "PRESET JSON NOT FOUND (jsonFound): " << jsonPath;
+        qDebug() << "Restoring QuNeo.json from app resources";
+
         QFile sourceJson(":/Quneo/preset/resources/QuNeo.json");
         if (!sourceJson.exists())
         {
-            qDebug() << "ERROR: QuNeo.json resource file does not exist!";
+            qDebug() << "ERROR: QuNeo.json compiled resource file does not exist (this really shouldn't ever happen)!";
         }
         else
         {
-            qDebug() << "json not found, copying from resources to: " << jsonPath;
+            qDebug() << "Copying from resources to: " << jsonPath;
             if (QFile::copy(":/Quneo/preset/resources/QuNeo.json", jsonPath))
             {
                 qDebug() << "file copied";
@@ -192,11 +186,11 @@ PresetHandler::PresetHandler(QWidget *widget,QObject *parent) :
     updateIndicator = new UpdateIndicator(mainWindow, &presetMaps, &presetMapsCopy, 0);
     connect(this, SIGNAL(signalPresetModified(bool)), updateIndicator, SLOT(slotPresetModified(bool)));
 
-    currentPreset = 0;
+    currentPreset = 0; // currentPreset is zero indexed
 }
 
 void PresetHandler::slotRecallPreset(QString selected){
-    qDebug() << "slotRecallPreset() called: " << selected;
+    qDebug() << "slotRecallPreset() called - dropdown text: " << selected;
     if(selected.contains("Preset ")){ //remove prepended preset
          // EB previously Removing this asterisk fixed a crash, adding it back fixed another
         if(selected.contains(" *")){    //remove asterisk if recalling unsaved/modified preset
@@ -204,9 +198,9 @@ void PresetHandler::slotRecallPreset(QString selected){
         }
 
 
-        currentPreset = selected.remove(0,7).toInt() - 1;
+        currentPreset = selected.remove(0,7).toInt() - 1; // dropdown is not zero indexed
 
-        qDebug() << "currentPresest:" << currentPreset;
+        qDebug() << "adjusted currentPreset:" << currentPreset;
 
         disconnect(this, SIGNAL(signalPresetModified(bool)), updateIndicator, SLOT(slotPresetModified(bool)));
         slotConnectDisconnectDisplayAllLabels(false);
@@ -240,7 +234,6 @@ void PresetHandler::slotRevertPreset() {
 
 void PresetHandler::slotSave(){
 
-    //presetMaps.insert(QString("Preset %1").arg(currentPreset), presetNumMap);//*
     slotPresetNameValidator();
     //If not opened
     if(jsonFile->open(QIODevice::ReadWrite | QIODevice::Text))
@@ -250,10 +243,17 @@ void PresetHandler::slotSave(){
         presetMaps.insert(QString("Preset %1").arg(currentPreset), presetMapsCopy.value(QString("Preset %1").arg(currentPreset)));
         jsonMasterMap.insert("QuNeo Presets", presetMaps);
 
-//    jsonByteArray = serializer.serialize(jsonMasterMap);//serialize the master json map into the byte array
+        QVariantMap presets = jsonMasterMap.value("QuNeo Presets").toMap();
+        QVariantMap preset1 = presets.value(QString("Preset %1").arg(currentPreset)).toMap();
+        QVariantMap componentSettings = preset1.value("ComponentSettings").toMap();
+        QVariantMap pads = componentSettings.value("Pads").toMap();
+        QString padVelocityTableID = pads.value("padVelocityTableID").toString();
+
+        QString tableID = jsonMasterMap.value("QuNeo Presets").toMap().value("Preset 1").toMap().value("ComponentSettings").toMap().value("Pads").toMap().value("padVelocityTableID").toString();
+
+        qDebug() << "slotSave - Pad Velocity Table ID in Preset " << currentPreset << ":" << padVelocityTableID;
+
         QJsonDocument jsonPresets = QJsonDocument::fromVariant(jsonMasterMap);
-
-
         jsonByteArray = jsonPresets.toJson();
 
         jsonFile->resize(0);//clear jsonFile (set to 0 byte size)
@@ -286,8 +286,9 @@ void PresetHandler::slotEvents(QString string){
 
 }
 
-void PresetHandler::slotPropogateValuesSelectMultiple(int presetNum, QString settingsType, QString paramType, int typeNum, QString paramName, int paramValue){
-
+void PresetHandler::slotPropogateValuesSelectMultiple(int presetNum, QString settingsType, QString paramType, int typeNum, QString paramName, int paramValue)
+{
+    qDebug() << "slotPropogateValuesSelectMultiple called - presetNum: " <<  presetNum;
     Q_UNUSED(typeNum);
     //query clickedSensors map to see if each sensor has been highlighted.
     //If it has beeen then insert incoming parameter.
@@ -526,8 +527,8 @@ void::PresetHandler::slotPresetNameChanged(QString presetName){
     slotCheckPresets();
 }
 
-void::PresetHandler::slotPresetNameValidator(){
-
+void::PresetHandler::slotPresetNameValidator()
+{
     //find current preset name.
     isPresetNameValidatorRunning = true;
     presetNumMap = presetMapsCopy.value(QString("Preset %1").arg(currentPreset)).toMap();//Preset#
@@ -568,7 +569,9 @@ void::PresetHandler::slotPresetNameValidator(){
 
 }
 
-void PresetHandler::slotPadVelocityTableChanged(int presetNum, QString selectedTableID, QList<QVariant> selectedTableValues){
+void PresetHandler::slotPadVelocityTableChanged(int presetNum, QString selectedTableID, QList<QVariant> selectedTableValues)
+{
+    qDebug() << "presetHandler slotPadVelocityTableChanged called - presetNum: " << presetNum << " selectedTableID: " << selectedTableID;
     //this function saves both the table ID and the table array into the json file.
     //print selected table
     /*for(int z = 0; z < selectedTableValues.size(); z++){

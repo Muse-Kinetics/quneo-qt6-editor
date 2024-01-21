@@ -46,8 +46,8 @@ MainWindow::MainWindow(QWidget *parent) :
     kmiPorts->devicePoller->start(100);
 
     // connect kmiPorts to our handler
-    connect(kmiPorts, SIGNAL(signalPortUpdated(QString, uchar, uchar, int)),
-            this, SLOT(slotMIDIPortChange(QString, uchar, uchar, int)));
+    connect(kmiPorts, SIGNAL(signalPortUpdated(QString,uchar,uchar,int)),
+            this, SLOT(slotMIDIPortChange(QString,uchar,uchar,int)));
 
     //qDebug() << "end connect";
 
@@ -80,9 +80,28 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connected = false;
 
-    settings = new QSettings();
+    // **********************************
+    // Load Session Settings and File locations
+    // **********************************
 
-    qDebug() << "Qsettings file name" << settings->fileName();
+    // get session settings, make sure to pass this to objects that need them (ie preset interfaces looking for json files)
+    settings = new QSettings(this); //session settings allow us to enable/disable tooltips -- see slotInitMenuBar
+
+    // default file location
+    const QString DEFAULT_DIR_KEY("default_dir");
+
+    // test if this is a directory
+    QFileInfo check_file(settings->value(DEFAULT_DIR_KEY, QStandardPaths::writableLocation(QStandardPaths::DesktopLocation)).toString());
+    if (!check_file.exists() || !check_file.isDir() || settings->value(DEFAULT_DIR_KEY).toString().contains("Contents/MacOS"))
+    {
+        QString desktop = QStandardPaths::locate(QStandardPaths::DesktopLocation, QString(), QStandardPaths::LocateDirectory);
+        qDebug() << "Desktop: " << desktop;
+        settings->setValue(DEFAULT_DIR_KEY, desktop);     // if key doesn't exist, set it to desktop
+    }
+
+    qDebug() << "Default file save location: " << settings->value(DEFAULT_DIR_KEY).toString();
+
+
     // check for updates
     QString JSONVersionCheckUrl = "https://files.keithmcmillen.com/products/quneo/editor/softwareVersionCheck.json";
     checkUpdates = new KMI_Updates(this, "QuNeo", settings, applicationVersion, JSONVersionCheckUrl);
@@ -154,6 +173,17 @@ MainWindow::MainWindow(QWidget *parent) :
     grayStyleFile->open(QFile::ReadOnly);
     grayStyleString = QLatin1String(grayStyleFile->readAll());
 
+    qDebug() << "Delaying connections until main window loads";
+    QTimer::singleShot(0, this, &MainWindow::windowHasLoaded);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::windowHasLoaded()
+{
     //*****Setup Preset Handler*****//
     qDebug() << "new presetHandler";
     presetHandler = new PresetHandler(this, 0);
@@ -350,36 +380,13 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "Connect PresetHandler save button";
     connect(presetHandler->saveButton, SIGNAL(clicked()), presetHandler, SLOT(slotSave()));
 
-    qDebug() << "Firmware update stuff";
-    //Firmware Updating Stuff ***********
-//    firmwareUpdate = this->findChild<QPushButton *>(QString("updateFirmwareButton"));
-//    firmwareUpdate->hide();
-
-//    connect(midiDeviceAccess, SIGNAL(sigFirmwareCurrent(bool)), this, SLOT(firmwareUpdateDialog(bool)));
     centerWidgetOnScreen(this);
 
-//    updateComplete.setText("Firmware Sent. \n\nAfter hitting OK please press Update All.");
-//    updateComplete.move(this->width()/2, this->height()/2);
-
-//    fwUpdateDialogAuto.setIcon(QMessageBox::Warning);
-//    fwUpdateDialogAuto.addButton(QMessageBox::Cancel);
-//    fwUpdateDialogAuto.addButton(QMessageBox::Ok);
-//    fwUpdateDialogAuto.setText(QString("The firmware on the selected QuNeo is out of date.\n""Click OK to update your firmware."));
-//    fwUpdateDialogAuto.move(this->width()/2, this->height()/2);
-
-//    fwUpdateDialogManual.setIcon(QMessageBox::Warning);
-//    fwUpdateDialogManual.addButton(QMessageBox::Cancel);
-//    fwUpdateDialogManual.addButton(QMessageBox::Ok);
-//    fwUpdateDialogManual.setText(QString("Click OK to update your firmware."));
-//    fwUpdateDialogManual.move(this->width()/2, this->height()/2);
 
     qDebug() << "setup Update All Presets Dialog";
-    // moved this into slotShowUpdateAllDialog()
     updateAllPresetsProgressDialog = new QProgressDialog("Updating All Presets...","Cancel", 0,16,this);
-    //updateAllPresetsProgressDialog->setWindowModality(Qt::WindowModal);
     updateAllPresetsProgressDialog->setCancelButton(0);
     updateAllPresetsProgressDialog->close();
-    //updateAllPresetsProgressDialog->setValue(4);
 
     qDebug() << "Connect midiDeviceAccess";
     connect(midiDeviceAccess, SIGNAL(sigUpdateAllPresetsCount(int)), this, SLOT(slotUpdateAllPresetsProgress(int)));
@@ -424,7 +431,6 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 
     qDebug() << "setup Rogue warning";
-    //rogueWarning.setWindowFlags(Qt::Widget);
     rogueWarning.setIcon(QMessageBox::Warning);
     rogueWarning.addButton(QMessageBox::Ok);
     rogueWarning.setText("Your QuNeo is either in Expander Mode or you are using a Rogue.");
@@ -443,10 +449,7 @@ MainWindow::MainWindow(QWidget *parent) :
 #endif
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
+
 
 #define DIALOG_WIDTH 400
 #define DIALOG_HEIGHT 125

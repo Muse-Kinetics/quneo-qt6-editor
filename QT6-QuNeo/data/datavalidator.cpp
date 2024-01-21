@@ -6,13 +6,12 @@ DataValidator::DataValidator(QWidget *parent) :
 
     /***********************************Load and Parse JSON***********************************/
 
-    QString jsonPath = QCoreApplication::applicationDirPath(); //get bundle path
+    QString jsonPath;
 
-    qDebug() << "Data Validator: Load and parse JSON - jsonPath: " << jsonPath;
+    qDebug() << "Data Validator: Load and parse JSON";
 
-#if defined(Q_OS_MAC)
-#if defined(Q_OS_IOS)
-    QString m_dataLocation = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+
+    QString m_dataLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     if (QDir(m_dataLocation).exists()) {
         qDebug() << "App data directory exists. " << m_dataLocation;
     } else {
@@ -25,13 +24,6 @@ DataValidator::DataValidator(QWidget *parent) :
 
     jsonPath = m_dataLocation.append("/QuNeo.json");
     qDebug() << "jsonPath: " << jsonPath;
-#else
-    jsonPath.remove(jsonPath.length() - 5, jsonPath.length());
-    jsonPath.append("Resources/presets/QuNeo.json");
-#endif
-#else
-    jsonPath = QString("./Resources/presets/QuNeo.json");
-#endif
 
     //load json into QFile
     jsonFile = new QFile(jsonPath);
@@ -1600,14 +1592,6 @@ void DataValidator::slotConstructDefultParamMap(){
 void DataValidator::slotLoadJSON(){
 
     qDebug() << "slotLoadJSON called";
-    //load json into QFile - moved to main class
-    //jsonFile = new QFile("../../../presets/QuNeo.json");
-
-//    if(jsonFile->open(QIODevice::ReadWrite | QIODevice::Text)){
-//        qDebug("jsonFound");
-//    } else {
-//        qDebug() << "json not found";
-//    }
 
     // error object
     QJsonParseError JsonParseError;
@@ -1619,19 +1603,13 @@ void DataValidator::slotLoadJSON(){
     QJsonObject RootObject = JsonDocument.object();
 
     //load json file into a byte array to be processd by the parser
-//    jsonByteArray = jsonFile->readAll();
     jsonByteArray = JsonDocument.toJson();
 
     //parse the json data, convert it to a map and set it equal to the master jsonMap
-//    jsonMasterMap = parser.parse(jsonByteArray, &ok).toMap();
     jsonMasterMap = RootObject.toVariantMap();
 
     //store a map of the 16 preset maps
     jsonQuNeoPresetsMap = jsonMasterMap["QuNeo Presets"].toMap();
-
-    //qDebug() << jsonQuNeoPresetsMap.keys();
-
-
 }
 
 void DataValidator::slotParseJSON(){
