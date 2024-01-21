@@ -249,7 +249,7 @@ void PresetHandler::slotSave(){
         QVariantMap pads = componentSettings.value("Pads").toMap();
         QString padVelocityTableID = pads.value("padVelocityTableID").toString();
 
-        QString tableID = jsonMasterMap.value("QuNeo Presets").toMap().value("Preset 1").toMap().value("ComponentSettings").toMap().value("Pads").toMap().value("padVelocityTableID").toString();
+        QString tableID = jsonMasterMap.value("QuNeo Presets").toMap().value(QString("Preset %1").arg(currentPreset)).toMap().value("ComponentSettings").toMap().value("Pads").toMap().value("padVelocityTableID").toString();
 
         qDebug() << "slotSave - Pad Velocity Table ID in Preset " << currentPreset << ":" << padVelocityTableID;
 
