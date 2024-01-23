@@ -24,9 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     applicationVersion[0] = 2;
     applicationVersion[1] = 0;
-    applicationVersion[2] = 2;
+    applicationVersion[2] = 3;
 
-    betaVersion = "A"; // release, do not show beta string
+    betaVersion = ""; // release, do not show beta string
 
     thisFw = QByteArray(reinterpret_cast<char*>(_fw_ver_quneo), sizeof(_fw_ver_quneo));
 
@@ -72,7 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug() << "connect signalFirmwareDetected";
 
     // setup MIDI aux output
-    MIDIThru = new MidiDeviceManager(this, PID_AUX, "MIDI Thru");
+    MIDIThru = new MidiDeviceManager(this, PID_AUX, "MIDI Thru", kmiPorts);
 
     // ******************************
     // end KMI_Ports and device handlers
