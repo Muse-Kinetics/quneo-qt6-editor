@@ -1,5 +1,11 @@
 #### QuNeo RED Editor and Firmware Changelog
 
+### 2.0.3 (2024-01-23)
+- Bug Fixes:
+	- Fixed a bug where Pad velocity tables weren't saving properly
+	- Fixed a bug where midi thru port selection would crash the app
+	- Fixed menu bar styling on Windows
+
 ### 2.0.1 (2022-05-30)
 - Features:
 	- Editor 2.0.1, firmware 1.2.31
