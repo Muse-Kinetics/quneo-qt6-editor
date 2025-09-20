@@ -1,0 +1,14 @@
+version={0,0,1}
+
+function remote_supported_control_surfaces()
+	local surfaces =
+		{
+			{ manufacturer="Keith McMillen", model="QuNeo",
+				source="QuNeo.lua", picture="QuNeo.png",
+				in_ports={ {description="QUNEO"} },
+				out_ports={{description="QUNEO", optional=true}},
+				has_keyboard=true
+			},
+		}
+	return surfaces
+end

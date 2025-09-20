@@ -1,0 +1,1 @@
+IDI_ICON1               ICON    DISCARDABLE     "darth_quneo_icon.ico"

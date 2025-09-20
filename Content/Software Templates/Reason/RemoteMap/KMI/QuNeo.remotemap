@@ -1,0 +1,933 @@
+Propellerhead Remote Mapping File					
+File Format Version	1.0.0				
+Control Surface Manufacturer	Keith McMillen			
+Control Surface Model	QuNeo				
+Map Version	1.0.0				
+
+//Blank Map
+//Vsliders - banks 1-4
+//Map	Fader 1		
+//Map	Fader 2		
+//Map	Fader 3		
+//Map	Fader 4		
+//Map	Fader 11		
+//Map	Fader 12		
+//Map	Fader 13		
+//Map	Fader 14		
+//Map	Fader 21		
+//Map	Fader 22		
+//Map	Fader 23		
+//Map	Fader 24		
+//Map	Fader 31		
+//Map	Fader 32		
+//Map	Fader 33		
+//Map	Fader 34		
+
+//HSliders - banks 1-4
+//Map	Fader 5		
+//Map	Fader 6		
+//Map	Fader 7		
+//Map	Fader 8		
+//Map	Fader 15		
+//Map	Fader 16		
+//Map	Fader 17		
+//Map	Fader 18		
+//Map	Fader 25		
+//Map	Fader 26		
+//Map	Fader 27		
+//Map	Fader 28		
+//Map	Fader 35		
+//Map	Fader 36		
+//Map	Fader 37		
+//Map	Fader 38		
+
+//LongSlider Location, Width, Pressure
+//Map	Fader 9		
+//Map	Fader 10		
+//Map	Fader 40		
+
+//Pressure, X, Y on pads 14, 15, 16
+//pad 14
+//Map	Fader 41		
+//Map	Fader 42		
+//Map	Fader 43		
+//pad 15 
+//Map	Fader 44		
+//Map	Fader 45		
+//Map	Fader 46		
+//pad 16
+//Map	Fader 47		
+//Map	Fader 48		
+//Map	Fader 49		
+
+//Global Keyboard Pressure, X, Y
+//Map	Fader 19		
+//Map	Fader 29		
+//Map	Fader 39
+
+//Rotaries banks 1-4
+//Map	Encoder 1		
+//Map	Encoder 2		
+//Map	Encoder 3		
+//Map	Encoder 4		
+//Map	Encoder 5		
+//Map	Encoder 6		
+//Map	Encoder 7		
+//Map	Encoder 8		
+
+//Up Down Right
+//Map	Keyboard	C-1		
+//Map	Keyboard	C#-1		
+Scope	Propellerheads	Reason Document
+Map	Keyboard	G0	Play 
+Map	Keyboard	F#0	Stop
+Map	Keyboard	F0	Record
+
+Scope	Propellerheads	Master Keyboard			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+Map	Keyboard		Keyboard		
+//Map	Fader 9		Pitch Bend		
+//Map	Fader 10		Mod Wheel		
+
+Scope	Propellerheads	NN19 Digital Sampler	
+//done - uses banks 1 and 2 on sliders, bank 1 rotaries, lslider loc+press, updown, keys, xypads.
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+//bank 1 and 2 vsliders - envelope control
+Map	Fader 1		Amp Env Attack		
+Map	Fader 2		Amp Env Decay		
+Map	Fader 3		Amp Env Sustain		
+Map	Fader 4		Amp Env Release		
+Map	Fader 11		Filter Env Attack		
+Map	Fader 12		Filter Env Decay		
+Map	Fader 13		Filter Env Sustain		
+Map	Fader 14		Filter Env Release		
+//longslider location, pressure - filter control
+//Map	Fader 9		Filter Freq		
+//Map	Fader 40		Filter Res	
+//bank 1 hsliders - env amount controls for filter, osc, global port+master level
+Map	Fader 5		Filter Env Amount
+Map	Fader 6		Osc Env Amount
+Map	Fader 7		Portamento		
+Map	Fader 8		Master Level	
+//xy pad 14 - x = lfo rate, y = lfo amount
+Map	Encoder 1		LFO Rate		
+Map	Encoder 2		LFO Amount	
+//xy pad 15 - x = filter freq, y = filter res
+Map	Fader 45		Filter Freq
+Map	Fader 46		Filter Res
+//xy pad 16 - x = pitchbend, y=modwheel
+Map	Fader 49		Pitch Bend
+Map	Fader 43		Mod Wheel
+//bank 1 rotary 1 with bank 2 hslider3 and 4 = tuning
+Map	Fader 9		Osc Octave
+Map	Fader 15		Polyphony
+Map	Fader 16		Osc Semitone
+Map	Encoder 3		Osc Fine Tune
+//bank 1 rotary 2 scrubs
+Map	Encoder 4		Sample Start
+//bank 2 hslider1 and 2 = lfo control - destination and waveform
+Map	Fader 17		LFO Dest
+Map	Fader 18		LFO Wave
+
+Map	Keyboard	C-1	Select Previous Patch
+Map	Keyboard	C#-1	Select Next Patch
+
+Scope	Propellerheads	NN-XT Advanced Sampler			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+//done
+Map	Fader 1		Amp Env Attack		
+Map	Fader 2		Amp Env Decay		
+Map	Fader 3		Amp Env Release		
+Map	Fader 4		Mod Env Decay
+//xy pad 15 - x = filter freq, y = filter res
+Map	Fader 45		Filter Freq
+Map	Fader 46		Filter Res
+Map	Fader 49		Pitch Bend
+Map	Fader 43		Mod Wheel
+//lslider
+Map	Fader 9		External Controller
+//standard bank 1 hsliders 1 and 2
+Map	Fader 7		Portamento
+Map	Fader 8		Master Volume	
+
+Map	Keyboard	C-1	Select Previous Patch
+Map	Keyboard	C#-1	Select Next Patch
+
+Scope	Propellerheads	ID8 Instrument Device
+//done
+//xy pad 15 
+Map	Fader 45		Parameter 1
+Map	Fader 46		Parameter 2
+//xy pad 16 - x = pitchbend, y=modwheel
+Map	Fader 49		Pitch Bend
+Map	Fader 43		Mod Wheel
+Map	Fader 6		Sound
+Map	Fader 7		Category
+Map	Fader 8		Volume
+
+Map	Keyboard	C-1	Select Previous Preset
+Map	Keyboard	C#-1	Select Next Preset
+
+Scope	Propellerheads	SubTractor Analog Synthesizer	
+//Define Group	Keyboard Shortcut Variations	Filter & Env	Osc			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 11		Filter Env Attack			
+Map	Fader 12		Filter Env Decay			
+Map	Fader 13		Filter Env Sustain			
+Map	Fader 14		Filter Env Release			
+Map	Fader 1		Amp Env Attack			
+Map	Fader 2		Amp Env Decay			
+Map	Fader 3		Amp Env Sustain			
+Map	Fader 4		Amp Env Release			
+Map	Fader 21		Mod Env Attack			
+Map	Fader 22		Mod Env Decay			
+Map	Fader 23		Mod Env Sustain			
+Map	Fader 24		Mod Env Release			
+Map	Fader 9		Osc Mix			
+Map	Fader 10		Ring Mod
+
+//xy pad 14
+Map	Fader 42		Osc1 Phase Diff
+Map	Fader 43		Osc2 Phase Diff
+//xy pad 15 
+Map	Fader 45		Filter Freq			
+Map	Fader 46		Filter Res			
+//xy pad 16
+Map	Fader 48		Pitch Bend
+Map	Fader 49		Mod Wheel
+
+Map	Fader 5		FM Amount
+Map	Fader 6		Pitch Bend Range
+Map	Fader 7		Portamento			
+Map	Fader 8		Master Level			
+Map	Fader 15		Filter Env Amount			
+Map	Fader 16		Polyphony			
+Map	Fader 17		Noise Level
+Map	Fader 18		Noise On/Off
+Map	Fader 25		Mod Env Gain
+Map	Fader 26		Mod Env Dest
+Map	Fader 27		Noise Decay
+Map	Fader 28		Noise Color
+
+//global keyboard x and y
+Map	Fader 29		Filter2 Freq			
+Map	Fader 39		Filter2 Res			
+//lf01
+Map	Fader 31		LFO1 Rate
+Map	Fader 32		LFO1 Amount
+Map	Fader 33		LFO1 Wave
+Map	Fader 34		LFO1 Dest
+//lf02
+Map	Fader 35		Mod Env Invert
+Map	Fader 36		LFO2 Rate
+Map	Fader 37		LFO2 Amount
+Map	Fader 38		LFO2 Dest
+//rotary 1 = osc 1, rotary 2 = osc 2
+Map	Encoder 1		Osc1 Wave
+Map	Encoder 2		Osc2 Wave
+Map	Encoder 3		Osc1 Fine Tune
+Map	Encoder 4		Osc2 Fine Tune
+Map	Encoder 5		Osc1 Semitone
+Map	Encoder 6		Osc2 Semitone
+Map	Encoder 7		Osc1 Octave
+Map	Encoder 8		Osc2 Octave
+
+Map	Keyboard	C-1	Select Previous Patch
+Map	Keyboard	C#-1	Select Next Patch
+
+Scope	Propellerheads	Malstrom Graintable Synthesizer	
+//done
+//Define Group	Keyboard Shortcut Variations	Filters	Oscillators	Modulators
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+//Vsliders - banks 1-4
+Map	Fader 1		Oscillator A Attack			
+Map	Fader 2		Oscillator A Decay			
+Map	Fader 3		Oscillator A Sustain			
+Map	Fader 4		Oscillator A Release			
+Map	Fader 11		Oscillator B Attack			
+Map	Fader 12		Oscillator B Decay			
+Map	Fader 13		Oscillator B Sustain			
+Map	Fader 14		Oscillator B Release			
+Map	Fader 21		Filter Env Attack			
+Map	Fader 22		Filter Env Decay			
+Map	Fader 23		Filter Env Sustain			
+Map	Fader 24		Filter Env Release			
+Map	Fader 31		Oscillator A Shift
+Map	Fader 32		Oscillator A Octave
+Map	Fader 33		Oscillator A Semi
+Map	Fader 34		Oscillator A Gain
+
+//HSliders - banks 1-4
+Map	Fader 5		Filter Env Amount
+Map	Fader 6		Pitch Bend Range
+Map	Fader 7		Portamento
+Map	Fader 8		Master Level
+Map	Fader 15		Modulator A Curve
+Map	Fader 16		Modulator A To Pitch
+Map	Fader 17		Modulator A To Index
+Map	Fader 18		Modulator A To Shift
+Map	Fader 25		Modulator B Curve
+Map	Fader 26		Modulator B To Motion
+Map	Fader 27		Modulator B To Level
+Map	Fader 28		Modulator B To Filter
+Map	Fader 35		Oscillator B Shift
+Map	Fader 36		Oscillator B Octave
+Map	Fader 37		Oscillator B Semi
+Map	Fader 38		Oscillator B Gain
+
+//LongSlider Location, Width, Pressure
+Map	Fader 9		Filter A Freq
+Map	Fader 10		Filter A Resonance
+//Map	Fader 40		
+
+//Pressure, X, Y on pads 14, 15, 16
+//pad 14
+//Map	Fader 41		
+Map	Fader 42		Oscillator A Index
+Map	Fader 43		Oscillator A Motion
+//pad 15 
+//Map	Fader 44		
+Map	Fader 45		Oscillator B Index
+Map	Fader 46		Oscillator B Motion
+//pad 16
+//Map	Fader 47		
+Map	Fader 48		Pitch Bend
+Map	Fader 49		Mod Wheel		
+
+//Global Keyboard Pressure, X, Y
+//Map	Fader 19		
+Map	Fader 29		Filter B Freq
+Map	Fader 39		Filter B Resonance
+
+//Rotaries banks 1-4
+Map	Encoder 1		Modulator A Rate
+Map	Encoder 2		Modulator B Rate
+Map	Encoder 3		Shaper Amount
+Map	Encoder 4		Modulator B To Modulator A
+Map	Encoder 5		Mod Wheel To Modulator
+Map	Encoder 6		Mod Wheel To Filter
+Map	Encoder 7		Mod Wheel To Shift
+Map	Encoder 8		Mod Wheel To Index
+
+//Up Down Right
+Map	Keyboard	C-1	Select Previous Patch
+Map	Keyboard	C#-1	Select Next Patch	
+
+Scope	Propellerheads	Dr.REX Loop Player			
+//done except for rotaries and long slider.
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Encoder 1		Selected Loop in Editor
+Map	Encoder 2		Notes to Slot
+Map	Encoder 3		LFO1 Rate
+Map	Encoder 4		LFO1 Amount
+
+Map	Fader 1		Amp Env Attack
+Map	Fader 2		Amp Env Decay
+Map	Fader 3		Amp Env Sustain
+Map	Fader 4		Amp Env Release
+Map	Fader 11		Filter Env Attack		
+Map	Fader 12		Filter Env Decay
+Map	Fader 13		Filter Env Sustain
+Map	Fader 14		Filter Env Release
+	
+Map	Fader 21		Transpose
+Map	Fader 22		Osc Env Amount
+Map	Fader 23		Osc Octave
+Map	Fader 24		Osc Fine Tune
+//Map	Fader 31		LFO1 Rate
+//Map	Fader 32		LFO1 Amount
+//Map	Fader 33		LFO1 Wave
+//Map	Fader 34		LFO1 Dest
+//pad 14
+Map	Fader 43		Mod Wheel
+//pad 15 
+//Map	Fader 44		
+Map	Fader 45		Filter Freq
+Map	Fader 46		Filter Res
+//pad 16
+//Map	Fader 47		
+Map	Fader 48		Pitch Bend
+
+Map	Fader 5		Filter Env Amount
+Map	Fader 6		Filter Mode
+Map	Fader 7		Pitch Bend Range
+Map	Fader 8		Master Level		
+Map	Fader 15		Filter Freq Mod Wheel Amount
+Map	Fader 16		Filter Res Mod Wheel Amount
+Map	Fader 17		Filter Decay Mod Wheel Amount
+Map	Fader 18		Loop Level
+Map	Fader 25		Amp Vel Amount
+Map	Fader 26		Filter Env Vel Amount
+Map	Fader 27		Filter Decay Vel Amount
+Map	Fader 28		Loop Transpose	
+Map	Fader 9		Polyphony
+
+Map	Keyboard	G0	Run 
+
+Map	Keyboard	C-1	Select Previous Patch
+Map	Keyboard	C#-1	Select Next Patch
+
+Scope	Propellerheads	Redrum Drum Computer	
+//done
+Define Group	Keyboard Shortcut Variations	Pitch	Length	Pan		
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Keyboard	G0	Run
+
+Map	Keyboard	C-1	Select Previous Patch
+Map	Keyboard	C#-1	Select Next Patch
+
+Map	Fader 1		Drum 1 Level
+Map	Fader 2		Drum 2 Level
+Map	Fader 3		Drum 3 Level
+Map	Fader 4		Drum 4 Level
+Map	Fader 11		Drum 5 Level
+Map	Fader 12		Drum 6 Level
+Map	Fader 13		Drum 7 Level
+Map	Fader 14		Drum 8 Level
+Map	Fader 21		Drum 9 Level
+Map	Fader 22		Drum 10 Level
+Map	Fader 23		Drum 9 Pitch
+Map	Fader 24		Drum 10 Pitch
+Map	Fader 31		Drum 9 Length
+Map	Fader 32		Drum 10 Length
+//Map	Fader 33		Drum 10 Tone
+//Map	Fader 34		Flam Amount
+
+Map	Fader 5		Drum 1 Pitch			
+Map	Fader 6		Drum 2 Pitch			
+Map	Fader 7		Drum 3 Pitch			
+Map	Fader 8		Drum 4 Pitch			
+Map	Fader 15		Drum 5 Pitch			
+Map	Fader 16		Drum 6 Pitch		
+Map	Fader 17		Drum 7 Pitch	
+Map	Fader 18		Drum 8 Pitch		
+
+Map	Fader 25		Drum 1 Length	
+Map	Fader 26		Drum 2 Length	
+Map	Fader 27		Drum 3 Length		
+Map	Fader 28		Drum 4 Length	
+Map	Fader 35		Drum 5 Length	
+Map	Fader 36		Drum 6 Length	
+Map	Fader 37		Drum 7 Length	
+Map	Fader 38		Drum 8 Length	
+//pad 14
+//Map	Fader 41		
+Map	Fader 42		Drum 6 Pitch Bend Amount
+Map	Fader 43		Drum 7 Pitch Bend Amount
+//pad 15 
+//Map	Fader 44		
+Map	Fader 45		Drum 1 Tone
+Map	Fader 46		Drum 2 Tone
+//pad 16
+Map	Fader 47		Drum 6 Pitch Bend Rate
+Map	Fader 48		Drum 7 Pitch Bend Rate
+Map	Fader 49		Pitch bend		
+
+Map	Fader 9		Resolution
+
+//Rotaries banks 1-4
+Map	Encoder 1		Bank Select
+Map	Encoder 2		Pattern Select in Bank
+Map	Encoder 3		Drum 10 Tone
+Map	Encoder 4		Flam Amount
+Map	Encoder 5		Drum 3 Sample Start
+Map	Encoder 6		Drum 4 Sample Start
+Map	Encoder 7		Drum 5 Sample Start
+Map	Encoder 8		Drum 8 Sample Start
+
+Scope	Propellerheads	Thor Polysonic Synthesizer
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+//Vsliders - banks 1-4
+Map	Fader 1		Amp Env Attack
+Map	Fader 2		Amp Env Decay
+Map	Fader 3		Amp Env Sustain
+Map	Fader 4		Amp Env Release
+Map	Fader 11		Filter Env Attack		
+Map	Fader 12		Filter Env Decay
+Map	Fader 13		Filter Env Sustain
+Map	Fader 14		Filter Env Release
+Map	Fader 21		Mod Env Delay
+Map	Fader 22		Mod Env Attack
+Map	Fader 23		Mod Env Decay
+Map	Fader 24		Mod Env Release
+Map	Fader 31		Global Env Attack
+Map	Fader 32		Global Env Decay
+Map	Fader 33		Global Env Sustain
+Map	Fader 34		Global Env Release
+
+//HSliders - banks 1-4
+Map	Fader 5		Osc 1 Oct
+Map	Fader 6		Osc 1 Semi
+Map	Fader 7		Osc 1 Tune
+Map	Fader 8		Osc 1 Mod
+Map	Fader 15		Osc 2 Oct
+Map	Fader 16		Osc 2 Semi
+Map	Fader 17		Osc 2 Tune
+Map	Fader 18		Osc 2 Mod
+Map	Fader 25		Osc 3 Oct
+Map	Fader 26		Osc 3 Semi
+Map	Fader 27		Osc 3 Tune
+Map	Fader 28		Osc 3 Mod
+Map	Fader 35		Osc 1 And 2 Level
+Map	Fader 36		Osc 3 Level
+Map	Fader 37		Osc 2 Sync BW
+Map	Fader 38		Osc 3 Sync BW
+
+//LongSlider Location, Width, Pressure
+Map	Fader 9		Chorus Rate
+Map	Fader 10		Chorus Dry Wet
+Map	Fader 40		Chorus Feedback
+
+//Pressure, X, Y on pads 14, 15, 16
+//pad 14
+//Map	Fader 41		
+Map	Fader 42		Delay Feedback
+Map	Fader 43		Delay Time
+//pad 15 
+//Map	Fader 44		
+Map	Fader 45		Filter 1 Freq
+Map	Fader 46		Filter 1 Res
+//pad 16
+//Map	Fader 47		
+Map	Fader 48		Mod Wheel
+Map	Fader 49		Pitch Bend		
+
+//Global Keyboard Pressure, X, Y
+//Map	Fader 19		
+Map	Fader 29		Filter 2 Freq
+Map	Fader 39		Filter 2 Res
+
+//Rotaries banks 1-4
+Map	Encoder 1		Rotary 1
+Map	Encoder 2		Rotary 2
+Map	Encoder 3		Osc 1 And 2 Balance
+Map	Encoder 4		Osc 1 AM From Osc 2
+Map	Encoder 5		Shaper Drive
+Map	Encoder 6		Step Sequencer Step Count
+Map	Encoder 7		LFO 1 Rate
+Map	Encoder 8		LFO 2 Rate
+
+//Up Down Right
+Map	Keyboard	C-1	Button 1
+Map	Keyboard	C#-1	Button 2
+
+Scope	Propellerheads	Kong Drum Designer
+//Blank Map
+//Vsliders - banks 1-4
+Map	Fader 1		Drum 1 DM Variable
+Map	Fader 2		Drum 1 DM Pitch
+Map	Fader 3		Drum 2 DM Variable
+Map	Fader 4		Drum 2 DM Pitch
+Map	Fader 11		Drum 5 DM Variable
+Map	Fader 12		Drum 5 DM Pitch
+Map	Fader 13		Drum 6 DM Variable
+Map	Fader 14		Drum 6 DM Pitch
+Map	Fader 21		Drum 9 DM Variable
+Map	Fader 22		Drum 9 DM Pitch
+Map	Fader 23		Drum 10 DM Variable
+Map	Fader 24		Drum 10 DM Pitch
+Map	Fader 31		Drum 13 DM Variable
+Map	Fader 32		Drum 13 DM Pitch
+Map	Fader 33		Drum 14 DM Variable
+Map	Fader 34		Drum 14 DM Pitch
+
+//HSliders - banks 1-4
+Map	Fader 5		Drum 3 DM Variable
+Map	Fader 6		Drum 3 DM Pitch
+Map	Fader 7		Drum 4 DM Variable
+Map	Fader 8		Drum 4 DM Pitch
+Map	Fader 15		Drum 7 DM Variable
+Map	Fader 16		Drum 7 DM Pitch
+Map	Fader 17		Drum 8 DM Variable
+Map	Fader 18		Drum 8 DM Pitch
+Map	Fader 25		Drum 11 DM Variable
+Map	Fader 26		Drum 11 DM Pitch
+Map	Fader 27		Drum 12 DM Variable
+Map	Fader 28		Drum 12 DM Pitch
+Map	Fader 35		Drum 15 DM Variable
+Map	Fader 36		Drum 15 DM Pitch
+Map	Fader 37		Drum 16 DM Variable
+Map	Fader 38		Drum 16 DM Pitch
+
+Map	Fader 50		Drum 1 DM Decay
+Map	Fader 51		Drum 1 FX1 P1
+Map	Fader 52		Drum 1 FX1 P2
+
+Map	Fader 53		Drum 2 DM Decay
+Map	Fader 54		Drum 2 FX1 P1
+Map	Fader 55		Drum 2 FX1 P2
+
+Map	Fader 56		Drum 3 DM Decay
+Map	Fader 57		Drum 3 FX1 P1
+Map	Fader 58		Drum 3 FX1 P2
+
+Map	Fader 59		Drum 4 DM Decay
+Map	Fader 60		Drum 4 FX1 P1
+Map	Fader 61		Drum 4 FX1 P2
+
+Map	Fader 62		Drum 5 DM Decay
+Map	Fader 63		Drum 5 FX1 P1
+Map	Fader 64		Drum 5 FX1 P2
+
+Map	Fader 65		Drum 6 DM Decay
+Map	Fader 66		Drum 6 FX1 P1
+Map	Fader 67		Drum 6 FX1 P2
+
+Map	Fader 68		Drum 7 DM Decay
+Map	Fader 69		Drum 7 FX1 P1
+Map	Fader 70		Drum 7 FX1 P2
+
+Map	Fader 71		Drum 8 DM Decay
+Map	Fader 72		Drum 8 FX1 P1
+Map	Fader 73		Drum 8 FX1 P2
+
+Map	Fader 74		Drum 9 DM Decay
+Map	Fader 75		Drum 9 FX1 P1
+Map	Fader 76		Drum 9 FX1 P2
+
+Map	Fader 77		Drum 10 DM Decay
+Map	Fader 78		Drum 10 FX1 P1
+Map	Fader 79		Drum 10 FX1 P2
+
+Map	Fader 80		Drum 11 DM Decay
+Map	Fader 81		Drum 11 FX1 P1
+Map	Fader 82		Drum 11 FX1 P2
+
+Map	Fader 83		Drum 12 DM Decay
+Map	Fader 84		Drum 12 FX1 P1
+Map	Fader 85		Drum 12 FX1 P2
+
+Map	Fader 86		Drum 13 DM Decay
+Map	Fader 87		Drum 13 FX1 P1
+Map	Fader 88		Drum 13 FX1 P2
+
+Map	Fader 89		Drum 14 DM Decay
+Map	Fader 90		Drum 14 FX1 P1
+Map	Fader 91		Drum 14 FX1 P2
+
+Map	Fader 92		Drum 15 DM Decay
+Map	Fader 93		Drum 15 FX1 P1
+Map	Fader 94		Drum 15 FX1 P2
+
+Map	Fader 95		Drum 16 DM Decay
+Map	Fader 96		Drum 16 FX1 P1
+Map	Fader 97		Drum 16 FX1 P2
+
+//LongSlider Location, Width, Pressure
+Map	Fader 9		Pitch Bend
+//Map	Fader 10		
+//Map	Fader 40		
+
+//Pressure, X, Y on pads 14, 15, 16
+//pad 14
+//Map	Fader 41		Drum 1 DM Decay
+//Map	Fader 42		Drum 1 Tone/Drum 1 FX1 P2
+//Map	Fader 43		Drum 1 FX1 P1
+//pad 15 
+//Map	Fader 44		
+//Map	Fader 45		
+//Map	Fader 46		
+//pad 16
+//Map	Fader 47		
+//Map	Fader 48		
+//Map	Fader 49				
+
+//Global Keyboard Pressure, X, Y
+//Map	Fader 19		
+//Map	Fader 29		
+//Map	Fader 39
+
+//Rotaries banks 1-4
+Map	Encoder 1		Master FX P1
+Map	Encoder 2		Master FX P2
+Map	Encoder 3		Bus FX P1
+Map	Encoder 4		Bus FX P2
+Map	Encoder 5		Mod Wheel
+Map	Encoder 6		Level Bus FX to Master FX
+//Map	Encoder 7		
+//Map	Encoder 8		
+
+//Up Down Right
+Map	Keyboard	C-1	Select Previous Patch
+Map	Keyboard	C#-1	Select Next Patch	
+Map	Keyboard	F0	Quick Sample
+Scope	Propellerheads	MClass Equalizer			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 1		Low Shelf Frequency			
+Map	Fader 2		Low Shelf Gain			
+Map	Fader 3		Low Shelf Q			
+Map	Fader 11		Parametric 1 Frequency			
+Map	Fader 12		Parametric 1 Gain			
+Map	Fader 13		Parametric 1 Q			
+
+Map	Fader 21		Parametric 2 Frequency			
+Map	Fader 22		Parametric 2 Gain			
+Map	Fader 23		Parametric 2 Q			
+Map	Fader 31		Hi Shelf Frequency			
+Map	Fader 32		Hi Shelf Gain			
+Map	Fader 33		Hi Shelf Q			
+
+Map	Keyboard	C0	Low Shelf Enable
+Map	Keyboard	C#0	Parametric 1 Enable
+Map	Keyboard	D0	Parametric 2 Enable
+Map	Keyboard	D#0	Hi Shelf Enable
+
+Scope	Propellerheads	MClass Stereo Imager			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 1		Low Width		
+Map	Fader 9		X-Over Frequency		
+Map	Fader 3		High Width
+
+Scope	Propellerheads	MClass Compressor			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 6		Input Gain		
+Map	Fader 3		Threshold		
+Map	Fader 4		Ratio		
+Map	Fader 1		Attack		
+Map	Fader 2		Release		
+Map	Fader 5		Output Gain		
+
+Map	Keyboard	C0	Soft Knee		
+Map	Keyboard	C#0	Sidechain Solo		
+Map	Keyboard	D0	Adapt		
+Map	Keyboard	D#0	Enabled		
+
+Scope	Propellerheads	MClass Maximizer			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 6		Input Gain		
+Map	Fader 1		Attack Speed		
+Map	Fader 2		Release Speed		
+Map	Fader 5		Output Gain		
+Map	Fader 3		Soft Clip Amount		
+
+Map	Keyboard	C0	Limiter Enable		
+Map	Keyboard	C#0	Look Ahead Enable		
+Map	Keyboard	D0	Soft Clip Enable		
+Map	Keyboard	D#0	Enabled		
+
+Scope	Propellerheads	COMP-01 Compressor/Limiter			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 3		Ratio		
+Map	Fader 4		Threshold		
+Map	Fader 1		Attack		
+Map	Fader 2		Release		
+
+Map	Keyboard	C#-1	Enabled		
+
+
+Scope	Propellerheads	PEQ-2 Two Band Parametric EQ			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 1		Filter A Freq		
+Map	Fader 2		Filter A Q		
+Map	Fader 3		Filter A Gain		
+Map	Fader 11		Filter B Freq		
+Map	Fader 12		Filter B Q		
+Map	Fader 13		Filter B Gain		
+
+Map	Keyboard	C-1	Filter B On/Off		
+Map	Keyboard	C#-1	Enabled		
+
+Scope	Propellerheads	RV7000 Advanced Reverb			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 1		Decay		
+Map	Fader 2		HF Damp		
+Map	Fader 3		Hi EQ		
+Map	Fader 4		Dry/Wet
+
+Map	Fader 5		Soft Knob 1
+Map	Fader 6		Soft Knob 2
+Map	Fader 7		Soft Knob 3
+Map	Fader 8		Soft Knob 4
+Map	Fader 11		Soft Knob 5
+Map	Fader 12		Soft Knob 6
+Map	Fader 13		Soft Knob 7
+Map	Fader 14		Soft Knob 8
+
+Map	Keyboard	C0	EQ On/Off
+Map	Keyboard	C#0	Gate On/Off
+Map	Keyboard	D0	Edit Mode
+Map	Keyboard	D#0	Enabled
+
+Map	Keyboard	C-1	Select Previous Patch
+Map	Keyboard	C#-1	Select Next Patch
+
+
+Scope	Propellerheads	Scream 4 Distortion			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Encoder 1		Damage Control		
+Map	Encoder 2		Damage Type		
+Map	Encoder 3		Parameter 1		
+Map	Encoder 4		Parameter 2		
+Map	Fader 5		Cut Lo		
+Map	Fader 6		Cut Mid		
+Map	Fader 7		Cut Hi		
+Map	Fader 8		Master Level		
+
+Map	Fader 1		Body Resonance		
+Map	Fader 2		Body Scale		
+Map	Fader 3		Body Auto		
+Map	Fader 4		Body Type		
+
+Map	Keyboard	C0	Damage On/Off		
+Map	Keyboard	C#0	Cut On/Off		
+Map	Keyboard	D0	Body On/Off		
+Map	Keyboard	D#0	Enabled		
+
+Map	Keyboard	C-1	Select Previous Patch
+Map	Keyboard	C#-1	Select Next Patch
+
+
+Scope	Propellerheads	BV512 Digital Vocoder			
+Define Group	Keyboard Shortcut Variations	Band 1-8	Band 9-16	Band 17-24	Band 25-32
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Encoder 2		Band Count
+Map	Encoder 3		Attack
+Map	Encoder 4		Decay
+Map	Encoder 1		Shift
+Map	Fader 10		HF Emphasis
+Map	Fader 9		Dry/Wet
+
+Map	Fader 1		Band Level 1			Band 1-8
+Map	Fader 2		Band Level 2			Band 1-8
+Map	Fader 3		Band Level 3			Band 1-8
+Map	Fader 4		Band Level 4			Band 1-8
+Map	Fader 5		Band Level 5			Band 1-8
+Map	Fader 6		Band Level 6			Band 1-8
+Map	Fader 7		Band Level 7			Band 1-8
+Map	Fader 8		Band Level 8			Band 1-8
+
+Map	Fader 11		Band Level 9			Band 9-16
+Map	Fader 12		Band Level 10			Band 9-16
+Map	Fader 13		Band Level 11			Band 9-16
+Map	Fader 14		Band Level 12			Band 9-16
+Map	Fader 15		Band Level 13			Band 9-16
+Map	Fader 16		Band Level 14			Band 9-16
+Map	Fader 17		Band Level 15			Band 9-16
+Map	Fader 18		Band Level 16			Band 9-16
+
+Map	Fader 21		Band Level 17			Band 17-24
+Map	Fader 22		Band Level 18			Band 17-24
+Map	Fader 23		Band Level 19			Band 17-24
+Map	Fader 24		Band Level 20			Band 17-24
+Map	Fader 25		Band Level 21			Band 17-24
+Map	Fader 26		Band Level 22			Band 17-24
+Map	Fader 27		Band Level 23			Band 17-24
+Map	Fader 28		Band Level 24			Band 17-24
+
+Map	Fader 31		Band Level 25			Band 25-32
+Map	Fader 32		Band Level 26			Band 25-32
+Map	Fader 33		Band Level 27			Band 25-32
+Map	Fader 34		Band Level 28			Band 25-32
+Map	Fader 35		Band Level 29			Band 25-32
+Map	Fader 36		Band Level 30			Band 25-32
+Map	Fader 37		Band Level 31			Band 25-32
+Map	Fader 38		Band Level 32			Band 25-32
+
+
+Scope	Propellerheads	RV-7 Digital Reverb			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 1		Algorithm		
+Map	Fader 2		Size		
+Map	Fader 3		Decay		
+Map	Fader 4		Damping		
+Map	Fader 9		Dry/Wet		
+
+Map	Keyboard	C#-1	Enabled			
+
+
+Scope	Propellerheads	DDL-1 Digital Delay Line			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 1		DelayTime (steps)		
+Map	Fader 2		DelayTime (ms)		
+Map	Fader 3		Feedback		
+Map	Fader 9		Pan		
+Map	Fader 4		Dry/Wet Balance		
+
+Map	Keyboard	G0	Unit		
+Map	Keyboard	C-1	Step Length		
+Map	Keyboard	C#-1	Enabled			
+
+
+Scope	Propellerheads	D-11 Foldback Distortion			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 1		Amount		
+Map	Fader 2		Foldback		
+
+Map	Keyboard	C#-1	Enabled			
+
+
+Scope	Propellerheads	ECF-42 Envelope Controlled Filter			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 5		Frequency		
+Map	Fader 6		Resonance		
+Map	Fader 7		Env Amount		
+Map	Fader 8		Velocity		
+Map	Fader 1		Attack		
+Map	Fader 2		Decay		
+Map	Fader 3		Sustain		
+Map	Fader 4		Release		
+
+Map	Keyboard	C-1	Mode		
+Map	Keyboard	C#-1	Enabled			
+
+Scope	Propellerheads	CF-101 Chorus/Flanger			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 1		Delay		
+Map	Fader 2		Feedback		
+Map	Fader 3		Rate		
+Map	Fader 4		Modulation Amount		
+
+Map	Keyboard	C-1	LFO Sync Enable		
+Map	Keyboard	C#-1	Enabled			
+
+
+Scope	Propellerheads	PH-90 Phaser			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 1		Frequency		
+Map	Fader 2		Split		
+Map	Fader 3		Width		
+Map	Fader 4		Rate		
+Map	Fader 5		Frequency Modulation		
+Map	Fader 6		Feedback		
+
+Map	Keyboard	C-1	LFO Sync Enable		
+Map	Keyboard	C#-1	Enabled			
+
+
+Scope	Propellerheads	UN-16 Unison			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Fader 1		Voice Count		
+Map	Fader 9		Detune		
+Map	Fader 2		Dry/Wet		
+
+Map	Keyboard	C#-1	Enabled			
+
+Scope	Propellerheads	Matrix Pattern Sequencer			
+//	Control Surface Item	Key	Remotable Item	Scale	Mode
+
+Map	Keyboard	G0	Run
+Map	Keyboard	C#-1	Pattern Select in Bank
+Map	Keyboard	C-1	Bank Select
+Map	Keyboard	F0	Pattern Enable

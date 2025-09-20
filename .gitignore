@@ -50,6 +50,6 @@ compile_commands.json
 *.app
 
 # Deploy / build packages directory
-./win-build/packages/com.keithmcmillen.quneoeditor/data/QuNeo\ Editor
-./Signing\ and\ Notarization/dmg/QuNeo\ Editor
-./xx_archive/application_installer
+win-deploy/packages/com.keithmcmillen.quneoeditor/data/QuNeo\ Editor/
+Signing\ and\ Notarization/dmg/QuNeo\ Editor/
+xx_archive/application_installer/

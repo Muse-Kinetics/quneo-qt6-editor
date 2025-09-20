@@ -1,0 +1,21 @@
+QMenuBar {
+    background-color: rgba(60,60,60,255);
+    color: white;
+    font: 13x "Source Code Pro";
+    spacing: 3px; /* spacing between menu bar items */
+    padding-top: 3px;
+}
+
+QMenuBar::item {
+    padding: 1px 4px;
+    background: transparent;
+    border-radius: 0px;
+}
+
+QMenuBar::item:selected { /* when selected using mouse or keyboard */
+    background: #a8a8a8;
+}
+
+QMenuBar::item:pressed {
+    background: #888888;
+}

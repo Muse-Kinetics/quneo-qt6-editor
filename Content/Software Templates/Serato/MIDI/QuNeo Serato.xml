@@ -1,0 +1,40 @@
+<midi>
+    <Control name="Load Left Button" channel="1" event_type="Note On" control="17" />
+    <Control name="Load Right Button" channel="1" event_type="Note On" control="18" />
+    <Control name="Scroll Up Button" channel="1" event_type="Note On" control="20" />
+    <Control name="Scroll Down Button" channel="1" event_type="Note On" control="21" />
+    <Control name="Trigger Cue Point Button A3" channel="1" event_type="Note On" control="36" />
+    <Control name="Reloop Button A" channel="1" event_type="Note On" control="37" />
+    <Control name="Reloop Button B" channel="1" event_type="Note On" control="38" />
+    <Control name="Trigger Cue Point Button B3" channel="1" event_type="Note On" control="39" />
+    <Control name="Trigger Cue Point Button A2" channel="1" event_type="Note On" control="40" />
+    <Control name="Loop Out Adjust Button A" channel="1" event_type="Note On" control="41" />
+    <Control name="Loop Out Adjust Button B" channel="1" event_type="Note On" control="42" />
+    <Control name="Trigger Cue Point Button B2" channel="1" event_type="Note On" control="43" />
+    <Control name="Trigger Cue Point Button A1" channel="1" event_type="Note On" control="44" />
+    <Control name="Loop In Adjust Button A" channel="1" event_type="Note On" control="45" />
+    <Control name="Loop In Adjust Button B" channel="1" event_type="Note On" control="46" />
+    <Control name="Trigger Cue Point Button B1" channel="1" event_type="Note On" control="47" />
+    <Control name="Trigger Cue Point Button A0" channel="1" event_type="Note On" control="48" />
+    <Control name="Play Forward A" channel="1" event_type="Note On" control="49" />
+    <Control name="Play Forward B" channel="1" event_type="Note On" control="50" />
+    <Control name="Trigger Cue Point Button B0" channel="1" event_type="Note On" control="51" />
+    <Control name="Set Cue Point Button A3" channel="1" event_type="Note On" control="52" />
+    <Control name="Set Cue Point Button B3" channel="1" event_type="Note On" control="55" />
+    <Control name="Set Cue Point Button A2" channel="1" event_type="Note On" control="56" />
+    <Control name="Set Cue Point Button B2" channel="1" event_type="Note On" control="59" />
+    <Control name="Set Cue Point Button A1" channel="1" event_type="Note On" control="60" />
+    <Control name="Set Cue Point Button B1" channel="1" event_type="Note On" control="63" />
+    <Control name="Set Cue Point Button A0" channel="1" event_type="Note On" control="64" />
+    <Control name="Set Cue Point Button B0" channel="1" event_type="Note On" control="67" />
+    <Control name="Effect Ultra On Button 1" channel="1" event_type="Note On" control="69" />
+    <Control name="Effect Ultra On Button 2" channel="1" event_type="Note On" control="70" />
+    <Control name="Effect Unit 0 Attach To Deck 2" channel="1" event_type="Note On" control="77" />
+    <Control name="Effect Unit 1 Attach To Deck 2" channel="1" event_type="Note On" control="78" />
+    <Control name="Effect Unit 0 Attach To Deck 1" channel="1" event_type="Note On" control="81" />
+    <Control name="Effect Unit 1 Attach To Deck 1" channel="1" event_type="Note On" control="82" />
+    <Control name="Effect Ultra Select 1" channel="1" event_type="Control Change" data_type="Absolute 7" control="6" />
+    <Control name="Effect Ultra Select 2" channel="1" event_type="Control Change" data_type="Absolute 7" control="7" />
+    <Control name="Effect Ultra Knob 1" channel="1" event_type="Control Change" data_type="Absolute 7" control="8" />
+    <Control name="Effect Ultra Knob 2" channel="1" event_type="Control Change" data_type="Absolute 7" control="9" />
+</midi>

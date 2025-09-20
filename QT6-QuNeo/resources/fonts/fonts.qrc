@@ -1,0 +1,45 @@
+<RCC>
+    <qresource prefix="/fonts/">
+        <file>Aller/Aller Font License.txt</file>
+        <file>Aller/Aller_Bd.ttf</file>
+        <file>Aller/Aller_BdIt.ttf</file>
+        <file>Aller/Aller_It.ttf</file>
+        <file>Aller/Aller_Lt.ttf</file>
+        <file>Aller/Aller_LtIt.ttf</file>
+        <file>Aller/Aller_Rg.ttf</file>
+        <file>Aller/AllerDisplay.ttf</file>
+        <file>droid-sans/Apache License.txt</file>
+        <file>droid-sans/DroidSans-Bold.ttf</file>
+        <file>droid-sans/DroidSans.ttf</file>
+        <file>droid-sans/DroidSansMono.ttf</file>
+        <file>open-sans/Apache License.txt</file>
+        <file>open-sans/OpenSans-Bold.ttf</file>
+        <file>open-sans/OpenSans-BoldItalic.ttf</file>
+        <file>open-sans/OpenSans-ExtraBold.ttf</file>
+        <file>open-sans/OpenSans-ExtraBoldItalic.ttf</file>
+        <file>open-sans/OpenSans-Italic.ttf</file>
+        <file>open-sans/OpenSans-Light.ttf</file>
+        <file>open-sans/OpenSans-LightItalic.ttf</file>
+        <file>open-sans/OpenSans-Regular.ttf</file>
+        <file>open-sans/OpenSans-Semibold.ttf</file>
+        <file>open-sans/OpenSans-SemiboldItalic.ttf</file>
+        <file>source-sans-pro/SIL Open Font License.txt</file>
+        <file>source-sans-pro/SourceSansPro-Black.otf</file>
+        <file>source-sans-pro/SourceSansPro-BlackIt.otf</file>
+        <file>source-sans-pro/SourceSansPro-Bold.otf</file>
+        <file>source-sans-pro/SourceSansPro-BoldIt.otf</file>
+        <file>source-sans-pro/SourceSansPro-ExtraLight.otf</file>
+        <file>source-sans-pro/SourceSansPro-ExtraLightIt.otf</file>
+        <file>source-sans-pro/SourceSansPro-It.otf</file>
+        <file>source-sans-pro/SourceSansPro-Light.otf</file>
+        <file>source-sans-pro/SourceSansPro-LightIt.otf</file>
+        <file>source-sans-pro/SourceSansPro-Regular.otf</file>
+        <file>source-sans-pro/SourceSansPro-Semibold.otf</file>
+        <file>source-sans-pro/SourceSansPro-SemiboldIt.otf</file>
+        <file>corbel/corbel.ttf</file>
+        <file>corbel/corbelb.ttf</file>
+        <file>futura/Futura-Bold.ttf</file>
+        <file>futura/futura-normal.ttf</file>
+        <file>futura/FuturaPT-Book.otf</file>
+    </qresource>
+</RCC>

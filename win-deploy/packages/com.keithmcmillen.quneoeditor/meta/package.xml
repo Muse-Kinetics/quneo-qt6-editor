@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    	<DisplayName>QuNeo Editor</DisplayName>
+    	<Description>The Windows editor for the QuNeo controller. Includes DAW scripts and other content.</Description>
+    	<Version>2.0.3</Version>
+    	<Default>true</Default>    
+    	<ReleaseDate>2024-02-29</ReleaseDate>
+	<Script>installscript.qs</Script>
+</Package>

@@ -1,0 +1,37 @@
+/* Set the background color for the entire installer */
+QWizard {
+    background: #f0f0f0;
+}
+
+/* Style the 'Next' button */
+QWizard QPushButton[objectName="NextButton"] {
+    background: #007acc;
+    color: white;
+}
+
+/* Style the 'Back' button */
+QWizard QPushButton[objectName="BackButton"] {
+    background: #ccc;
+    color: black;
+}
+
+/* Style the 'Cancel' button */
+QWizard QPushButton[objectName="CancelButton"] {
+    background: #f00;
+    color: white;
+}
+
+/* Style the radio buttons */
+QRadioButton {
+    color: #333;
+}
+
+/* Style the checkboxes */
+QCheckBox {
+    color: #333;
+}
+
+/* Style the labels */
+QLabel {
+    color: #333;
+}

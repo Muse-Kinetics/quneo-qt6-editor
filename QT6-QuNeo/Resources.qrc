@@ -1,0 +1,45 @@
+<RCC>
+    <qresource prefix="/Quneo/images">
+        <file>resources/images/padHighlight.png</file>
+        <file>resources/images/quneophotoshop2gray.png</file>
+        <file>resources/images/horizontalSliderHighlight.png</file>
+        <file>resources/images/longSliderHighlight.png</file>
+        <file>resources/images/rotaryHighlight.png</file>
+        <file>resources/images/vSliderHighlight.png</file>
+        <file>resources/images/padTransparent.png</file>
+        <file>resources/images/highlightButton8.png</file>
+        <file>resources/images/highlightButton3.png</file>
+        <file>resources/images/highlightButton2.png</file>
+        <file>resources/images/highlightButton1.png</file>
+        <file>resources/images/highlightButton0.png</file>
+        <file>resources/images/highlightButton9.png</file>
+        <file>resources/images/highlightButton4.png</file>
+        <file>resources/images/backgroundQuneo.png</file>
+        <file>resources/images/kmilogo.png</file>
+        <file>resources/images/quneoLabel.png</file>
+        <file>resources/images/backgroundQuneo2.png</file>
+        <file>resources/images/tables/Medium.png</file>
+        <file>resources/images/tables/Light.png</file>
+        <file>resources/images/tables/None.png</file>
+        <file>resources/images/tables/Dynamic.png</file>
+        <file>resources/images/tables/Hard.png</file>
+        <file>resources/images/tables/Full Level.png</file>
+        <file>resources/images/QuNeoRED_editor_background.png</file>
+        <file>resources/images/QuNeoRED_editor_background_final.png</file>
+        <file>resources/images/kmi_white_trans_logo.png</file>
+        <file>resources/images/white-drop-down-arrow-gray.png</file>
+    </qresource>
+    <qresource prefix="/Quneo/sysex">
+        <file>resources/sysex/Quneo_Enter_Bootloader.syx</file>
+        <file>resources/sysex/Quneo_Firmware_v1.2.31.syx</file>
+    </qresource>
+    <qresource prefix="/Quneo/preset">
+        <file>resources/blank.quneopreset</file>
+        <file>resources/QuNeo.json</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>resources/stylesheets/QuNeoStyles.qss</file>
+        <file>resources/stylesheets/QuNeoStylesWindows.qss</file>
+        <file>resources/stylesheets/menuBarWin.qss</file>
+    </qresource>
+</RCC>
