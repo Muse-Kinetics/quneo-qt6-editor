@@ -53,3 +53,4 @@ compile_commands.json
 win-deploy/packages/com.keithmcmillen.quneoeditor/data/QuNeo\ Editor/
 Signing\ and\ Notarization/dmg/QuNeo\ Editor/
 xx_archive/application_installer/
+*.stash

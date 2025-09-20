@@ -20,7 +20,7 @@ this_year=2024
 app_name="QuNeo Editor"
 bundle_name="QuNeoEditor"
 app_name_fp=QuNeo\ Editor
-app_source=../build-QuNeo-Qt_6_3_2_for_macOS-Release/$app_name_fp.app
+app_source=./build/Qt_6_9_2_for_macOS-Release/$app_name_fp.app
 qml_dir=../QT6-QuNeo
 
 bundle_id="com.keithmcmillen.$bundle_name"
@@ -36,7 +36,7 @@ changelog_source="../CHANGELOG.md"
 changelog_dest="$subfolder_path/CHANGELOG.md"
 
 icon_file="./$app_name.icns"
-path_to_dqt=~/Qt/6.3.2/macos/bin/macdeployqt
+path_to_dqt=~/Qt/6.9.2/macos/bin/macdeployqt
 developer_id="$DEVELOPER_ID"
 
 final_dmg_name="./$app_name Mac v$version.dmg"

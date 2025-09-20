@@ -41,7 +41,7 @@ lessThan(QT_MAJOR_VERSION, 6){
 versionAtLeast(QT_VERSION, 6.2.1){
     message("Building Apple M1/Intel Universal Binary")
     macx{
-        QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.14
+        QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.15
         QMAKE_APPLE_DEVICE_ARCHS = x86_64 arm64
     }
 }
